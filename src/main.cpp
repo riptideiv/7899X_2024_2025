@@ -60,12 +60,8 @@ void autonomous() {}
  */
 
 void opcontrol() {
-	lv_obj_t *mot_display = lv_label_create(lv_scr_act());
-	lv_obj_align(mot_display, LV_ALIGN_TOP_LEFT, 0, 0);
-
 	while (true) {
-		handle_controller_input();
-		lv_label_set_text_fmt(mot_display, "goal intake mot I (mA): %d", (int)(xrobot::goal_intake.get_current_draw()));
+		xrobot::handle_controller_input();
 		Display::update();
 		pros::delay(10);                               // Run for 10 ms then update
 	}

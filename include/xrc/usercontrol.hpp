@@ -1,3 +1,5 @@
 #pragma once
 
-void handle_controller_input();
+namespace xrobot{
+    void handle_controller_input();
+}

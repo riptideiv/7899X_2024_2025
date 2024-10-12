@@ -42,6 +42,8 @@
 #include "xrc/display.hpp"
 #include "xrc/usercontrol.hpp"
 #include "xrc/auton.hpp"
+#include "xrc/movement.hpp"
+#include "xrc/utils.hpp"
 
    /**
     * You should add more #includes here
