@@ -10,6 +10,7 @@
  */
 void initialize() {
 	lvgl_init();
+	// pros::lcd::initialize();
 	xrobot::initialize();
 	Display::init();
 }
@@ -63,6 +64,6 @@ void opcontrol() {
 	while (true) {
 		xrobot::handle_controller_input();
 		Display::update();
-		pros::delay(10);                               // Run for 10 ms then update
+		pros::delay(20);                               // Run for 10 ms then update
 	}
 }

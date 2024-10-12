@@ -1,0 +1,540 @@
+Transferring V5 to download channel
+
+
+
+         _+=+_
+      .-`  .  `-.          8888888b.  8888888b.   .d88888b.   .d8888b.
+   _+`     "     `+_       888   Y88b 888   Y88b d88P" "Y88b d88P  Y88b
+  \\\sssssssssssss///      888    888 888    888 888     888 Y88b.
+     .ss\  *  /ss.         888   d88P 888   d88P 888     888  "Y888b.
+ .+bm  .s  *  s.  md+.     8888888P"  8888888P"  888     888     "Y88b.
+.hMMMMs .  *  . sMMMMh.    888        888 T88b   888     888       "888
+ `\hMMMb \ | / dMMMh:      888        888  T88b  Y88b. .d88P Y88b  d88P
+   -SNMNo  -  oNMNs-       888        888   T88b  "Y88888P"   "Y8888P"
+     `+dMh\./dMd/
+        `:yNy:`                      Powered by PROS for VEX V5
+           "                Copyright (c) Purdue University ACM SIGBots
+Version:        4.1.0     Platform:  V1.1.4 (b19)     Uptime:    0.000 s
+Compiled:   Oct 12 2024 15:10:09     Directory:                        
+
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+WARNING - pros.serial.devices.vex.v5_user_device:read - Could not decode bytes: 12736f757464533a20302e303020302e3030303030300a
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+WARNING - pros.serial.devices.vex.v5_user_device:read - Could not decode bytes: 12736f757464533a20302e303030303020302e3030303030300a
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+WARNING - pros.serial.devices.vex.v5_user_device:read - Could not decode bytes: 12736f757464533a20302e303030303020302e3030303030300a
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+WARNING - pros.serial.devices.vex.v5_user_device:read - Could not decode bytes: 12736f757464533a20302e303030303020302e3030303030300a
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+WARNING - pros.serial.devices.vex.v5_user_device:read - Could not decode bytes: 12736f757464533a20302e303030303020302e3030303030300a
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+WARNING - pros.serial.devices.vex.v5_user_device:read - Could not decode bytes: 12736f757464533a20302e303030303020302e3030303030300a
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+WARNING - pros.serial.devices.vex.v5_user_device:read - Could not decode bytes: 12736f757464533a20302e303030303020302e3030303030300a
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+WARNING - pros.serial.devices.vex.v5_user_device:read - Could not decode bytes: 12736f757464533a20302e303030303020302e3030303030300a
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+WARNING - pros.serial.devices.vex.v5_user_device:read - Could not decode bytes: 12736f757464533a20302e303030303020302e3030303030300a
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+WARNING - pros.serial.devices.vex.v5_user_device:read - Could not decode bytes: 12736f757464533a20302e303030303020302e3030303030300a
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+WARNING - pros.serial.devices.vex.v5_user_device:read - Could not decode bytes: 12736f757464533a20302e30303030303030303030300a
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+WARNING - pros.serial.devices.vex.v5_user_device:read - Could not decode bytes: 0d73593a206e616e0a
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+WARNING - pros.serial.devices.vex.v5_user_device:read - Could not decode bytes: 736f75740a
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+WARNING - pros.serial.devices.vex.v5_user_device:read - Could not decode bytes: 1273533a20302e3030303030300a
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+WARNING - pros.serial.devices.vex.v5_user_device:read - Could not decode bytes: 12736f757464533a20302e30303030300a
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+WARNING - pros.serial.devices.vex.v5_user_device:read - Could not decode bytes: 0d736f7564583a206e616e0a
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+
+dS: 0.000000
+dX: nan
+dY: nan
+WARNING - pros.serial.devices.vex.v5_user_device:read - Could not decode bytes: 060a
+ERROR - pros.serial.terminal.terminal:reader - 
+  File "/usr/local/lib/python3.10/site-packages/pros/serial/devices/vex/v5_user_device.py", line 47, in read
+    assert len(msg) >= 4
+AssertionError
+We detected something went wrong! Do you want to send a report? [y/N]: WARNING - pros.serial.terminal.terminal:stop - Stopping terminal
+Error: invalid input
+We detected something went wrong! Do you want to send a report? [y/N]: Not sending bug report.

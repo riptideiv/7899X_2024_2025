@@ -5,20 +5,20 @@ namespace xrobot {
 
     pros::Controller master(pros::E_CONTROLLER_MASTER);
     pros::MotorGroup left_mg({ -1, 2, 7 });
-    pros::MotorGroup right_mg({ 11, -12, -17 });
+    pros::MotorGroup right_mg({ 10, -12, -17 });
     pros::Imu sinertial(19);
-    pros::Rotation horizTracker(9);
+    pros::Rotation horizTracker(11);
 
     void initialize() {
         horizTracker.reset_position();
         sinertial.reset();
         left_mg.set_encoder_units_all(MOTOR_ENCODER_DEGREES);
         right_mg.set_encoder_units_all(MOTOR_ENCODER_DEGREES);
+        initTracking();
         // Wait for IMU calibration
         while (sinertial.is_calibrating()) {
             pros::delay(20);
         }
-        initTracking();
     }
 
     double get_rotation() {
