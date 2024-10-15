@@ -11,6 +11,10 @@ namespace xrobot {
     extern pros::MotorGroup right_mg;
     extern pros::Imu sinertial;
     extern pros::Rotation horizTracker;
+    
+    extern pros::Motor mhooks;
+    extern pros::Motor mintake;
+    extern pros::Motor mbigarm;  // New motor declaration
 
     void toggle_goal();
 

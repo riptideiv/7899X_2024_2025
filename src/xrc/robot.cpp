@@ -8,12 +8,22 @@ namespace xrobot {
     pros::MotorGroup right_mg({ 10, -12, -17 });
     pros::Imu sinertial(19);
     pros::Rotation horizTracker(11);
+    
+    pros::Motor mhooks(20);
+    pros::Motor mintake(21);
+    pros::Motor mbigarm(22);
 
     void initialize() {
         horizTracker.reset_position();
         sinertial.reset();
+        left_mg.set_brake_mode_all(MOTOR_BRAKE_COAST);
+        right_mg.set_brake_mode_all(MOTOR_BRAKE_COAST);
         left_mg.set_encoder_units_all(MOTOR_ENCODER_DEGREES);
         right_mg.set_encoder_units_all(MOTOR_ENCODER_DEGREES);
+        mhooks.set_encoder_units(MOTOR_ENCODER_DEGREES);
+        mintake.set_encoder_units(MOTOR_ENCODER_DEGREES);
+        mbigarm.set_encoder_units(MOTOR_ENCODER_DEGREES);
+        mbigarm.set_brake_mode(MOTOR_BRAKE_BRAKE);
         initTracking();
         // Wait for IMU calibration
         while (sinertial.is_calibrating()) {
