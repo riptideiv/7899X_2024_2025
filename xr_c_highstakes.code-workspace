@@ -7,7 +7,9 @@
 	"settings": {
 		"files.associations": {
 			"random": "cpp",
-			"optional": "cpp"
-		}
+			"optional": "cpp",
+			"memory": "cpp"
+		},
+		"CodeGPT.apiKey": "DeepSeek"
 	}
 }

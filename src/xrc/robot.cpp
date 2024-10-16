@@ -4,14 +4,14 @@ namespace xrobot {
     bool imu_flipped = false;
 
     pros::Controller master(pros::E_CONTROLLER_MASTER);
-    pros::MotorGroup left_mg({ -1, 2, 7 });
-    pros::MotorGroup right_mg({ 10, -12, -17 });
+    pros::MotorGroup left_mg({ 14, -19, -15 });
+    pros::MotorGroup right_mg({ -6, 5, 7 });
     pros::Imu sinertial(19);
     pros::Rotation horizTracker(11);
-    
+
     pros::Motor mhooks(20);
-    pros::Motor mintake(21);
-    pros::Motor mbigarm(22);
+    pros::Motor mintake(8);
+    pros::Motor mbigarm(9);
 
     void initialize() {
         horizTracker.reset_position();
@@ -36,11 +36,11 @@ namespace xrobot {
         return imu_flipped ? -rotation : rotation;
     }
 
-    double get_avg_pos(const pros::MotorGroup &mg){
-        double sum=0;
-        for(double i:mg.get_position_all()){
-            sum+=i;
+    double get_avg_pos(const pros::MotorGroup &mg) {
+        double sum = 0;
+        for (double i : mg.get_position_all()) {
+            sum += i;
         }
-        return sum/mg.get_position_all().size();
+        return sum / mg.get_position_all().size();
     }
 }
