@@ -5,12 +5,14 @@
 
 class Display {
 public:
-    static lv_obj_t *hTrackerDisplay;
-    static lv_obj_t *hOdomDisplay;
+    static lv_obj_t *odomDebug;
+    static lv_obj_t *odomDisplay;
     static lv_obj_t *hLeftMotorCurrentDisplay[3];
     static lv_obj_t *hRightMotorCurrentDisplay[3];
+    static lv_obj_t *hLeftMotorTempSquare[3];
+    static lv_obj_t *hRightMotorTempSquare[3];
 
     static void init();
     static void update();
-    static void displayMotorCurrent();
+    static void displayMotorCurrentAndTemperature();
 };

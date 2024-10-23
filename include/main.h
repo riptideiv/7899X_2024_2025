@@ -36,6 +36,22 @@
    */
 #define PROS_USE_LITERALS
 
+
+
+
+
+
+   /**
+    * Disable driving HERE
+    */
+    // #define ENABLE_DRIVING // disable driving so it doesn't drive off a table
+
+
+
+
+
+
+
 #include "pros/apix.h"
 #include "liblvgl/lvgl.h"
 #include "xrc/robot.hpp"
@@ -44,29 +60,30 @@
 #include "xrc/auton.hpp"
 #include "xrc/movement.hpp"
 #include "xrc/utils.hpp"
-
-   /**
-    * You should add more #includes here
-    */
-    //#include "okapi/api.hpp"
+#include "xrc/medic.hpp"
 
     /**
-     * If you find doing pros::Motor() to be tedious and you'd prefer just to do
-     * Motor, you can use the namespace with the following commented out line.
-     *
-     * IMPORTANT: Only the okapi or pros namespace may be used, not both
-     * concurrently! The okapi namespace will export all symbols inside the pros
-     * namespace.
+     * You should add more #includes here
      */
-     // using namespace pros;
-     // using namespace pros::literals;
-     // using namespace okapi;
+     //#include "okapi/api.hpp"
 
      /**
-      * Prototypes for the competition control tasks are redefined here to ensure
-      * that they can be called from user code (i.e. calling autonomous from a
-      * button press in opcontrol() for testing purposes).
+      * If you find doing pros::Motor() to be tedious and you'd prefer just to do
+      * Motor, you can use the namespace with the following commented out line.
+      *
+      * IMPORTANT: Only the okapi or pros namespace may be used, not both
+      * concurrently! The okapi namespace will export all symbols inside the pros
+      * namespace.
       */
+      // using namespace pros;
+      // using namespace pros::literals;
+      // using namespace okapi;
+
+      /**
+       * Prototypes for the competition control tasks are redefined here to ensure
+       * that they can be called from user code (i.e. calling autonomous from a
+       * button press in opcontrol() for testing purposes).
+       */
 #ifdef __cplusplus
 extern "C" {
 #endif

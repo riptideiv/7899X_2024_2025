@@ -8,7 +8,8 @@
 		"files.associations": {
 			"random": "cpp",
 			"optional": "cpp",
-			"memory": "cpp"
+			"memory": "cpp",
+			"cmath": "cpp"
 		},
 		"CodeGPT.apiKey": "DeepSeek"
 	}
