@@ -1,7 +1,7 @@
 #include "xrc/robot.hpp"
 
 namespace xrobot {
-    bool imu_flipped = false;
+    bool auton_selecting;
 
     pros::Controller master(pros::E_CONTROLLER_MASTER);
     pros::MotorGroup left_mg({ 14, -19, -15 });
@@ -13,10 +13,10 @@ namespace xrobot {
 
     pros::Motor mhooks(20);
     pros::Motor mintake(2);
-    pros::Motor mbigarm(21);
+    pros::Motor mbigarm(-21);
 
-    pros::adi::DigitalOut goalToggle('B');
-    pros::adi::DigitalOut ringLock('F');
+    pros::adi::DigitalOut goalToggle('F');
+    pros::adi::DigitalOut ringLock('D');
     pros::adi::DigitalOut lilArm('H');
     pros::adi::DigitalOut intakeToggle('G');
 
@@ -33,9 +33,10 @@ namespace xrobot {
         mhooks.set_encoder_units(MOTOR_ENCODER_DEGREES);
         mintake.set_brake_mode(MOTOR_BRAKE_BRAKE);
         mintake.set_encoder_units(MOTOR_ENCODER_DEGREES);
-        mbigarm.set_brake_mode(MOTOR_BRAKE_HOLD);
+        mbigarm.set_brake_mode(MOTOR_BRAKE_BRAKE);
         mbigarm.set_encoder_units(MOTOR_ENCODER_DEGREES);
         initTracking();
+        auton::initialize();
         // Wait for IMU calibration
         while (sinertial.is_calibrating()) {
             pros::delay(20);
@@ -44,15 +45,29 @@ namespace xrobot {
     }
 
     double get_rotation() {
-        double rotation = sinertial.get_rotation();
-        return imu_flipped ? -rotation : rotation;
+        return sinertial.get_rotation();
     }
 
     double get_avg_pos(const pros::MotorGroup &mg) {
-        double sum = 0;
+        double sum = 0, asum = 0;
         for (double i : mg.get_position_all()) {
             sum += i;
+            asum += fabs(i);
         }
-        return sum / 3.0;
+        if (sum > 0) {
+            return asum;
+        } else {
+            return -asum;
+        }
+    }
+
+    void driveV(int lV, int rV) { // lV and rV are voltage between -127 and 127
+        left_mg.move(lV);
+        right_mg.move(rV);
+    }
+
+    void drivePct(double lPct, double rPct) { // lPct and rPct are percentages between -100 and 100
+        left_mg.move_velocity(lPct * 127 / 100);
+        right_mg.move_velocity(rPct * 127 / 100);
     }
 }

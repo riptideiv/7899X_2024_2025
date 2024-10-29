@@ -1,63 +1,56 @@
-#include "xrc/auton.hpp"
-
-using namespace xrobot;
+#include "main.h"
+#include "xrc/autons/plus.hpp"
+#include "xrc/autons/minus.hpp"
 
 namespace auton {
-    Color selectedColor = Color::Red;
-    Side selectedSide = Side::Plus;
-    Mode selectedMode = Mode::Rush;
-    bool AWP = true;
+    bool flipped;
 
-    void toggleAWP() {
-        AWP = !AWP;
+    void initialize() {
+        pid::initPID();
+        autonSelectTask = new pros::Task(auton::autonSelectLoop);
     }
 
     void runSelectedAuton() {
+        xrobot::left_mg.set_brake_mode_all(MOTOR_BRAKE_HOLD);
+        xrobot::right_mg.set_brake_mode_all(MOTOR_BRAKE_HOLD);
+
         if (selectedColor == Color::Blue) {
-            imu_flipped = true;
+            flipped = true;
         } else {
-            imu_flipped = false;
+            flipped = false;
         }
 
         if (selectedSide == Side::Plus) {
             if (selectedMode == Mode::Rush) {
                 if (AWP) {
-                    // Plus Rush AWP
-                    // Add your autonomous code here
+                    plusRushAWP();
                 } else {
-                    // Plus Rush non-AWP
-                    // Add your autonomous code here
+                    plusRushNoAWP();
                 }
             } else {
                 if (AWP) {
-                    // Plus Safe AWP
-                    // Add your autonomous code here
+                    plusSafeAWP();
                 } else {
-                    // Plus Safe non-AWP
-                    // Add your autonomous code here
+                    plusSafeNoAWP();
                 }
             }
         } else {
             if (selectedMode == Mode::Rush) {
                 if (AWP) {
-                    // Minus Rush AWP
-                    // Add your autonomous code here
+                    minusRushAWP();
                 } else {
-                    // Minus Rush non-AWP
-                    // Add your autonomous code here
+                    minusRushNoAWP();
                 }
             } else {
                 if (AWP) {
-                    // Minus Safe AWP
-                    // Add your autonomous code here
+                    minusSafeAWP();
                 } else {
-                    // Minus Safe non-AWP
-                    // Add your autonomous code here
+                    minusSafeNoAWP();
                 }
             }
         }
 
         // Reset imu_flipped state after autonomous
-        imu_flipped = false;
+        flipped = false;
     }
 }

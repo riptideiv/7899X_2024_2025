@@ -35,6 +35,7 @@ void Display::init() {
 }
 
 void Display::update() {
+    lv_label_set_text_fmt(odomDebug, "Angle (centidegrees): %d", (int)(xrobot::get_rotation() * 100));
     displayMotorCurrentAndTemperature();
 }
 

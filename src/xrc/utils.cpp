@@ -1,9 +1,13 @@
 #include "xrc/utils.hpp"
 
-double deg2rad(double degrees){
-    return degrees*M_PI/180;
+double deg2rad(double degrees) {
+    return degrees * M_PI / 180;
 }
 
-double dsin(double degrees){
+double dsin(double degrees) {
     return sin(deg2rad(degrees));
+}
+
+double dcos(double degrees) {
+    return cos(deg2rad(degrees));
 }

@@ -4,7 +4,7 @@ import time
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-GRID_SIZE = 1000
+GRID_SIZE = 3000
 
 # Function to read the latest JSON object from the log file
 def read_latest_log_entry(log_file_path):
@@ -16,13 +16,14 @@ def read_latest_log_entry(log_file_path):
     return None
 
 # Function to update the plot
-def update_plot(frame, log_file_path, scatter):
+def update_plot(frame, log_file_path, scatter, text):
     log_entry = read_latest_log_entry(log_file_path)
     if log_entry:
         odomX = log_entry.get('odomX', 0)
         odomY = log_entry.get('odomY', 0)
         scatter.set_offsets([[odomX+GRID_SIZE/2, odomY+GRID_SIZE/2]])
-    return scatter,
+        text.set_text(f'X: {odomX}, Y: {odomY}')
+    return scatter, text
 
 def main():
     log_file_path = './brain.log'  # Update this path to your actual log file path
@@ -31,8 +32,9 @@ def main():
     ax.set_xlim(0, GRID_SIZE)
     ax.set_ylim(0, GRID_SIZE)
     scatter = ax.scatter([], [])
+    text = ax.text(0.95, 0.05, '', transform=ax.transAxes, ha='right', va='bottom')
 
-    ani = animation.FuncAnimation(fig, update_plot, fargs=(log_file_path, scatter), interval=250)
+    ani = animation.FuncAnimation(fig, update_plot, fargs=(log_file_path, scatter, text), interval=250)
     plt.show()
 
 if __name__ == "__main__":

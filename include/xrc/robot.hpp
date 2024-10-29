@@ -2,7 +2,15 @@
 #include "main.h"
 
 namespace xrobot {
-    extern bool imu_flipped;
+    struct Constants {
+        static constexpr double wheelDia = 2.75; // diameter of drivetrain wheel
+        static constexpr double trackDia = 2.75; // diameter of tracking wheel
+        static constexpr double hWheelOffset = 0; // vertical offset of horizontal tracking wheel from the center (forward is +)
+        static constexpr double vWheelOffset = 0; // horizontal offset of vertical tracking wheel from the center (rightward is +), we don't have one
+        static constexpr double lWheelOffset = -6.4; // horizontal offset of left drivetrain side from the center (rightward is +)
+        static constexpr double rWheelOffset = 6.4; // horizontal offset of right drivetrain side from the center (rightward is +)
+    };
+    extern struct Constants constants;
 
     double get_rotation();
 
@@ -21,9 +29,10 @@ namespace xrobot {
     extern pros::adi::DigitalOut goalToggle;
     extern pros::adi::DigitalOut ringLock;
     extern pros::adi::DigitalOut lilArm;
-    extern pros::adi::DigitalOut intakeToggle;  // New digital output declaration
+    extern pros::adi::DigitalOut intakeToggle;
 
-    void toggle_goal();
+    void drivePct(double lPct, double rPct); // lPct and rPct are percentages between -100 and 100
+    void driveV(int lV, int rV); // lV and rV are voltage between -127 and 127
 
     // New initialization function
     void initialize();

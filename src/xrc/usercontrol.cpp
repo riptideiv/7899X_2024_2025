@@ -4,7 +4,13 @@ bool goalToggleState = false;
 bool armlockState = false;
 bool lilarmState = false;
 bool intakeToggleState = false;
+bool bigarmState = false;
+pros::Task *clearArmTask = nullptr;
 void xrobot::handle_controller_input() {
+    // printf("State of auton select task: %d\n", auton::autonSelectTask->get_state());
+    if (auton::autonSelectTask->get_state() != pros::E_TASK_STATE_DELETED) {
+        return;
+    }
     // Arcade control scheme
     int dir = master.get_analog(ANALOG_LEFT_Y);    // Gets amount forward/backward from left joystick
     int turn = master.get_analog(ANALOG_RIGHT_X);  // Gets the turn left/right from right joystick
@@ -33,13 +39,17 @@ void xrobot::handle_controller_input() {
         lilarmState = !lilarmState;
     }
 
-    if (master.get_digital(DIGITAL_A)) {
-        mbigarm.move(127);
-    } else if (master.get_digital(DIGITAL_B)) {
-        mbigarm.move(-127);
-    } else {
-        mbigarm.move(0);
+    int vbigarm;
+
+    if (master.get_digital(DIGITAL_B)) {
+        vbigarm = 127;
+    } else if (master.get_digital(DIGITAL_A)) {
+        vbigarm = -127;
+    } else if (vbigarm != 127) {
+        vbigarm = 0;
     }
+
+    mbigarm.move(vbigarm);
 
     // Control hooks motor with R1 and R2 buttons
     if (master.get_digital(DIGITAL_L1)) {

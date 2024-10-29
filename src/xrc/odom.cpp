@@ -26,7 +26,7 @@ void xrobot::updatePos(bool log) {
     double dX, dY;
     if (fabs(dAngle) < 0.05) {
         dX = dS;
-        dY = dR;
+        dY = (dL + dR) / 2;
     } else {
         dX = (2 * sin(dAngle / 2)) * (dS / dAngle + constants.hWheelOffset);
         dY = (2 * sin(dAngle / 2)) * ((dL + dR) / 2 / dAngle + constants.lWheelOffset);

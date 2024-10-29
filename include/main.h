@@ -44,7 +44,7 @@
    /**
     * Disable driving HERE
     */
-    // #define ENABLE_DRIVING // disable driving so it doesn't drive off a table
+#define ENABLE_DRIVING // disable driving so it doesn't drive off a table
 
 
 
@@ -58,7 +58,7 @@
 #include "xrc/display.hpp"
 #include "xrc/usercontrol.hpp"
 #include "xrc/auton.hpp"
-#include "xrc/movement.hpp"
+#include "xrc/odom.hpp"
 #include "xrc/utils.hpp"
 #include "xrc/medic.hpp"
 
