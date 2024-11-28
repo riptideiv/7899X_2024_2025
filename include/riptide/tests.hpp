@@ -2,15 +2,22 @@
 
 #include "main.h"
 
-namespace riptide {
-    void testChassisSpeedDifference() {
-        bot::chass.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-        bot::chass.reset_position();
-        bot::chass.leftMotors->move_voltage(12000);
-        bot::chass.rightMotors->move_voltage(12000);
-        pros::delay(1000);
-        double left = bot::chass.leftMotors->get_position(), right = bot::chass.rightMotors->get_position();
-        bot::pwrChassPct(0, 0);
-        std::cout << "Left: " << left << ", Right: " << right << ", left divided by light: " << left / right << ", right divided by left: " << right / left << std::endl;
+namespace test {
+    void offsetTest() {
+        bot::reset();
+        bot::drive_chass(50, -50);
+        double avgV = 0, avgH = 0;
+        double origV = bot::getVertPos();
+        double origH = bot::getHorizPos();
+        for (int i = 0; i < 10; i++) {
+            pros::delay(2000);
+            double angle = bot::getRotation();
+            double vOffset = (bot::getVertPos() - origV) / 36000 * 2 / angle;
+            double hTrackOffset = (bot::getHorizPos() - origH) / 36000 * 2.75 / angle;
+            avgV += vOffset;
+            avgH += hTrackOffset;
+            printf("Angle: %f, Vert: %f, Horiz: %f\n", angle, vOffset, hTrackOffset);
+        }
+        printf("Avg: Vert: %f, Horiz: %f\n", avgV / 10, avgH / 10);
     }
 }

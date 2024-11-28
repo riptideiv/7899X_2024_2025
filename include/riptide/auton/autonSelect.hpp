@@ -26,12 +26,12 @@ namespace auton {
     }
 
     void runSelectedAuton() {
-        bot::chass.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+        bot::set_brake_mode(pros::MotorBrake::brake);
 
         if (selectedColor == Color::Blue) {
-            pid::set_flipped(true);
+
         } else {
-            pid::set_flipped(false);
+
         }
 
         if (selectedSide == Side::Plus) {
@@ -63,9 +63,6 @@ namespace auton {
                 }
             }
         }
-
-        pid::set_flipped(false);
-        pid::set_mogo(false);
     }
 
     void autonSelectLoop() {
