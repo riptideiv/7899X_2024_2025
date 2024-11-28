@@ -4,12 +4,11 @@ namespace riptide {
     void initialize();
     void autonomous();
     void opcontrol();
-    void testChassisSpeedDifference();
 }
 
 #include "config.hpp"
+#include "pidConsts.hpp"
 #include "robot.hpp"
-#include "pid.hpp"
 #include "auton.hpp"
 #include "display.hpp"
 #include "usercontrol.hpp"
@@ -20,7 +19,6 @@ namespace riptide {
         bot::initialize();
         auton::initialize();
         display::initialize();
-        pid::initialize();
     }
 
     void disabled() {
@@ -32,7 +30,8 @@ namespace riptide {
     }
 
     void autonomous() {
-        auton::runSelectedAuton();
+        test::offsetTest();
+        // auton::runSelectedAuton();
     }
 
     void opcontrol() {
