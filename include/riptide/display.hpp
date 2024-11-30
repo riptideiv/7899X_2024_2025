@@ -23,7 +23,7 @@ namespace display {
         lv_label_set_text_fmt(leftMotorsDisplay[0], "Left motors: %i %i %i", (int)lvals[0], (int)lvals[1], (int)lvals[2]);
         lv_label_set_text_fmt(rightMotorsDisplay[0], "Right motors: %i %i %i", (int)rvals[0], (int)rvals[1], (int)rvals[2]);
         // lv_label_set_text_fmt(otherDisplay, "Arm: %i", bot::bigArm.rotation->get_position());
-        lv_label_set_text_fmt(otherDisplay, "vertTrack: %i", (int)bot::vertTrackRotSensor->get_position());
+        lv_label_set_text_fmt(otherDisplay, "chassis pose: %i %i %i", (int)(100 * bot::chass[0]->getPose().x), (int)(100 * bot::chass[0]->getPose().y), (int)(100 * bot::chass[0]->getPose().theta));
     }
 
     void initialize() {

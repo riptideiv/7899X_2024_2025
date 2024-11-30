@@ -30,7 +30,7 @@ namespace riptide {
     }
 
     void autonomous() {
-        test::offsetTest();
+        test::pidTune();
         // auton::runSelectedAuton();
     }
 

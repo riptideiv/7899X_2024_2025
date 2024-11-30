@@ -56,38 +56,38 @@ namespace bot {
 
             setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
 
-            // move_task = new pros::Task([](void *bigArm) {
-            //     int error, prevError = 0, derivative, integral = 0;
-            //     BigArm *arm = (BigArm *)bigArm;
-            //     arm->rotation->get_position();
-            //     while (true) {
-            //         if (arm->manual) {
-            //             pros::delay(50);
-            //             continue;
-            //         }
+            move_task = new pros::Task([](void *bigArm) {
+                int error, prevError = 0, derivative, integral = 0;
+                BigArm *arm = (BigArm *)bigArm;
+                arm->rotation->get_position();
+                while (true) {
+                    if (arm->manual) {
+                        pros::delay(50);
+                        continue;
+                    }
 
-            //         int armPos = arm->rotation->get_position();
+                    int armPos = arm->rotation->get_position();
 
-            //         error = arm->move_target - armPos;
+                    error = arm->move_target - armPos;
 
-            //         if (abs(error) < 1000) integral += error;
-            //         else integral = 0;
+                    if (abs(error) < 1000) integral += error;
+                    else integral = 0;
 
-            //         if ((error > 0 && prevError < 0) || (error < 0 && prevError > 0)) {
-            //             integral = 0;
-            //         }
+                    if ((error > 0 && prevError < 0) || (error < 0 && prevError > 0)) {
+                        integral = 0;
+                    }
 
-            //         derivative = error - prevError;
-            //         prevError = error;
+                    derivative = error - prevError;
+                    prevError = error;
 
-            //         double power = error * 1.25 + integral * 0 + derivative * 0;
+                    double power = error * 2.1 + integral * 0 + derivative * 0;
 
-            //         arm->mtr->move_voltage(power);
+                    arm->mtr->move_voltage(power);
 
-            //         // std::cout << "BigArm Error: " << error << std::endl;
-            //         pros::delay(50);
-            //     }
-            //     }, this);
+                    // std::cout << "BigArm Error: " << error << std::endl;
+                    pros::delay(50);
+                }
+                }, this);
         }
 
         void setBrakeMode(pros::motor_brake_mode_e_t mode) {

@@ -54,17 +54,8 @@ namespace bot {
             toggleFrontLeftArm();
         }
 
-        if (master.get_digital(pros::E_CONTROLLER_DIGITAL_Y)) {
-            autoMogoCnt++;
-            if (goalClampClosed) {
-                toggleGoalClamp();
-            }
-            if (autoMogoCnt > 50) {
-                toggleGoalClamp();
-                autoMogoCnt = 0;
-            }
-        } else {
-            autoMogoCnt = 0;
+        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y)) {
+            toggleGoalClamp();
         }
     }
 }
