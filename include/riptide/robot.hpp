@@ -28,12 +28,12 @@ namespace bot {
         );
 
         chass[0] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[0], pid::angular_controller[0], *odomSensors[0]);
-        chass[1] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[1], pid::angular_controller[1], *odomSensors[1]);
+        // chass[1] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[1], pid::angular_controller[1], *odomSensors[1]);
 
-        int bigArmHi = 22000,
-            bigArmMid = 0,
-            bigArmLow = 0,
-            bigArmScore = 0;
+        int bigArmHi = 22700,
+            bigArmMid = 24389,
+            bigArmLow = 25910,
+            bigArmScore = 15785;
 
         bigArm.initialize(-15, 21, bigArmLow, bigArmMid, bigArmHi, bigArmScore);
 
@@ -99,7 +99,7 @@ namespace bot {
         drivetrain->rightMotors->tare_position_all();
     }
 
-    void reset() {
+    void _reset() {
         reset_imu();
         reset_chass();
     }
