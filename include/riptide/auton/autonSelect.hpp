@@ -10,36 +10,38 @@
 namespace auton {
     enum class Color { Red, Blue };
     enum class Side { Plus, Minus };
-    enum class Mode { Rush, Safe };
+    enum class Mode { Risk, Safe };
 
-    Color selectedColor = Color::Red;
+    // Color selectedColor = Color::Red;
     Side selectedSide = Side::Plus;
-    Mode selectedMode = Mode::Rush;
-    bool AWP = true;
+    Mode selectedMode = Mode::Risk;
+    bool AWP = false;
+
+    bool FLIPPED = false;
 
     pros::Task *autonSelectTask;
 
     inline void displaySelectedAuton() {
-        bot::master.print(0, 0, "%s;; %s    ", selectedColor == Color::Red ? "Red" : "Blue", selectedSide == Side::Plus ? "Plus" : "Minus");
+        bot::master.print(0, 0, "%s;; %s    ", "(N/A)", selectedSide == Side::Plus ? "Right" : "Left");
         pros::delay(100);
-        bot::master.print(2, 0, "%s;; %s    ", AWP ? "AWP" : "Elims", selectedMode == Mode::Rush ? "Rush" : "Safe");
+        bot::master.print(2, 0, "%s;; %s    ", AWP ? "Mid" : "NoMid", selectedMode == Mode::Risk ? "Risk" : "Safe");
     }
 
     void runSelectedAuton() {
         bot::set_brake_mode(pros::MotorBrake::brake);
 
-        if (selectedColor == Color::Blue) {
-
-        } else {
-
-        }
+        // if (selectedColor == Color::Blue) {
+        //     FLIPPED = true;
+        // } else {
+        //     FLIPPED = false;
+        // }
 
         if (selectedSide == Side::Plus) {
-            if (selectedMode == Mode::Rush) {
+            if (selectedMode == Mode::Risk) {
                 if (AWP) {
-                    plusRushAWP();
+                    plusRiskAWP();
                 } else {
-                    plusRushNoAWP();
+                    plusRiskNoAWP();
                 }
             } else {
                 if (AWP) {
@@ -49,11 +51,11 @@ namespace auton {
                 }
             }
         } else {
-            if (selectedMode == Mode::Rush) {
+            if (selectedMode == Mode::Risk) {
                 if (AWP) {
-                    minusRushAWP();
+                    minusRiskAWP();
                 } else {
-                    minusRushNoAWP();
+                    minusRiskNoAWP();
                 }
             } else {
                 if (AWP) {
@@ -67,16 +69,17 @@ namespace auton {
 
     void autonSelectLoop() {
         printf("Auton select loop started\n");
+        pros::delay(500);
         bot::master.clear();
         pros::delay(100);
         displaySelectedAuton();
         while (!pros::competition::is_disabled()) {
             bool update = 0;
 
-            if (bot::master.get_digital_new_press(DIGITAL_X)) {
-                selectedColor = (selectedColor == Color::Red) ? Color::Blue : Color::Red;
-                update = 1;
-            }
+            // if (bot::master.get_digital_new_press(DIGITAL_X)) {
+            //     selectedColor = (selectedColor == Color::Red) ? Color::Blue : Color::Red;
+            //     update = 1;
+            // }
 
             if (bot::master.get_digital_new_press(DIGITAL_A)) {
                 selectedSide = (selectedSide == Side::Plus) ? Side::Minus : Side::Plus;
@@ -84,7 +87,7 @@ namespace auton {
             }
 
             if (bot::master.get_digital_new_press(DIGITAL_B)) {
-                selectedMode = (selectedMode == Mode::Rush) ? Mode::Safe : Mode::Rush;
+                selectedMode = (selectedMode == Mode::Risk) ? Mode::Safe : Mode::Risk;
                 update = 1;
             }
 
@@ -105,6 +108,7 @@ namespace auton {
                 bot::master.get_digital_new_press(DIGITAL_R1) ||
                 bot::master.get_digital_new_press(DIGITAL_R2)) {
                 bot::bigArm.reset();
+                // bot::getChass()->setPose(0, 0, 90);
                 break;
             }
 

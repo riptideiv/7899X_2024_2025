@@ -21,7 +21,7 @@ namespace bot {
         }
 
         void toggleUp() {
-            if (move_target == posLow) {
+            if (move_target == posLow || move_target == posScore) {
                 set_target(posMid);
             } else {
                 set_target(posHigh);
@@ -52,7 +52,7 @@ namespace bot {
             this->posHigh = posHigh;
             this->posScore = posScore;
 
-            move_target = posHigh;
+            move_target = posMid;
 
             setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
 

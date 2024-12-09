@@ -1,0 +1,36 @@
+drWait(0.2, 0.2, -6);
+bot::toggleIntakeLift();
+turn2pt(-17.556730, 7.157436, 600);
+// printPose();
+bot::bigArm.reset();
+bot::spin_intk(100);
+mv2pt(-6.95, 1.803006, 700);
+drWait(0.2, 0.2, 3);
+bot::toggleIntakeLift();
+drWait(0.3, 0.3, -1);
+mv2pt(-8, 1.36, 400);
+bot::spin_intk(10);
+turn2pt(9.310891, 37.665257, 1000, { .forwards = false });
+mv2pt(2, 20.375, 1000, { .forwards = false });
+drWait(0.3, 0.3, -10);
+for (int i = 60; i--;) {
+    pros::delay(10);
+    if (bot::mogoDist.get() < 40) {
+        bot::toggleGoalClamp();
+        pros::delay(200);
+        break;
+    }
+}
+bot::spin_intk(100);
+bot::getChass()->tank(0, 0);
+pros::delay(1500);
+bot::spin_intk(-30);;
+turn2pt(32.328323, 34.935890, 750);
+bot::spin_intk(100);
+drWait(0.5, 0.5, 20, true);
+bot::getChass()->tank(0, 0);
+pros::delay(1500);
+
+turn2pt(7.742729, 38.747849, 1000);
+bot::bigArm.set_target(9800);
+mv2pose(7.742729, 38.747849, -431.813049, 1500);
