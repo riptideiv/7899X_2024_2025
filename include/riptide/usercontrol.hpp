@@ -21,7 +21,7 @@ namespace bot {
         // intake
         if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
             spin_intk(100);
-        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
+        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
             spin_intk(-100);
         } else {
             spin_intk(0);
@@ -38,24 +38,41 @@ namespace bot {
             bigArm.reset();
         }
 
-        if (master.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) {
+        if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
             bigArm.manual_move(-100);
-        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
             bigArm.manual_move(100);
         } else if (bigArm.manual) {
             bigArm.manual_move(0);
         }
 
         // front arms
-        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R2)) {
+        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
             toggleFrontRightArm();
         }
-        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
+        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
             toggleFrontLeftArm();
         }
 
         if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y)) {
-            toggleGoalClamp();
+            if (bot::goalClampClosed) {
+                bot::toggleGoalClamp();
+                autoMogoCnt = -10;
+            }
+        }
+
+        if (master.get_digital(pros::E_CONTROLLER_DIGITAL_Y) && !bot::goalClampClosed) {
+            autoMogoCnt++;
+            if (autoMogoCnt > 10) {
+                if (bot::mogoDist.get() < 40) {
+                    bot::toggleGoalClamp();
+                }
+            }
+        } else {
+            if (autoMogoCnt > 0 && autoMogoCnt <= 10) {
+                bot::toggleGoalClamp();
+            }
+            autoMogoCnt = 0;
         }
     }
 }

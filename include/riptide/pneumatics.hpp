@@ -9,6 +9,9 @@ namespace bot {
     pros::adi::DigitalOut goalClamp('H');
     bool goalClampClosed = false;
 
+    pros::adi::DigitalOut intakeLift('G');
+    bool intakeLiftUp = false;
+
     void toggleFrontLeftArm() {
         frontLeftArmDown = !frontLeftArmDown;
         frontLeftArm.set_value(frontLeftArmDown);
@@ -23,5 +26,10 @@ namespace bot {
         goalClampClosed = !goalClampClosed;
         goalClamp.set_value(goalClampClosed);
         MOGO = goalClampClosed;
+    }
+
+    void toggleIntakeLift() {
+        intakeLiftUp = !intakeLiftUp;
+        intakeLift.set_value(intakeLiftUp);
     }
 }

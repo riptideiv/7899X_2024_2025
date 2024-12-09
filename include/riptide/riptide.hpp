@@ -30,13 +30,15 @@ namespace riptide {
     }
 
     void autonomous() {
-        test::pidTune();
-        // auton::runSelectedAuton();
+        // test::pidTune();
+        auton::runSelectedAuton();
     }
 
     void opcontrol() {
+        // test::pidTune();
         while (1) {
             bot::handleControllerInput();
+            test::handleDebugInputs();
             pros::delay(20);
         }
     }
