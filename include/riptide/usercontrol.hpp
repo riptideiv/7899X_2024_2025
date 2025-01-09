@@ -1,6 +1,7 @@
 #pragma once
 
 #include "main.h"
+#include<iostream>
 
 namespace bot {
     int autoMogoCnt = 0;
@@ -8,6 +9,17 @@ namespace bot {
     void handleControllerInput() {
         if (auton::autonSelectTask->get_state() != pros::E_TASK_STATE_DELETED) {
             return;
+        }
+
+        bot::intake.antiStuck = false;
+        bot::intake.set_colorsort(1, 0);
+
+        // debug
+        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
+            std::cout << (bot::chass[0]->getPose().x) << ' ' << (bot::chass[0]->getPose().y) << ' ' << (bot::chass[0]->getPose().theta) << std::endl << "1: " << (bot::chass[1]->getPose().x) << ' ' << (bot::chass[1]->getPose().y) << ' ' << (bot::chass[1]->getPose().theta) << std::endl;
+        }
+        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+            bot::intake.colorSortRed = !bot::intake.colorSortRed;
         }
 
 #ifndef DISABLE_DRIVING
@@ -29,7 +41,7 @@ namespace bot {
 
         // big arm
         if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_X)) {
-            bigArm.raiseToScore();
+            bigArm.raise();
         }
         if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
             bigArm.toggleUp();
@@ -64,7 +76,7 @@ namespace bot {
         if (master.get_digital(pros::E_CONTROLLER_DIGITAL_Y) && !bot::goalClampClosed) {
             autoMogoCnt++;
             if (autoMogoCnt > 10) {
-                if (bot::mogoDist.get() < 40) {
+                if (bot::mogoDist.get() < 70) {
                     bot::toggleGoalClamp();
                 }
             }

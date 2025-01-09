@@ -8,7 +8,10 @@ namespace bot {
     struct BigArm {
         pros::Motor *mtr;
         pros::Rotation *rotation;
-        int posLow, posMid, posHigh, posScore;
+        int posLow, posMid, posHigh, posToScore, posScore;
+
+        const double nkP = 2.1, nkI = 0, nkD = 0; // "normal" kP, kI, kD for resetting after some custom action
+        double kP = 2.1, kI = 0, kD = 0;
 
         int move_target;
         pros::Task *move_task = nullptr;
@@ -18,14 +21,19 @@ namespace bot {
         void set_target(int target) {
             manual = false;
             move_target = target;
+            kP = nkP, kI = nkI, kD = nkD;
         }
 
         void toggleUp() {
-            if (move_target == posLow || move_target == posScore) {
-                set_target(posMid);
-            } else {
-                set_target(posHigh);
-            }
+            // FOR SINGLE LADY BROWN
+            set_target(posHigh);
+
+            // FOR DOUBLE LADY BROWN 
+            // if (move_target == posMid) {
+            //     set_target(posHigh);
+            // } else {
+            //     set_target(posMid);
+            // }
         }
 
         void reset() {
@@ -37,11 +45,16 @@ namespace bot {
             mtr->move_voltage(spdPercent * 120);
         }
 
-        void raiseToScore() {
-            set_target(posScore);
+        void raise() {
+            if (move_target == posToScore) {
+                set_target(posScore);
+                kP = 4;
+            } else {
+                set_target(posToScore);
+            }
         }
 
-        void initialize(int port, int rotationPort, int posLow, int posMid, int posHigh, int posScore) {
+        void initialize(int port, int rotationPort, int posLow, int posMid, int posHigh, int posToScore, int posScore) {
             mtr = new pros::Motor(port);
 
             rotation = new pros::Rotation(rotationPort);
@@ -50,6 +63,7 @@ namespace bot {
             this->posLow = posLow;
             this->posMid = posMid;
             this->posHigh = posHigh;
+            this->posToScore = posToScore;
             this->posScore = posScore;
 
             move_target = posMid;
@@ -80,7 +94,7 @@ namespace bot {
                     derivative = error - prevError;
                     prevError = error;
 
-                    double power = error * 2.1 + integral * 0 + derivative * 0;
+                    double power = error * arm->kP + integral * arm->kI + derivative * arm->kD;
 
                     arm->mtr->move_voltage(power);
 

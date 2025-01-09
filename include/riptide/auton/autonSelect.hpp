@@ -12,56 +12,50 @@ namespace auton {
     enum class Side { Plus, Minus };
     enum class Mode { Risk, Safe };
 
-    // Color selectedColor = Color::Red;
+    Color selectedColor = Color::Red;
     Side selectedSide = Side::Plus;
-    Mode selectedMode = Mode::Risk;
-    bool AWP = false;
+    // Mode selectedMode = Mode::Risk;
+    bool selectedVersion = true;
 
     bool FLIPPED = false;
 
     pros::Task *autonSelectTask;
 
     inline void displaySelectedAuton() {
-        bot::master.print(0, 0, "%s;; %s    ", "(N/A)", selectedSide == Side::Plus ? "Right" : "Left");
+        bot::master.print(0, 0, "%s;; %s    ", selectedColor == Color::Red ? "Red" : "Blue", selectedSide == Side::Plus ? "Plus" : "Minus");
         pros::delay(100);
-        bot::master.print(2, 0, "%s;; %s    ", AWP ? "Mid" : "NoMid", selectedMode == Mode::Risk ? "Risk" : "Safe");
+        bot::master.print(2, 0, "%s;; %s    ", selectedVersion ? "V1" : "V2", /*selectedMode == Mode::Risk ? "Risk" : "Safe"*/ "(N/A)");
     }
 
     void runSelectedAuton() {
         bot::set_brake_mode(pros::MotorBrake::brake);
 
-        // if (selectedColor == Color::Blue) {
-        //     FLIPPED = true;
-        // } else {
-        //     FLIPPED = false;
-        // }
-
         if (selectedSide == Side::Plus) {
-            if (selectedMode == Mode::Risk) {
-                if (AWP) {
-                    plusRiskAWP();
+            if (selectedColor == Color::Red) {
+                if (selectedVersion) {
+                    plusRedV1();
                 } else {
-                    plusRiskNoAWP();
+                    plusRedV2();
                 }
             } else {
-                if (AWP) {
-                    plusSafeAWP();
+                if (selectedVersion) {
+                    plusBlueV1();
                 } else {
-                    plusSafeNoAWP();
+                    plusBlueV2();
                 }
             }
         } else {
-            if (selectedMode == Mode::Risk) {
-                if (AWP) {
-                    minusRiskAWP();
+            if (selectedColor == Color::Red) {
+                if (selectedVersion) {
+                    minusRedV1();
                 } else {
-                    minusRiskNoAWP();
+                    minusRedV2();
                 }
             } else {
-                if (AWP) {
-                    minusSafeAWP();
+                if (selectedVersion) {
+                    minusBlueV1();
                 } else {
-                    minusSafeNoAWP();
+                    minusBlueV2();
                 }
             }
         }
@@ -76,10 +70,10 @@ namespace auton {
         while (!pros::competition::is_disabled()) {
             bool update = 0;
 
-            // if (bot::master.get_digital_new_press(DIGITAL_X)) {
-            //     selectedColor = (selectedColor == Color::Red) ? Color::Blue : Color::Red;
-            //     update = 1;
-            // }
+            if (bot::master.get_digital_new_press(DIGITAL_X)) {
+                selectedColor = (selectedColor == Color::Red) ? Color::Blue : Color::Red;
+                update = 1;
+            }
 
             if (bot::master.get_digital_new_press(DIGITAL_A)) {
                 selectedSide = (selectedSide == Side::Plus) ? Side::Minus : Side::Plus;
@@ -87,12 +81,12 @@ namespace auton {
             }
 
             if (bot::master.get_digital_new_press(DIGITAL_B)) {
-                selectedMode = (selectedMode == Mode::Risk) ? Mode::Safe : Mode::Risk;
+                // selectedMode = (selectedMode == Mode::Risk) ? Mode::Safe : Mode::Risk;
                 update = 1;
             }
 
             if (bot::master.get_digital_new_press(DIGITAL_Y)) {
-                AWP = !AWP;
+                selectedVersion = !selectedVersion;
                 update = 1;
             }
 
