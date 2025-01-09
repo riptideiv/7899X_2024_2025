@@ -44,12 +44,12 @@ namespace auton {
         bot::turnToPoint(x, y, timeout, params, async);
     }
 
-    void drWait(double lMult, double rMult, double dist, bool useVertTrack = false) {
+    void drWait(double lMult, double rMult, double dist) {
         if (FLIPPED) {
             double t = lMult;
             lMult = rMult;
             rMult = t;
         }
-        bot::driveWait(lMult, rMult, dist, useVertTrack);
+        bot::driveWait(lMult, rMult, dist);
     }
 }

@@ -4,12 +4,13 @@
 #include "robot_globals.hpp"
 #include "sensors.hpp"
 #include "bigArm.hpp"
+#include "intake.hpp"
 #include "pneumatics.hpp"
 
 namespace bot {
-    pros::Controller master(pros::E_CONTROLLER_MASTER);
+    lemlib::ExpoDriveCurve driveSteerCurve(20, 15, 1.02);
 
-    pros::Motor intake(-1);
+    pros::Controller master(pros::E_CONTROLLER_MASTER);
 
     lemlib::Drivetrain *drivetrain;
 
@@ -27,15 +28,17 @@ namespace bot {
             2 // horizontal drift is 2
         );
 
-        chass[0] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[0], pid::angular_controller[0], *odomSensors[0]);
-        chass[1] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[1], pid::angular_controller[1], *odomSensors[1]);
+        chass[0] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[0], pid::angular_controller[0], *odomSensors[0], &(lemlib::defaultDriveCurve), &driveSteerCurve);
+        chass[1] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[1], pid::angular_controller[1], *odomSensors[1], &(lemlib::defaultDriveCurve), &driveSteerCurve);
 
-        int bigArmHi = 22600,
-            bigArmMid = 24389,
-            bigArmLow = 25910,
-            bigArmScore = 14400;
+        int bigArmHi = 33400,
+            bigArmMid = 33400,
+            bigArmLow = 35191,
+            bigArmToScore = 23853,
+            bigArmScore = 19800;
 
-        bigArm.initialize(-15, 21, bigArmLow, bigArmMid, bigArmHi, bigArmScore);
+        bigArm.initialize(-15, 21, bigArmLow, bigArmMid, bigArmHi, bigArmToScore, bigArmScore);
+        intake.initialize(-1);
 
         chass[0]->calibrate();
     }
@@ -97,7 +100,7 @@ namespace bot {
     }
 
     void spin_intk(double pct) {
-        intake.move_voltage(pct * 120);
+        intake.set_speed(pct * 1.27);
     }
 
     void deactivate_all_pistons() {
@@ -130,23 +133,15 @@ namespace bot {
         return chass[MOGO]->getPose();
     }
 
-    void driveWait(double lMult, double rMult, double dist, bool useVertTrack = false) {
+    void driveWait(double lMult, double rMult, double dist) {
         double curr;
-        if (useVertTrack) {
-            curr = vertTrack[MOGO]->getDistanceTraveled();
-        } else {
-            curr = lMult > rMult ? getLeftPos() : getRightPos();
-        }
+        curr = lMult > rMult ? getLeftPos() : getRightPos();
         double error, prev_error;
         error = prev_error = dist;
         double target = dist + curr;
         while (true) {
             pros::delay(10);
-            if (useVertTrack) {
-                curr = vertTrack[MOGO]->getDistanceTraveled();
-            } else {
-                curr = lMult > rMult ? getLeftPos() : getRightPos();
-            }
+            curr = lMult > rMult ? getLeftPos() : getRightPos();
             error = target - curr;
             if (prev_error == 0 || error / prev_error <= 0) break;
             prev_error = error;

@@ -5,155 +5,38 @@
 #include "autonIncludes.hpp"
 
 namespace auton {
-    void minusAllianceStake() {
-        turn2pt(-4.164485, -3.904427, 500);
-        bot::bigArm.set_target(5000);
-        mv2pose(-4.5809335 * 1.23, -4.2948697 * 1.23, -130.252594, 1000);
-    }
-
-    void minusAllianceStake_PickupMogo() {
-        minusAllianceStake();
-        // printPose();
-        drWait(0.2, 0.2, -4);
-        bot::toggleIntakeLift();
-        turn2pt(-17.556730, 7.157436, 500);
-        // printPose();
+    void minusRedV1() {
+        printf("minusRedV1 was run\n");
         bot::bigArm.reset();
-        bot::spin_intk(100);
-        mv2pt(-5.45, 2.303006, 550);
-        drWait(0.2, 0.2, 4.5);
-        bot::toggleIntakeLift();
-        pros::delay(250);
-        drWait(0.3, 0.3, -4);
-        mv2pt(-5.45, 1.36, 300);
-        bot::spin_intk(15);
-        turn2pt(13.310891, 37.665257, 600, { .forwards = false });
-        mv2pt(2.5, 21, 1000, { .forwards = false, .maxSpeed = 60 });
-        drWait(0.3, 0.3, -2);
-        int i;
-        for (i = 30; i--;) {
+        drWait(0.5, 0.5, -2);
+        drWait(0.7, 0.7, -4);
+        mv2pt(-3.8, -28.1001, 1000, { .forwards = false, .maxSpeed = 40 }, true);
+        while (bot::getChass()->isInMotion()) {
             pros::delay(10);
-            if (bot::mogoDist.get() < 40) {
+            if (bot::mogoDist.get() < 60) {
                 bot::toggleGoalClamp();
-                pros::delay(200);
                 break;
             }
         }
-
-        if (i < 0) {
-            bot::toggleGoalClamp();
+        if (bot::MOGO) {
             pros::delay(200);
+            bot::getChass()->cancelAllMotions();
         }
+        mv2pose(10.5, -43.5313, 130.112, 3500, { .minSpeed = 40 }, true);
+        pros::delay(750);
+        bot::intake.set_colorsort(true, true);
+        bot::intake.antiStuck = true;
+        bot::spin_intk(100);
+        bot::chass[0]->waitUntilDone();
+        bot::getChass()->swingToHeading(90, lemlib::DriveSide::LEFT, 1000, {}, false);
     }
-
-    void minusRiskAWP() {
-        // 2 different setup modes
-        // bot::setPose(0, 0, 90);
-        bot::setPose(0, 0, bot::getChass()->getPose().theta);
-
-        FLIPPED = true;
-
-        minusAllianceStake_PickupMogo();
-
-        FLIPPED = false;
-
-        turn2pt(-30, 45, 800);
-        drWait(0.3, 0.3, 1, true);
-        mv2pose(-25.65, 49.09, 288.800, 2000, { .lead = 0.8, .minSpeed = 30 }, true);
-        pros::delay(500);
-        bot::spin_intk(100);
-        pros::delay(1000);
-        bot::getChass()->cancelAllMotions();
-        mv2pt(-40.18, 49.20, 2000, { .maxSpeed = 40 });
-        printf("minusRiskAWP was run\n");
+    void minusRedV2() {
+        printf("minusRedV2 was run\n");
     }
-    void minusRiskNoAWP() {
-        printf("minusRushNoAWP was run\n");
-        bot::setPose(0, 0, bot::getChass()->getPose().theta);
-        FLIPPED = true;
-
-        minusAllianceStake_PickupMogo();
-
-        bot::spin_intk(100);
-        bot::getChass()->tank(0, 0);
-        pros::delay(1500);
-        turn2pt(32.328323, 30.435890, 1000, {});
-        bot::spin_intk(-100);
-        drWait(0.5, 0.5, 2, true);
-        bot::spin_intk(100);
-        drWait(0.5, 0.5, 18, true);
-        bot::getChass()->tank(0, 0);
-        pros::delay(1500);
-        turn2pt(0, 2.26, 1000, { .forwards = false });
-        mv2pt(-16.7, 2.26, 5000, { .forwards = false });
+    void minusBlueV1() {
+        printf("minusBlueV1 was run\n");
     }
-    void minusSafeAWP() {
-        bot::setPose(0, 0, bot::getChass()->getPose().theta);
-        FLIPPED = true;
-
-        minusAllianceStake_PickupMogo();
-
-        bot::spin_intk(100);
-        bot::getChass()->tank(0, 0);
-        pros::delay(1500);
-        turn2pt(32.328323, 31.935890, 1000, {});
-        bot::spin_intk(-100);
-        drWait(0.5, 0.5, 2, true);
-        bot::spin_intk(100);
-        drWait(0.5, 0.5, 18, true);
-        bot::getChass()->tank(0, 0);
-        pros::delay(1500);
-
-        turn2pt(7.742729, 38.747849, 1000, {});
-        bot::bigArm.set_target(9800);
-        mv2pose(7.742729, 38.747849, -431.813049, 1500, {}, true);
-        bot::spin_intk(-100);
-        pros::delay(200);
-        bot::spin_intk(100);
-        printf("minusSafeAWP was run\n");
-    }
-    void minusSafeNoAWP() {
-        bot::setPose(0, 0, bot::getChass()->getPose().theta);
-        FLIPPED = true;
-        minusAllianceStake();
-        // printPose();
-        drWait(0.2, 0.2, -7);
-        // bot::toggleIntakeLift();
-        // turn2pt(-17.556730, 7.157436, 600);
-        // printPose();
-        bot::bigArm.reset();
-        // bot::spin_intk(100);
-        // mv2pt(-6.95, 2.303006, 700);
-        // drWait(0.2, 0.2, 3);
-        // bot::toggleIntakeLift();
-        // drWait(0.3, 0.3, -1);
-        // mv2pt(-8, 1.36, 400);
-        // bot::spin_intk(1);
-        // turn2pt(9.310891, 37.665257, 1000, { .forwards = false });
-        // mv2pt(2, 20.375, 1000, { .forwards = false });
-        // drWait(0.3, 0.3, -10);
-        // for (int i = 60; i--;) {
-        //     pros::delay(10);
-        //     if (bot::mogoDist.get() < 40) {
-        //         bot::toggleGoalClamp();
-        //         pros::delay(200);
-        //         break;
-        //     }
-        // }
-        // bot::spin_intk(100);
-        // bot::getChass()->tank(0, 0);
-        // pros::delay(1500);
-        // bot::spin_intk(-30);;
-        // turn2pt(32.328323, 31.935890, 750);
-        // bot::spin_intk(100);
-        // drWait(0.5, 0.5, 20, true);
-        // bot::getChass()->tank(0, 0);
-        // pros::delay(1500);
-
-        turn2pt(7.742729, 38.747849, 1000, { .forwards = false });
-        mv2pt(7.742729, 38.747849, 3000, { .forwards = false });
-        bot::bigArm.set_target(9800);
-        turn2hd(-71.813049, 5000);
-        printf("minusSafeNoAWP was run\n");
+    void minusBlueV2() {
+        printf("minusBlueV2 was run\n");
     }
 }
