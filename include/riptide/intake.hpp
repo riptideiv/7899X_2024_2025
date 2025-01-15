@@ -13,7 +13,7 @@ namespace bot {
         double speedOverride = -127;
         int speedOverrideCnt = 0;
         int almostOverriding = 0;
-        const int delayCycles = 6;
+        const int delayCycles = 4;
         const int speedOverrideCycles = 5;
 
         bool waitingOverride = 0;
@@ -28,6 +28,8 @@ namespace bot {
         bool antiStuck = false;
         int stuckCnt = 0;
 
+        int startupCnt = 0;
+
         void initialize(int port) {
             mtr = new pros::Motor(port);
 
@@ -36,8 +38,10 @@ namespace bot {
             move_task = new pros::Task([](void *intk) {
                 Intake *intake = (Intake *)intk;
                 while (1) {
-                    if (intake->almostOverriding > 0) std::cout << intake->almostOverriding << '\n';
                     pros::delay(15);
+
+                    if (intake->almostOverriding > 0) std::cout << intake->almostOverriding << '\n';
+                    if (intake->startupCnt > 0) intake->startupCnt--;
 
                     if (intake->almostOverriding > 0) {
                         intake->almostOverriding--;
@@ -47,11 +51,11 @@ namespace bot {
                         intake->speedOverrideCnt = intake->speedOverrideCycles;
                     }
 
-                    if (intake->stuckCnt >= 10) {
+                    if (intake->stuckCnt >= 15) {
                         intake->speedOverrideCnt = 10;
                     }
 
-                    if (intake->colorCnt >= 2) {
+                    if (!intake->colorSortRed && intake->colorCnt >= 2 || intake->colorSortRed && intake->colorCnt >= 1) {
                         intake->almostOverriding = intake->delayCycles;
                     }
 
@@ -60,6 +64,7 @@ namespace bot {
                         intake->mtr->move(intake->speedOverride);
                         intake->stuckCnt = 0;
                         intake->colorCnt = 0;
+                        intake->startupCnt = 30;
                     } else {
                         intake->mtr->move(intake->speed);
                     }
@@ -69,7 +74,7 @@ namespace bot {
                         if (
                             colorSortSensor.get_hue() < 20 &&
                             !intake->colorSortRed ||
-                            colorSortSensor.get_hue() > 150 &&
+                            colorSortSensor.get_hue() > 100 &&
                             intake->colorSortRed) {
                             intake->colorCnt++;
                             std::cout << "yes " << (intake->colorCnt) << std::endl;
@@ -80,9 +85,11 @@ namespace bot {
                         intake->colorCnt = 0;
                     }
 
-                    if (intake->speedOverrideCnt == 0 && intake->antiStuck && intake->speed > 0 && intake->mtr->get_actual_velocity() / intake->speed < 0.1) {
+                    if (intake->speedOverrideCnt == 0 && intake->antiStuck && intake->speed > 50 && intake->mtr->get_actual_velocity() / intake->speed < 0.1 && intake->startupCnt == 0) {
                         intake->stuckCnt++;
                     }
+
+                    if (intake->startupCnt != 0) intake->stuckCnt = 0;
                 }
                 }, this);
         }
