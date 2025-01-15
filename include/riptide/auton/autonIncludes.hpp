@@ -52,4 +52,11 @@ namespace auton {
         }
         bot::driveWait(lMult, rMult, dist);
     }
+
+    void swing2pt(double x, double y, lemlib::DriveSide side, double timeout, lemlib::SwingToPointParams params = {}, bool async = false) {
+        if (FLIPPED) {
+            x = -x;
+        }
+        bot::getChass()->swingToPoint(x, y, side, timeout, params, async);
+    }
 }
