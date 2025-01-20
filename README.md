@@ -1,6 +1,6 @@
 # VEX Robotics Competition: High Stakes 2024-2025
 
-This repository contains the code for my VEX Robotics Competition robot for the game High Stakes 2024-2025.
+This repository contains the code for 7899X's VEX Robotics Competition robot for the game High Stakes 2024-2025.
 
 ## Description
 
