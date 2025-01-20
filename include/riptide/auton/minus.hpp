@@ -30,7 +30,7 @@ namespace auton {
         bot::intake.antiStuck = true;
         bot::spin_intk(100);
         mv2pose(10.5, -42.0313, 130.112, 4000,
-            { .minSpeed = 40, .earlyExitRange = 3.5 });
+            { .minSpeed = 40, .earlyExitRange = 1 });
         bot::getChass()->swingToHeading(90, lemlib::DriveSide::LEFT, 450, { .maxSpeed = 90 }, false);
         mv2pt(23, -36.86, 1400, { .maxSpeed = 30 });
         drWait(0.3, 0.3, -2);
