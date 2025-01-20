@@ -20,8 +20,8 @@ namespace auton {
         mv2pt(-3, 17, 1000, { .forwards = false, .maxSpeed = 60 });
         bot::toggleFrontLeftArm();
         pros::delay(50);
-        turn2pt(-3, 35.2, 700, { .forwards = false });
-        mv2pt(-6, 35.2, 850,
+        turn2pt(-4.5, 37, 700, { .forwards = false });
+        mv2pt(-4.5, 37, 1000,
             { .forwards = false, .maxSpeed = 40,
             .minSpeed = 10, .earlyExitRange = 3 }, true);
         while (bot::getChass()->isInMotion()) {
@@ -40,7 +40,7 @@ namespace auton {
             // bot::toggleGoalClamp();
         }
         drWait(0.4, 0.4, 0.3);
-        turn2pt(-15, 26, 800);
+        turn2pt(-15, 30, 800);
         bot::spin_intk(100);
         drWait(0.5, 0.5, 20);
         bot::bigArm.set_target(18200);
