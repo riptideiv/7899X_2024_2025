@@ -20,8 +20,8 @@ namespace bot {
         init_sensors();
 
         drivetrain = new lemlib::Drivetrain(
-            new pros::MotorGroup({ -6, 4, -3 }, pros::v5::MotorGears::rpm_600, pros::v5::MotorEncoderUnits::degrees),
-            new pros::MotorGroup({ 19, -10, 9 }, pros::v5::MotorGears::rpm_600, pros::v5::MotorEncoderUnits::degrees),
+            new pros::MotorGroup({ -11, 12, -15 }, pros::v5::MotorGears::rpm_600, pros::v5::MotorEncoderUnits::degrees),
+            new pros::MotorGroup({ 13, -20, 19 }, pros::v5::MotorGears::rpm_600, pros::v5::MotorEncoderUnits::degrees),
             12.344, // 12.344 inch track width
             lemlib::Omniwheel::NEW_275, // using new 2.75" omnis
             600, // drivetrain rpm is 360
@@ -37,8 +37,8 @@ namespace bot {
             bigArmToScore = 23853,
             bigArmScore = 19800;
 
-        bigArm.initialize(-15, 21, bigArmLow, bigArmMid, bigArmHi, bigArmToScore, bigArmScore);
-        intake.initialize(-1);
+        bigArm.initialize(-4, 5, bigArmLow, bigArmMid, bigArmHi, bigArmToScore, bigArmScore);
+        intake.initialize(-10);
 
         chass[0]->calibrate();
     }
