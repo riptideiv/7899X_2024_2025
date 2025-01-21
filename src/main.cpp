@@ -21,7 +21,7 @@ motor LF = motor(PORT11, ratio6_1, true);
 motor RF = motor(PORT13, ratio6_1, false);
 motor RM = motor(PORT20, ratio6_1, true);
 motor RB = motor(PORT19, ratio6_1, false);
-motor BigArm = motor(PORT4, ratio36_1, true);
+motor bigArm = motor(PORT4, ratio36_1, true);
 motor intake = motor(PORT10, ratio18_1, true);
 motor_group leftDrive(LM, LB, LF);
 motor_group rightDrive(RM, RB, RF);
@@ -30,7 +30,7 @@ double dia = 2.75;
 double g = 1.0 / 1.0;
 
 vex::digital_out intakeupper(Brain.ThreeWirePort.A);
-vex::digital_out mogoclamp(Brain.ThreeWirePort.B);
+vex::digital_out mogoClamp(Brain.ThreeWirePort.B);
 vex::digital_out Rdoinker(Brain.ThreeWirePort.C);
 vex::digital_out Ldoinker(Brain.ThreeWirePort.D);
 inertial Inertial = inertial(PORT2);
@@ -145,31 +145,31 @@ void gyroturnAbs(double target, int timeout = 1500)
   wait(10, msec);
 }
 
-void intakespinf(double time, double speed)
+void intakeSpinF(double time, double speed)
 {
   intake.spin(forward, speed * 120, voltageUnits::mV);
   wait(time, msec);
   intake.stop();
 }
-void intakespinr(double time, double speed)
+void intakeSpinR(double time, double speed)
 {
   intake.spin(reverse, speed * 120, voltageUnits::mV);
   wait(time, msec);
   intake.stop();
 }
 
-void BigArmrotatef(double time, double speed)
+void bigArmRotateF(double time, double speed)
 {
-  BigArm.spin(forward, speed * 120, voltageUnits::mV);
+  bigArm.spin(forward, speed * 120, voltageUnits::mV);
   wait(time, msec);
-  BigArm.stop();
+  bigArm.stop();
 }
 
-void BigArmrotater(double time, double speed)
+void bigArmRotateR(double time, double speed)
 {
-  BigArm.spin(reverse, speed * 120, voltageUnits::mV);
+  bigArm.spin(reverse, speed * 120, voltageUnits::mV);
   wait(time, msec);
-  BigArm.stop();
+  bigArm.stop();
 }
 
 // void resetBigArm () {
@@ -196,8 +196,20 @@ void BigArmrotater(double time, double speed)
 
 void pre_auton(void)
 {
-  Inertial.resetRotation();
-  wait(2,msec);
+  // make something for the gyro to calibrate at a predetermined angle
+  // print gyro value to brain
+  Inertial.calibrate();
+  while (true) {
+    int gyroReading = Inertial.value(); 
+    Brain.Screen.print("Gyro: ", gyroReading); 
+    wait(20, msec);
+}
+  // rotate the robot to find the starting pos degree
+  // set a starting degree to startingpos degree so that the robot's turns are not weird
+
+
+  // Inertial.resetRotation();
+  // wait(2,msec);
   // All activities that occur before the competition starts
   // Example: clearing encoders, setting servo positions, ...
 }
@@ -215,16 +227,16 @@ void pre_auton(void)
 void autonomous(void)
 { 
   wait(200, msec);
-  BigArmrotater(900, 100);
+  bigArmRotateR(900, 100);
   wait(400,msec);
   inchDrive(-25,900);
-  mogoclamp.set(true);
-  BigArmrotatef(900,100);
-  BigArmrotatef(900,100);
+  mogoClamp.set(true);
+  bigArmRotateF(900,100);
+  bigArmRotateF(900,100);
   wait(400,msec);
   gyroturnAbs(-80,300);
   inchDrive(20,800);
-  intakespinf(2000,100);
+  intakeSpinF(2000,100);
 
 }
 
