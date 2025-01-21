@@ -15,12 +15,12 @@ using namespace vex;
 competition Competition;
 brain Brain;
 controller Controller1;
-motor LM = motor(PORT12, ratio6_1, true);
-motor LB = motor(PORT15, ratio6_1, false);
-motor LF = motor(PORT11, ratio6_1, false);
-motor RF = motor(PORT13, ratio6_1, true);
-motor RM = motor(PORT20, ratio6_1, false);
-motor RB = motor(PORT19, ratio6_1, true);
+motor LM = motor(PORT12, ratio6_1, false);
+motor LB = motor(PORT15, ratio6_1, true);
+motor LF = motor(PORT11, ratio6_1, true);
+motor RF = motor(PORT13, ratio6_1, false);
+motor RM = motor(PORT20, ratio6_1, true);
+motor RB = motor(PORT19, ratio6_1, false);
 motor BigArm = motor(PORT4, ratio36_1, true);
 motor intake = motor(PORT10, ratio18_1, true);
 motor_group leftDrive(LM, LB, LF);
@@ -68,9 +68,10 @@ void Brake1()
   LM.stop(brake);
 }
 
-void inchDrive(float target, int timeout = 1500, float kp = 2.75)
+void inchDrive(float target, int timeout = 1500, float kp = 1.6)
 {
   timer t2;
+  t2.reset();
   float x = 0.0;
   float tolerance = 1;
   float accuracy = 1;
@@ -81,7 +82,7 @@ void inchDrive(float target, int timeout = 1500, float kp = 2.75)
   float prevError = target;
   float derivative = 0;
   float kd = 0;
-  // RF.setRotation(0.0, rev);
+  RF.setPosition(0.0, rev);
   while (t2.time(msec) < timeout)
   {
     x = RF.position(rev) * pie * dia * g;
@@ -99,12 +100,13 @@ void inchDrive(float target, int timeout = 1500, float kp = 2.75)
     Controller1.Screen.clearLine();
     Controller1.Screen.print(error);
   }
-  Brake1();
+  Coast1();
 }
 void gyroturnAbs(double target, int timeout = 1500)
 {
   timer t1;
-  float kp = 0.56;
+  t1.reset();
+  float kp = 0.50;
   float ki = 0;
   float kd = 0.3;
   float integral = 0;
@@ -139,7 +141,7 @@ void gyroturnAbs(double target, int timeout = 1500)
     Controller1.Screen.clearLine();
     Controller1.Screen.print(error);
   }
-  Brake1();
+  Coast1();
   wait(10, msec);
 }
 
@@ -194,7 +196,8 @@ void BigArmrotater(double time, double speed)
 
 void pre_auton(void)
 {
-
+  Inertial.resetRotation();
+  wait(2,msec);
   // All activities that occur before the competition starts
   // Example: clearing encoders, setting servo positions, ...
 }
@@ -210,17 +213,19 @@ void pre_auton(void)
 /*---------------------------------------------------------------------------*/
 
 void autonomous(void)
-{
-  // ..........................................................................
-  // Insert autonomous user code here.
-  // ..........................................................................
-  inchDrive(-15, 600);
-  inchDrive(15, 600);
-  gyroturnAbs(180, 500);
-  BigArmrotater(1000, 100);
-  intakespinr(2000, 100);
+{ 
+  wait(200, msec);
+  BigArmrotater(900, 100);
+  wait(400,msec);
+  inchDrive(-25,900);
   mogoclamp.set(true);
-  intakespinf(2000, 100);
+  BigArmrotatef(900,100);
+  BigArmrotatef(900,100);
+  wait(400,msec);
+  gyroturnAbs(-80,300);
+  inchDrive(20,800);
+  intakespinf(2000,100);
+
 }
 
 /*---------------------------------------------------------------------------*/
