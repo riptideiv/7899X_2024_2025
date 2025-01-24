@@ -172,6 +172,15 @@ void bigArmRotateR(double time, double speed)
   bigArm.stop();
 }
 
+int bigArmTarget = 350;
+int bigArmPIDLoop(){
+  while(1){
+    //PID
+    wait(20,msec);
+  }
+  return 0;
+}
+
 // void resetBigArm () {
 //   BigArm.setRotation(0, degrees);
 //   double BigArmPos = BigArm.rotation(degrees);
@@ -203,7 +212,9 @@ void pre_auton(void)
     int gyroReading = Inertial.value(); 
     Brain.Screen.print("Gyro: ", gyroReading); 
     wait(20, msec);
-}
+  }
+
+  task bigArmPIDTask(bigArmPIDLoop);
   // rotate the robot to find the starting pos degree
   // set a starting degree to startingpos degree so that the robot's turns are not weird
 
@@ -235,8 +246,8 @@ void autonomous(void)
   bigArmRotateF(900,100);
   wait(400,msec);
   gyroturnAbs(-80,300);
+  intakeSpinF(0,100);
   inchDrive(20,800);
-  intakeSpinF(2000,100);
 
 }
 
