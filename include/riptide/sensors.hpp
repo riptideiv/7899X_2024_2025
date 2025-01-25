@@ -18,8 +18,8 @@ namespace bot {
         imu = new pros::IMU(2);
 
         horizTrackRotSensor = new pros::Rotation(3);
-        horizTrack[0] = new lemlib::TrackingWheel(horizTrackRotSensor, lemlib::Omniwheel::NEW_275, 0.000); // done
-        horizTrack[1] = new lemlib::TrackingWheel(horizTrackRotSensor, lemlib::Omniwheel::NEW_275, 0.049);
+        horizTrack[0] = new lemlib::TrackingWheel(horizTrackRotSensor, lemlib::Omniwheel::NEW_275, -0.75); // done
+        horizTrack[1] = new lemlib::TrackingWheel(horizTrackRotSensor, lemlib::Omniwheel::NEW_275, 0.82);
 
         odomSensors[0] = new lemlib::OdomSensors(nullptr, nullptr, horizTrack[0], nullptr, imu);
         odomSensors[1] = new lemlib::OdomSensors(nullptr, nullptr, horizTrack[1], nullptr, imu);

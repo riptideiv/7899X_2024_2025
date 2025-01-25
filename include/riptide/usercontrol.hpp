@@ -16,10 +16,10 @@ namespace bot {
 
         // debug
         if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
-            std::cout << (bot::chass[0]->getPose().x) << ' ' << (bot::chass[0]->getPose().y) << ' ' << (bot::chass[0]->getPose().theta) << std::endl << "1: " << (bot::chass[1]->getPose().x) << ' ' << (bot::chass[1]->getPose().y) << ' ' << (bot::chass[1]->getPose().theta) << std::endl;
+            std::cout << (bot::chass[0]->getPose().x) << ", " << (bot::chass[0]->getPose().y) << ", " << (bot::chass[0]->getPose().theta) << std::endl;
         }
         if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
-            bot::intake.colorSortRed = !bot::intake.colorSortRed;
+
         }
 
 #ifndef DISABLE_DRIVING

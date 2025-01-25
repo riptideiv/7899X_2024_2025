@@ -7,11 +7,11 @@ namespace test {
         delete bot::chass[mogo ? 1 : 0];
         bot::chass[mogo ? 1 : 0] = new lemlib::Chassis(*bot::drivetrain, pid::lateral_controller[mogo ? 1 : 0], pid::angular_controller[mogo ? 1 : 0], *bot::odomSensors[mogo ? 1 : 0]);
         bot::setPose(0, 0, 0);
-        bot::moveToPose(0, target, 0, timeout, { .forwards = true }, false);
+        bot::moveToPoint(0, target, timeout, { .forwards = true }, false);
         double y = bot::getPose().y;
         std::cout << "forward: " << y << std::endl;
         bot::setPose(0, 0, 0);
-        bot::moveToPose(0, -target, 0, timeout, { .forwards = false }, false);
+        bot::moveToPoint(0, -target, timeout, { .forwards = false }, false);
         y = bot::getPose().y;
         std::cout << "backward: " << y << std::endl;
     }
@@ -68,7 +68,8 @@ namespace test {
         }
     }
 
-    void runLateralBSearchkD(double l, double r, double target, int timeout, bool mogo) {
+    void runLateralBSearchkD(double kP, double l, double r, double target, int timeout, bool mogo) {
+        pid::lateral_controller[mogo ? 1 : 0].kP = kP;
         while (1) {
             double m = (l + r) / 2;
             pid::lateral_controller[mogo ? 1 : 0].kD = m;
@@ -94,8 +95,8 @@ namespace test {
     void pidTune() {
         // runAngularPID_kPs(0, 2, 2.8, 0.1, 90, 3000, false);
         // runAngularPID_kDs(3.1, 24.4, 25.4, 0, 90, 2000, false);
-        // runLateralBSearchkP(0, 0, 200, 48, 2000, true);
-        runLateralBSearchkD(150, 300, 48, 2000, true);
+        // runLateralBSearchkP(0, 0, 10, 48, 2000, false);
+        runLateralBSearchkD(5, 0, 0, 48, 2000, true);
     }
 
     void handleDebugInputs() {
@@ -104,5 +105,17 @@ namespace test {
             printf("Current Pose[1]: %f, %f, %f\n", bot::chass[1]->getPose().x, bot::chass[1]->getPose().y, bot::chass[1]->getPose().theta);
             printf("IMU rotation: %f\n", bot::getRotation());
         }
+    }
+
+    void findTrackingRadius(){
+        int t=clock();
+        bot::drive_chass(30,-30);
+        pros::delay(500);
+        bot::horizTrack[0]->reset();
+        double initAngle=bot::imu->get_rotation();
+        pros::delay(5000);
+        std::cout<<"dist: "<<bot::horizTrack[0]->getDistanceTraveled()
+                <<"\nangle: "<<bot::imu->get_rotation()-initAngle
+                <<"\nradius: "<<(bot::horizTrack[0]->getDistanceTraveled()/((bot::imu->get_rotation()-initAngle)/360*2*M_PI))<<'\n';
     }
 }

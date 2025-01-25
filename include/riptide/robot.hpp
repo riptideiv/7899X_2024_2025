@@ -8,7 +8,7 @@
 #include "pneumatics.hpp"
 
 namespace bot {
-    lemlib::ExpoDriveCurve driveSteerCurve(20, 15, 1.02);
+    lemlib::ExpoDriveCurve driveSteerCurve(5, 15, 1.02);
 
     pros::Controller master(pros::E_CONTROLLER_MASTER);
 

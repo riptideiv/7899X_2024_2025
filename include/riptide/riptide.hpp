@@ -17,7 +17,7 @@ namespace riptide {
 namespace riptide {
     void initialize() {
         bot::initialize();
-        auton::initialize();
+        // auton::initialize();
         display::initialize();
     }
 
@@ -30,12 +30,11 @@ namespace riptide {
     }
 
     void autonomous() {
-        // test::pidTune();
         auton::runSelectedAuton();
     }
 
     void opcontrol() {
-        // test::pidTune();
+        test::pidTune();
         while (1) {
             bot::handleControllerInput();
             test::handleDebugInputs();
