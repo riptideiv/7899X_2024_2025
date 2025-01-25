@@ -71,6 +71,7 @@ namespace bot {
         return avg / 3;
     }
 
+    //! gets average positions of the left and right drivetrain sides
     double getChassPos() {
         return (getLeftPos() + getRightPos()) / 2;
     }
@@ -84,47 +85,58 @@ namespace bot {
         drivetrain->rightMotors->tare_position_all();
     }
 
+    //! resets imu and drivetrain positions
     void _reset() {
         reset_imu();
         reset_drivetrain();
     }
 
+    //! sets the brake mode (brake, coast, or hold)
     void set_brake_mode(pros::MotorBrake mode) {
         drivetrain->leftMotors->set_brake_mode_all(mode);
         drivetrain->rightMotors->set_brake_mode_all(mode);
     }
 
+    //! drives the chassis
     void drive_chass(double lPct, double rPct) {
         drivetrain->leftMotors->move_voltage(lPct * 120);
         drivetrain->rightMotors->move_voltage(rPct * 120);
     }
-
+    
+    //! spins the intake
     void spin_intk(double pct) {
         intake.set_speed(pct * 1.27);
     }
 
+    //! wrapper for lemlib's moveToPoint function that is aware of the MOGO state.
     void deactivate_all_pistons() {
         if (frontLeftArmDown) toggleFrontLeftArm();
         if (frontRightArmDown) toggleFrontRightArm();
         if (goalClampClosed) toggleGoalClamp();
+        if (intakeLiftUp) toggleIntakeLift();
     }
 
+    //! wrapper for lemlib's moveToPoint function that is aware of the MOGO state.
     void moveToPoint(double x, double y, double timeout, lemlib::MoveToPointParams params = {}, bool async = false) {
         chass[MOGO]->moveToPoint(x, y, timeout, params, async);
     }
 
+    //! wrapper for lemlib's moveToPose function that is aware of the MOGO state.
     void moveToPose(double x, double y, double theta, double timeout, lemlib::MoveToPoseParams params = {}, bool async = false) {
         chass[MOGO]->moveToPose(x, y, theta, timeout, params, async);
     }
 
+    //! wrapper for lemlib's turnToHeading function that is aware of the MOGO state.
     void turnToHeading(double theta, double timeout, lemlib::TurnToHeadingParams params = {}, bool async = false) {
         chass[MOGO]->turnToHeading(theta, timeout, params, async);
     }
 
+    //! wrapper for lemlib's turnToPoint function that is aware of the MOGO state.
     void turnToPoint(double x, double y, double timeout, lemlib::TurnToPointParams params = {}, bool async = false) {
         chass[MOGO]->turnToPoint(x, y, timeout, params, async);
     }
 
+    //! wrapper for lemlib's setPose function that is aware of the MOGO state.
     void setPose(double x, double y, double theta) {
         chass[MOGO]->setPose(x, y, theta);
     }
@@ -133,6 +145,12 @@ namespace bot {
         return chass[MOGO]->getPose();
     }
 
+    /**
+     * drives for a certain distance, and then exits without stopping.
+     * @param lMult multiplier for left side of drivetrain (range -1 to 1)
+     * @param rMult multiplier for right side of drivetrain (range -1 to 1)
+     * @param dist distance to drive for in inches
+     */
     void driveWait(double lMult, double rMult, double dist) {
         double curr;
         curr = lMult > rMult ? getLeftPos() : getRightPos();
