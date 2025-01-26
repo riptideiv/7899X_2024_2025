@@ -87,6 +87,8 @@ namespace bot {
 
                     if (intake->speedOverrideCnt == 0 && intake->antiStuck && intake->speed > 50 && intake->mtr->get_actual_velocity() / intake->speed < 0.1 && intake->startupCnt == 0) {
                         intake->stuckCnt++;
+                    } else {
+                        intake->stuckCnt = 0;
                     }
 
                     if (intake->startupCnt != 0) intake->stuckCnt = 0;
