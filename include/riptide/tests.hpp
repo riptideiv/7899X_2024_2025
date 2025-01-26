@@ -95,8 +95,8 @@ namespace test {
     void pidTune() {
         // runAngularPID_kPs(0, 2, 2.8, 0.1, 90, 3000, false);
         // runAngularPID_kDs(3.1, 24.4, 25.4, 0, 90, 2000, false);
-        // runLateralBSearchkP(0, 0, 10, 48, 2000, false);
-        runLateralBSearchkD(5, 0, 0, 48, 2000, true);
+        // runLateralBSearchkP(0, 0, 30, 24, 2000, false);
+        // runLateralBSearchkD(7.5, 50, 100, 24, 2000, false);
     }
 
     void handleDebugInputs() {
@@ -107,15 +107,15 @@ namespace test {
         }
     }
 
-    void findTrackingRadius(){
-        int t=clock();
-        bot::drive_chass(30,-30);
+    void findTrackingRadius() {
+        int t = clock();
+        bot::drive_chass(30, -30);
         pros::delay(500);
         bot::horizTrack[0]->reset();
-        double initAngle=bot::imu->get_rotation();
+        double initAngle = bot::imu->get_rotation();
         pros::delay(5000);
-        std::cout<<"dist: "<<bot::horizTrack[0]->getDistanceTraveled()
-                <<"\nangle: "<<bot::imu->get_rotation()-initAngle
-                <<"\nradius: "<<(bot::horizTrack[0]->getDistanceTraveled()/((bot::imu->get_rotation()-initAngle)/360*2*M_PI))<<'\n';
+        std::cout << "dist: " << bot::horizTrack[0]->getDistanceTraveled()
+            << "\nangle: " << bot::imu->get_rotation() - initAngle
+            << "\nradius: " << (bot::horizTrack[0]->getDistanceTraveled() / ((bot::imu->get_rotation() - initAngle) / 360 * 2 * M_PI)) << '\n';
     }
 }
