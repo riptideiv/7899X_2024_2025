@@ -62,21 +62,21 @@ namespace bot {
         }
 
         // front arms
-        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) {
+        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y)) {
             toggleFrontRightArm();
         }
-        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
             toggleFrontLeftArm();
         }
 
-        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y)) {
+        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) {
             if (bot::goalClampClosed) {
                 bot::toggleGoalClamp();
                 autoMogoCnt = -10;
             }
         }
 
-        if (master.get_digital(pros::E_CONTROLLER_DIGITAL_Y) && !bot::goalClampClosed) {
+        if (master.get_digital(pros::E_CONTROLLER_DIGITAL_B) && !bot::goalClampClosed) {
             autoMogoCnt++;
             if (autoMogoCnt > 10) {
                 if (bot::mogoInRange()) {
