@@ -3,7 +3,7 @@
 #include "main.h"
 
 namespace bot {
-    pros::adi::DigitalOut frontLeftArm('D'), frontRightArm('C');
+    pros::adi::DigitalOut frontLeftArm('F'), frontRightArm('C');
     bool frontLeftArmDown = false, frontRightArmDown = false;
 
     pros::adi::DigitalOut goalClamp('B');

@@ -6,12 +6,7 @@
 
 namespace auton {
     void plusRedV1() {
-        // printf("plusRedV1 was run\n");
-        // bot::intake.set_colorsort(1, 1);
-        // bot::intake.antiStuck = true;
-        // bot::spin_intk(0);
-        // mv2pt(0.0215648, -10.8349, 1000, {.minSpeed})
-        mv2pt(0,48,4000);
+        printf("plusRedV1 was run\n");
     }
     void plusRedV2() {
         printf("plusRedV2 was run\n");
@@ -19,7 +14,7 @@ namespace auton {
     void plusBlueV1() {
         printf("plusBlueV1 was run\n");
         bot::intake.set_colorsort(1, 0);
-        bot::intake.antiStuck = true;
+        bot::intake.doAntiStuck = true;
         bot::spin_intk(0);
         bot::chass[0]->setPose(0, -1, 0);
         bot::chass[1]->setPose(0, -1, 0);
@@ -37,7 +32,7 @@ namespace auton {
             .minSpeed = 10, .earlyExitRange = 3 }, true);
         while (bot::getChass()->isInMotion()) {
             pros::delay(10);
-            if (bot::mogoDist.get() < 75) {
+            if (bot::mogoInRange()) {
                 bot::toggleGoalClamp();
                 break;
             }

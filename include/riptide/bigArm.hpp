@@ -10,8 +10,8 @@ namespace bot {
         pros::Rotation *rotation;
         int posLow, posMid, posHigh, posToScore, posScore;
 
-        const double nkP = 2.1, nkI = 0, nkD = 0; // "normal" kP, kI, kD for resetting after some custom action
-        double kP = 2.1, kI = 0, kD = 0;
+        const double nkP = 2.8, nkI = 0, nkD = 0; // "normal" kP, kI, kD for resetting after some custom action
+        double kP = nkP, kI = nkI, kD = nkD;
 
         int move_target;
         pros::Task *move_task = nullptr;
@@ -25,15 +25,11 @@ namespace bot {
         }
 
         void toggleUp() {
-            // FOR SINGLE LADY BROWN
-            set_target(posHigh);
-
-            // FOR DOUBLE LADY BROWN 
-            // if (move_target == posMid) {
-            //     set_target(posHigh);
-            // } else {
-            //     set_target(posMid);
-            // }
+            if (move_target == posHigh) {
+                set_target(posLow);
+            } else {
+                set_target(posHigh);
+            }
         }
 
         void reset() {

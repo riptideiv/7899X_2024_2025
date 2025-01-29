@@ -10,94 +10,64 @@ namespace bot {
 
         pros::Task *move_task = nullptr;
 
-        double speedOverride = -127;
-        int speedOverrideCnt = 0;
-        int almostOverriding = 0;
-        const int delayCycles = 4;
-        const int speedOverrideCycles = 5;
-
-        bool waitingOverride = 0;
-
-        double speed = 0;
-        double prevSpeed = 0;
-
-        bool colorSort = false;
+        bool doColorSort = false;
         bool colorSortRed = true;
-        int colorCnt = 0;
+        bool doAntiStuck = false;
 
-        bool antiStuck = false;
-        int stuckCnt = 0;
+        int speed = 0;
 
-        int startupCnt = 0;
+        bool throwAway = false;
+
+        int reverseTime = 0;
+
+        const int loopDelay = 3;
+
+        void colorSort() {
+            if (throwAway) {
+                if (mtr->get_position() < 0) {
+                    throwAway = 0;
+                } else if (mtr->get_position() > 265) {
+                    throwAway = 0;
+                    reverseTime = 50;
+                }
+            } else {
+                if (speed > 0 && colorSortSensor.get_proximity() > 70) {
+                    // if (colorSortSensor.get_hue() < 30 && !colorSortRed ||
+                        // colorSortSensor.get_hue() > 90 && colorSortRed) {
+                    throwAway = true;
+                    mtr->set_zero_position(0);
+                    // }
+                }
+            }
+        }
 
         void initialize(int port) {
             mtr = new pros::Motor(port);
 
+            mtr->set_encoder_units(pros::motor_encoder_units_e::E_MOTOR_ENCODER_COUNTS);
             setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
+
+            mtr->set_zero_position(0);
 
             move_task = new pros::Task([](void *intk) {
                 Intake *intake = (Intake *)intk;
                 while (1) {
-                    pros::delay(15);
-
-                    if (intake->almostOverriding > 0) std::cout << intake->almostOverriding << '\n';
-                    if (intake->startupCnt > 0) intake->startupCnt--;
-
-                    if (intake->almostOverriding > 0) {
-                        intake->almostOverriding--;
-                        intake->waitingOverride = 1;
-                    } else if (intake->waitingOverride) {
-                        intake->waitingOverride = 0;
-                        intake->speedOverrideCnt = intake->speedOverrideCycles;
+                    pros::delay(intake->loopDelay);
+                    if (intake->doColorSort) {
+                        intake->colorSort();
                     }
-
-                    if (intake->stuckCnt >= 15) {
-                        intake->speedOverrideCnt = 10;
-                    }
-
-                    if (!intake->colorSortRed && intake->colorCnt >= 2 || intake->colorSortRed && intake->colorCnt >= 1) {
-                        intake->almostOverriding = intake->delayCycles;
-                    }
-
-                    if (intake->speedOverrideCnt > 0) {
-                        intake->speedOverrideCnt--;
-                        intake->mtr->move(intake->speedOverride);
-                        intake->stuckCnt = 0;
-                        intake->colorCnt = 0;
-                        intake->startupCnt = 30;
+                    if (intake->reverseTime > 0) {
+                        intake->reverseTime -= intake->loopDelay;
+                        intake->mtr->move_voltage(-12000);
                     } else {
-                        intake->mtr->move(intake->speed);
+                        intake->mtr->move_voltage(120 * intake->speed);
                     }
-
-                    if (intake->waitingOverride == 0 && intake->speedOverrideCnt == 0 && intake->colorSort && colorSortSensor.get_proximity() > 70) {
-                        std::cout << colorSortSensor.get_hue() << std::endl;
-                        if (
-                            colorSortSensor.get_hue() < 20 &&
-                            !intake->colorSortRed ||
-                            colorSortSensor.get_hue() > 100 &&
-                            intake->colorSortRed) {
-                            intake->colorCnt++;
-                            std::cout << "yes " << (intake->colorCnt) << std::endl;
-                        } else {
-                            intake->colorCnt = 0;
-                        }
-                    } else {
-                        intake->colorCnt = 0;
-                    }
-
-                    if (intake->speedOverrideCnt == 0 && intake->antiStuck && intake->speed > 50 && intake->mtr->get_actual_velocity() / intake->speed < 0.1 && intake->startupCnt == 0) {
-                        intake->stuckCnt++;
-                    } else {
-                        intake->stuckCnt = 0;
-                    }
-
-                    if (intake->startupCnt != 0) intake->stuckCnt = 0;
                 }
                 }, this);
         }
 
         void set_colorsort(bool state, bool red) {
-            colorSort = state;
+            doColorSort = state;
             colorSortRed = red;
         }
 

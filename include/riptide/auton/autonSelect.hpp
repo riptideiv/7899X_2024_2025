@@ -17,8 +17,6 @@ namespace auton {
     // Mode selectedMode = Mode::Risk;
     bool selectedVersion = true;
 
-    bool FLIPPED = false;
-
     pros::Task *autonSelectTask;
 
     inline void displaySelectedAuton() {

@@ -6,20 +6,26 @@
 namespace bot {
     int autoMogoCnt = 0;
 
+    bool toggleMogo = 0;
+    pros::Task toggleMogoTask([]() {
+        while (pros::Task::notify_take(true, TIMEOUT_MAX)) {
+            bot::toggleGoalClamp();
+            pros::Task::delay(50);
+            bot::master.rumble(".");
+        }
+        });
+
     void handleControllerInput() {
         if (auton::autonSelectTask->get_state() != pros::E_TASK_STATE_DELETED) {
             return;
         }
 
-        bot::intake.antiStuck = false;
-        bot::intake.set_colorsort(0, 0);
+        bot::intake.doAntiStuck = false;
+        bot::intake.set_colorsort(1, 1);
 
         // debug
         if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
             std::cout << (bot::chass[0]->getPose().x) << ", " << (bot::chass[0]->getPose().y) << ", " << (bot::chass[0]->getPose().theta) << std::endl;
-        }
-        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
-
         }
 
 #ifndef DISABLE_DRIVING
@@ -46,9 +52,6 @@ namespace bot {
         if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
             bigArm.toggleUp();
         }
-        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) {
-            bigArm.reset();
-        }
 
         if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
             bigArm.manual_move(-100);
@@ -59,10 +62,10 @@ namespace bot {
         }
 
         // front arms
-        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
+        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) {
             toggleFrontRightArm();
         }
-        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
             toggleFrontLeftArm();
         }
 
@@ -76,8 +79,8 @@ namespace bot {
         if (master.get_digital(pros::E_CONTROLLER_DIGITAL_Y) && !bot::goalClampClosed) {
             autoMogoCnt++;
             if (autoMogoCnt > 10) {
-                if (bot::mogoDist.get() < 70) {
-                    bot::toggleGoalClamp();
+                if (bot::mogoInRange()) {
+                    toggleMogoTask.notify();
                 }
             }
         } else {
