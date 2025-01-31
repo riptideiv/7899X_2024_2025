@@ -37,10 +37,11 @@ namespace bot {
             bigArmToScore = 23853,
             bigArmScore = 19800;
 
-        bigArm.initialize(-4, 5, bigArmLow, bigArmMid, bigArmHi, bigArmToScore, bigArmScore);
         intake.initialize(-10);
 
         chass[0]->calibrate();
+        
+        bigArm.initialize(-4, 5, bigArmLow, bigArmMid, bigArmHi, bigArmToScore, bigArmScore);
     }
 
     lemlib::Chassis *getChass() {

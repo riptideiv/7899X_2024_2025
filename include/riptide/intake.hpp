@@ -18,12 +18,17 @@ namespace bot {
 
         bool throwAway = false;
 
+        int stuckFor = 0;
+
         int reverseTime = 0;
+
+        int prevSpd = 0;
+        int startUpTime = 0;
 
         const int loopDelay = 3;
 
         void colorSort() {
-            if (throwAway) {
+            if (throwAway && reverseTime == 0) {
                 if (mtr->get_position() < 0) {
                     throwAway = 0;
                 } else if (mtr->get_position() > 250) {
@@ -33,11 +38,23 @@ namespace bot {
             } else {
                 if (!throwAway && speed > 0 && colorSortSensor.get_proximity() > 70) {
                     if (colorSortSensor.get_hue() < 50 && !colorSortRed ||
-                        colorSortSensor.get_hue() > 60 && colorSortRed) {
+                        colorSortSensor.get_hue() > 75 && colorSortRed) {
                         throwAway = true;
                         mtr->set_zero_position(0);
                     }
                 }
+            }
+        }
+
+        void antiStuck(){
+            if(reverseTime <= 0 && speed > 0 && mtr->get_actual_velocity()/speed < 0.10){
+                stuckFor += loopDelay;
+            }else{
+                stuckFor = 0;
+            }
+
+            if(stuckFor > 50){
+                reverseTime = 100;
             }
         }
 
@@ -53,10 +70,22 @@ namespace bot {
                 Intake *intake = (Intake *)intk;
                 while (1) {
                     pros::delay(intake->loopDelay);
-                    if (intake->doColorSort) {
-                        intake->colorSort();
+                    if(intake->startUpTime<=0){
+                        if (intake->doColorSort) {
+                            intake->colorSort();
+                        }
+                        if(intake->doAntiStuck){
+                            intake->antiStuck();
+                        }
+                    }else{
+                        intake->startUpTime -= intake->loopDelay;
                     }
+                    if(intake->prevSpd == 0 && intake->speed > 0){
+                        intake->startUpTime = 200;
+                    }
+                    intake->prevSpd = intake->speed;
                     if (intake->reverseTime > 0) {
+                        intake->startUpTime = 200;
                         intake->reverseTime -= intake->loopDelay;
                         intake->mtr->move_voltage(-12000);
                     } else {

@@ -20,8 +20,8 @@ namespace bot {
             return;
         }
 
-        bot::intake.doAntiStuck = false;
-        bot::intake.set_colorsort(1, 0);
+        bot::intake.doAntiStuck = true;
+        bot::intake.set_colorsort(0, 0);
 
         // debug
         if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
