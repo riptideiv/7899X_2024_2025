@@ -26,17 +26,17 @@ namespace bot {
             if (throwAway) {
                 if (mtr->get_position() < 0) {
                     throwAway = 0;
-                } else if (mtr->get_position() > 265) {
+                } else if (mtr->get_position() > 250) {
                     throwAway = 0;
-                    reverseTime = 50;
+                    reverseTime = 75;
                 }
             } else {
-                if (speed > 0 && colorSortSensor.get_proximity() > 70) {
-                    // if (colorSortSensor.get_hue() < 30 && !colorSortRed ||
-                        // colorSortSensor.get_hue() > 90 && colorSortRed) {
-                    throwAway = true;
-                    mtr->set_zero_position(0);
-                    // }
+                if (!throwAway && speed > 0 && colorSortSensor.get_proximity() > 70) {
+                    if (colorSortSensor.get_hue() < 50 && !colorSortRed ||
+                        colorSortSensor.get_hue() > 60 && colorSortRed) {
+                        throwAway = true;
+                        mtr->set_zero_position(0);
+                    }
                 }
             }
         }

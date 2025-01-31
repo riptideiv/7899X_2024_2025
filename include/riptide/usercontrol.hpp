@@ -21,7 +21,7 @@ namespace bot {
         }
 
         bot::intake.doAntiStuck = false;
-        bot::intake.set_colorsort(1, 1);
+        bot::intake.set_colorsort(1, 0);
 
         // debug
         if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
