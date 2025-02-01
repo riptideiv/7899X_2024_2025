@@ -27,7 +27,7 @@ namespace bot {
         // odomSensors[1] = new lemlib::OdomSensors(vertTrack[1], nullptr, nullptr, nullptr, imu);
     }
 
-    bool mogoInRange(int range = 56) {
+    bool mogoInRange(int range = 58) {
         return mogoDist.get() <= range;
     }
 }

@@ -7,9 +7,16 @@
 namespace auton {
     void plusRedV1() {
         printf("plusRedV1 was run\n");
+        bot::intake.set_colorsort(1, 1);
+        bot::intake.doAntiStuck = true;
+        bot::spin_intk(0);
+        bot::toggleIntakeLift();
     }
     void plusRedV2() {
         printf("plusRedV2 was run\n");
+        bot::intake.set_colorsort(1, 1);
+        bot::intake.doAntiStuck = true;
+        bot::spin_intk(0);
     }
     void plusBlueV1() {
         printf("plusBlueV1 was run\n");
@@ -55,5 +62,8 @@ namespace auton {
     }
     void plusBlueV2() {
         printf("plusBlueV2 was run\n");
+        bot::intake.set_colorsort(1, 0);
+        bot::intake.doAntiStuck = true;
+        bot::spin_intk(0);
     }
 }

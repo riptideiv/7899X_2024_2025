@@ -10,7 +10,7 @@ namespace bot {
     pros::Task toggleMogoTask([]() {
         while (pros::Task::notify_take(true, TIMEOUT_MAX)) {
             bot::toggleGoalClamp();
-            pros::Task::delay(50);
+            pros::Task::delay(25);
             bot::master.rumble(".");
         }
         });
@@ -20,12 +20,14 @@ namespace bot {
             return;
         }
 
-        bot::intake.doAntiStuck = true;
-        bot::intake.set_colorsort(0, 0);
+        bot::intake.doAntiStuck = false;
 
         // debug
         if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
             std::cout << (bot::chass[0]->getPose().x) << ", " << (bot::chass[0]->getPose().y) << ", " << (bot::chass[0]->getPose().theta) << std::endl;
+        }
+        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+            intake.colorSortRed = !intake.colorSortRed;
         }
 
 #ifndef DISABLE_DRIVING

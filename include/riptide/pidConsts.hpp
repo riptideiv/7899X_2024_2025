@@ -14,7 +14,7 @@ namespace pid {
             0, // small error range timeout, in milliseconds
             0, // large error range, in inches
             0, // large error range timeout, in milliseconds
-            0 // maximum acceleration (slew)
+            10 // maximum acceleration (slew)
         ),
         lemlib::ControllerSettings(
             7.5, // proportional gain (kP)
