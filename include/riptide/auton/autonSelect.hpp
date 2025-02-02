@@ -6,14 +6,16 @@
 
 #include "plus.hpp"
 #include "minus.hpp"
+#include "skills.hpp"
 
 namespace auton {
     enum class Color { Red, Blue };
     enum class Side { Plus, Minus };
     enum class Mode { Risk, Safe };
+    bool Skills = false;
 
     Color selectedColor = Color::Red;
-    Side selectedSide = Side::Plus;
+    Side selectedSide = Side::Minus;
     // Mode selectedMode = Mode::Risk;
     bool selectedVersion = true;
 
@@ -22,41 +24,50 @@ namespace auton {
     inline void displaySelectedAuton() {
         bot::master.print(0, 0, "%s;; %s    ", selectedColor == Color::Red ? "Red" : "Blue", selectedSide == Side::Plus ? "Plus" : "Minus");
         pros::delay(100);
-        bot::master.print(2, 0, "%s;; %s    ", selectedVersion ? "V1" : "V2", /*selectedMode == Mode::Risk ? "Risk" : "Safe"*/ "(N/A)");
+        bot::master.print(2, 0, "%s;; %s    ", selectedVersion ? "V1" : "V2", Skills ? "SKILLS" : "MATCH");
+        if(Skills){
+            bot::bigArm.set_target(bot::bigArm.posLow);
+        }else{
+            bot::bigArm.set_target(bot::bigArm.posHigh);
+        }
     }
 
     void runSelectedAuton() {
         bot::set_brake_mode(pros::MotorBrake::brake);
 
-        if (selectedSide == Side::Plus) {
-            if (selectedColor == Color::Red) {
-                if (selectedVersion) {
-                    plusRedV1();
+        if(Skills){
+            autonSkills();
+        }else{
+            if (selectedSide == Side::Plus) {
+                if (selectedColor == Color::Red) {
+                    if (selectedVersion) {
+                        plusRedV1();
+                    } else {
+                        plusRedV2();
+                    }
                 } else {
-                    plusRedV2();
+                    if (selectedVersion) {
+                        plusBlueV1();
+                    } else {
+                        plusBlueV2();
+                    }
                 }
             } else {
-                if (selectedVersion) {
-                    plusBlueV1();
+                if (selectedColor == Color::Red) {
+                    if (selectedVersion) {
+                        minusRedV1();
+                    } else {
+                        minusRedV2();
+                    }
                 } else {
-                    plusBlueV2();
+                    if (selectedVersion) {
+                        minusBlueV1();
+                    } else {
+                        minusBlueV2();
+                    }
                 }
             }
-        } else {
-            if (selectedColor == Color::Red) {
-                if (selectedVersion) {
-                    minusRedV1();
-                } else {
-                    minusRedV2();
-                }
-            } else {
-                if (selectedVersion) {
-                    minusBlueV1();
-                } else {
-                    minusBlueV2();
-                }
-            }
-        }
+        }        
     }
 
     void autonSelectLoop() {
@@ -79,7 +90,7 @@ namespace auton {
             }
 
             if (bot::master.get_digital_new_press(DIGITAL_B)) {
-                // selectedMode = (selectedMode == Mode::Risk) ? Mode::Safe : Mode::Risk;
+                Skills = !Skills;
                 update = 1;
             }
 
