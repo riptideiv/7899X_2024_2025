@@ -13,6 +13,7 @@ namespace auton{
         // do not change this when changing starting positions!
         // (unless you adjust all the coordinates as well)
         bot::setPose(0,0.0393701*(bot::mogoDist.get_distance()-125),0);
+        // starting position (FEB 3): 143 (originally was 120 but that doesnt work anymore)
 
         bot::spin_intk(100);
         pros::delay(550);
@@ -68,6 +69,10 @@ namespace auton{
         bot::bigArm.raise();
         turn2pt(61.7112, 63.5, 1000);
         bot::spin_intk(100);
+        // need to change wait vlaue
         mv2pose(65, 64, 90, 1000, {.minSpeed=60, .earlyExitRange=0.1});
+        bot::spin_intk(0); 
+        bot::bigArm.set_target(19800);
+
     }
 }
