@@ -12,12 +12,12 @@ namespace auton {
     enum class Color { Red, Blue };
     enum class Side { Plus, Minus };
     enum class Mode { Risk, Safe };
-    bool Skills = true;
+    bool Skills = false;
 
     Color selectedColor = Color::Red;
     Side selectedSide = Side::Minus;
     // Mode selectedMode = Mode::Risk;
-    bool selectedVersion = true;
+    bool selectedVersion = false;
 
     pros::Task *autonSelectTask;
 
