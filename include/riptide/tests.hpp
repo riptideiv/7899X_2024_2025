@@ -162,14 +162,6 @@ namespace test {
         runAngularBSearchkD(1.5, 0, 20, 135, 1500);
     }
 
-    void handleDebugInputs() {
-        if (bot::master.get_digital_new_press(DIGITAL_UP)) {
-            printf("Current Pose: %f, %f, %f\n", bot::chass[0]->getPose().x, bot::chass[0]->getPose().y, bot::chass[0]->getPose().theta);
-            printf("Current Pose[1]: %f, %f, %f\n", bot::chass[1]->getPose().x, bot::chass[1]->getPose().y, bot::chass[1]->getPose().theta);
-            printf("IMU rotation: %f\n", bot::getRotation());
-        }
-    }
-
     void findTrackingRadius() {
         int t = clock();
         bot::drive_chass(30, -30);

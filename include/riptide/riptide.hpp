@@ -37,7 +37,6 @@ namespace riptide {
         // test::pidTune();
         while (1) {
             bot::handleControllerInput();
-            test::handleDebugInputs();
             pros::delay(20);
         }
     }

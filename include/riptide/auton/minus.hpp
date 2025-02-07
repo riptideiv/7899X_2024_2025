@@ -19,18 +19,18 @@ namespace auton {
             bot::bigArm.set_target(14300);
             bot::bigArm.kP = 5;
             });
-        mv2pose(6.10945, 8.82005, 40.6512, 1000, { .lead = 0.2, .minSpeed = 25, .earlyExitRange = 8 });
+        mv2pose(3.57159, 7.65158, 42.7809, 1000, { .lead = 0.1, .minSpeed = 25, .earlyExitRange = 4 });
         mv2pt(0.217278, 3.39952, 500, { .minSpeed = 20, .earlyExitRange = 1 });
         bot::bigArm.reset();
 
         std::cout << "(afterBegin) intake settings: " << bot::intake.doAntiStuck << ' ' << bot::intake.doColorSort << ' ' << bot::intake.colorSortRed << '\n';
 
         // take mogo & first ring
-        turn2pt(-27.5024, -4.44832, 1000, { .forwards = false, .minSpeed = 20, .earlyExitRange = 2 });
-        mv2pt(-27.5024, -4.44832, 1500, { .forwards = false, .maxSpeed = 40, .minSpeed = 20 });
+        turn2pt(-26.5, -3.5, 1000, { .forwards = false, .minSpeed = 20, .earlyExitRange = 2 });
+        mv2pt(-26.5, -3.5, 1500, { .forwards = false, .maxSpeed = 60, .minSpeed = 20 });
         bot::toggleGoalClamp();
         pros::delay(200);
-        turn2pt(-31.9366, -30.1298, 1000);
+        turn2pt(-31.9366, -30.1298, 800);
         bot::spin_intk(100);
         mv2pt(-31.9366, -30.1298, 1000, { .minSpeed = 30, .earlyExitRange = 5 });
         pros::delay(250);
@@ -53,13 +53,18 @@ namespace auton {
         mv2pt(-7.90262, 43.9741, 1000, { .minSpeed = 10,.earlyExitRange = 2 });
         turn2pt(-31.6032, 70.0627, 650);
         mv2pt(-31.6032, 70.0627, 1000, { .minSpeed = 30, .earlyExitRange = 5 });
-        turn2hd(-90, 1000);
+        turn2hd(-90, 500);
         bot::toggleGoalClamp();
         bot::spin_intk(0);
+        bot::bigArm.raise();
         pros::delay(500);
         turn2pt(-32.6359, 45.3611, 1000, { .forwards = false });
-        mv2pt(-32.6359, 45.3611, 1500, { .forwards = false, .maxSpeed = 40, .minSpeed = 20 });
+        mv2pt(-32.6359, 45.3611, 1500, { .forwards = false, .maxSpeed = 60, .minSpeed = 20, .earlyExitRange=1 });
         bot::toggleGoalClamp();
+        bot::spin_intk(100);
+        pros::delay(200);
+        bot::bigArm.set_target(19425);
+        mv2pt(-41.506, 37.7836, 1000, {.minSpeed=10, .earlyExitRange=1});
     }
 
     void minusRedV2() {
@@ -152,6 +157,62 @@ namespace auton {
         bot::intake.set_colorsort(1, 0);
         bot::intake.doAntiStuck = true;
         bot::spin_intk(0);
+
+        std::cout << "(begin) intake settings: " << bot::intake.doAntiStuck << ' ' << bot::intake.doColorSort << ' ' << bot::intake.colorSortRed << '\n';
+
+        // alliance stake
+        pros::Task alliStakeBigArmTask([=]() {
+            pros::Task::delay(250);
+            bot::bigArm.set_target(14300);
+            bot::bigArm.kP = 5;
+            });
+        mv2pose(-4.18527, 8.33226, -45.4873, 1000, { .lead = 0.1, .minSpeed = 25, .earlyExitRange = 4 });
+        mv2pt(0.395338, 3.82862, 500, { .minSpeed = 20, .earlyExitRange = 1 });
+        bot::bigArm.reset();
+
+        std::cout << "(afterBegin) intake settings: " << bot::intake.doAntiStuck << ' ' << bot::intake.doColorSort << ' ' << bot::intake.colorSortRed << '\n';
+
+        // take mogo & first ring
+        turn2pt(25.9462, -3.5, 1000, { .forwards = false, .minSpeed = 20, .earlyExitRange = 2 });
+        mv2pt(25.9462, -3.5, 1500, { .forwards = false, .maxSpeed = 60, .minSpeed = 20 });
+        bot::toggleGoalClamp();
+        pros::delay(200);
+        turn2pt(32.8936, -29.9772, 800);
+        bot::spin_intk(100);
+        mv2pt(32.8936, -29.9772, 1000, { .minSpeed = 30, .earlyExitRange = 5 });
+        pros::delay(250);
+
+        std::cout << "(midRing) intake settings: " << bot::intake.doAntiStuck << ' ' << bot::intake.doColorSort << ' ' << bot::intake.colorSortRed << '\n';
+
+        // mid ring
+        turn2pt(7.85229, 18.0956, 1000);
+        pros::Task toggleLiftTask([=]() {
+            pros::Task::delay(300);
+            bot::toggleIntakeLift();
+            });
+        mv2pt(7.85229, 18.0956, 2000, { .minSpeed = 10,.earlyExitRange = 5 });
+        bot::toggleIntakeLift();
+
+        std::cout << "(end) intake settings: " << bot::intake.doAntiStuck << ' ' << bot::intake.doColorSort << ' ' << bot::intake.colorSortRed << '\n';
+
+        // last ring
+        turn2pt(7.91834, 45.8363, 600);
+        mv2pt(7.91834, 45.8363, 1000, { .minSpeed = 10,.earlyExitRange = 2 });
+        turn2pt(34.667, 64.6133, 650);
+        mv2pt(34.667, 64.6133, 1000, { .minSpeed = 30, .earlyExitRange = 4.5 });
+        turn2hd(90, 500);
+        bot::toggleGoalClamp();
+        bot::spin_intk(0);
+        bot::bigArm.raise();
+        pros::delay(500);
+        turn2pt(33.069664, 46.106853, 1000, { .forwards = false });
+        mv2pt(33.069664, 46.106853, 1500, { .forwards = false, .maxSpeed = 60, .minSpeed = 20, .earlyExitRange=1 });
+        bot::toggleGoalClamp();
+        bot::spin_intk(100);
+        pros::delay(200);
+        bot::bigArm.set_target(19425);
+        mv2pt(40, 38.8278, 1000, {.minSpeed=10, .earlyExitRange=2});
+        bot::drive_chass(0,0);
     }
 
     void minusBlueV2() {
@@ -161,6 +222,8 @@ namespace auton {
         bot::spin_intk(0);
 
         bot::bigArm.reset();
+
+        std::cout << "(begin) intake settings: " << bot::intake.doAntiStuck << ' ' << bot::intake.doColorSort << ' ' << bot::intake.colorSortRed << '\n';
 
         mv2pt(0, -18, 1000, { .forwards = false, .minSpeed = 10, .earlyExitRange = 7 });
         turn2pt(6, -26, 500, { .forwards = false });
@@ -179,6 +242,8 @@ namespace auton {
             pros::delay(5);
         }
         turn2pt(-10, -49, 800);
+
+        std::cout << "(afterBegin) intake settings: " << bot::intake.doAntiStuck << ' ' << bot::intake.doColorSort << ' ' << bot::intake.colorSortRed << '\n';
 
         int t = pros::millis();
         mv2pt(-10, -49, 1000, { .maxSpeed = 60, .minSpeed = 30, .earlyExitRange = 5 });
@@ -204,6 +269,8 @@ namespace auton {
 
         pros::delay(500);
 
+        std::cout << "(midRing) intake settings: " << bot::intake.doAntiStuck << ' ' << bot::intake.doColorSort << ' ' << bot::intake.colorSortRed << '\n';
+
         bot::spin_intk(0);
 
         turn2pt(30.9817, -9.90862, 900);
@@ -214,6 +281,8 @@ namespace auton {
             pros::Task::delay(300);
             bot::toggleIntakeLift();
             });
+
+            std::cout << "(end) intake settings: " << bot::intake.doAntiStuck << ' ' << bot::intake.doColorSort << ' ' << bot::intake.colorSortRed << '\n';
 
         mv2pt(30.9817, -9.90862, 2000, { .minSpeed = 10,.earlyExitRange = 5 });
         mv2pt(30.9817, -9.90862, 250);

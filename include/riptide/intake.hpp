@@ -31,7 +31,7 @@ namespace bot {
             if (throwAway && reverseTime == 0) {
                 if (mtr->get_position() < 0) {
                     throwAway = 0;
-                } else if (mtr->get_position() > 425) {
+                } else if (colorSortRed && mtr->get_position() > 425 || !colorSortRed && mtr->get_position() > 437.5) {
                     throwAway = 0;
                     reverseTime = 75;
                 }
