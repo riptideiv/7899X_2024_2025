@@ -19,7 +19,7 @@ namespace auton {
             bot::bigArm.set_target(14300);
             bot::bigArm.kP = 5;
             });
-        mv2pose(6.10945, 8.82005, 40.6512, 1000, { .lead = 0.2, .minSpeed = 25, .earlyExitRange = 7 });
+        mv2pose(6.10945, 8.82005, 40.6512, 1000, { .lead = 0.2, .minSpeed = 25, .earlyExitRange = 8 });
         mv2pt(0.217278, 3.39952, 500, { .minSpeed = 20, .earlyExitRange = 1 });
         bot::bigArm.reset();
 
@@ -49,13 +49,17 @@ namespace auton {
         std::cout << "(end) intake settings: " << bot::intake.doAntiStuck << ' ' << bot::intake.doColorSort << ' ' << bot::intake.colorSortRed << '\n';
 
         // last ring
-        turn2pt(-7.90262, 43.9741, 650);
+        turn2pt(-7.90262, 43.9741, 600);
         mv2pt(-7.90262, 43.9741, 1000, { .minSpeed = 10,.earlyExitRange = 2 });
         turn2pt(-31.6032, 70.0627, 650);
         mv2pt(-31.6032, 70.0627, 1000, { .minSpeed = 30, .earlyExitRange = 5 });
         turn2hd(-90, 1000);
         bot::toggleGoalClamp();
         bot::spin_intk(0);
+        pros::delay(500);
+        turn2pt(-32.6359, 45.3611, 1000, { .forwards = false });
+        mv2pt(-32.6359, 45.3611, 1500, { .forwards = false, .maxSpeed = 40, .minSpeed = 20 });
+        bot::toggleGoalClamp();
     }
 
     void minusRedV2() {
