@@ -17,7 +17,7 @@ namespace auton {
     Color selectedColor = Color::Red;
     Side selectedSide = Side::Minus;
     // Mode selectedMode = Mode::Risk;
-    bool selectedVersion = false;
+    bool selectedVersion = true;
 
     pros::Task *autonSelectTask;
 
@@ -25,9 +25,9 @@ namespace auton {
         bot::master.print(0, 0, "%s;; %s    ", selectedColor == Color::Red ? "Red" : "Blue", selectedSide == Side::Plus ? "Plus" : "Minus");
         pros::delay(100);
         bot::master.print(2, 0, "%s;; %s    ", selectedVersion ? "V1" : "V2", Skills ? "SKILLS" : "MATCH");
-        if(Skills){
+        if (Skills) {
             bot::bigArm.set_target(bot::bigArm.posLow);
-        }else{
+        } else {
             bot::bigArm.set_target(bot::bigArm.posHigh);
         }
     }
@@ -35,9 +35,9 @@ namespace auton {
     void runSelectedAuton() {
         bot::set_brake_mode(pros::MotorBrake::brake);
 
-        if(Skills){
+        if (Skills) {
             autonSkills();
-        }else{
+        } else {
             if (selectedSide == Side::Plus) {
                 if (selectedColor == Color::Red) {
                     if (selectedVersion) {
@@ -67,7 +67,7 @@ namespace auton {
                     }
                 }
             }
-        }        
+        }
     }
 
     void autonSelectLoop() {
