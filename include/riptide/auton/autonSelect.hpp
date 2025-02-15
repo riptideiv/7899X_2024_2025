@@ -11,59 +11,78 @@
 namespace auton {
     enum class Color { Red, Blue };
     enum class Side { Plus, Minus };
-    enum class Mode { Risk, Safe };
-    bool Skills = false;
+    bool Coop = true;
 
     Color selectedColor = Color::Red;
-    Side selectedSide = Side::Minus;
-    // Mode selectedMode = Mode::Risk;
-    bool selectedVersion = true;
+    Side selectedSide = Side::Plus;
+    int selectedRoute = 1;
+
+    std::string routeDisplay[] = { "SoloWP", "Elims", "2S_Pos" };
 
     pros::Task *autonSelectTask;
 
     inline void displaySelectedAuton() {
         bot::master.print(0, 0, "%s;; %s    ", selectedColor == Color::Red ? "Red" : "Blue", selectedSide == Side::Plus ? "Plus" : "Minus");
         pros::delay(100);
-        bot::master.print(2, 0, "%s;; %s    ", selectedVersion ? "V1" : "V2", Skills ? "SKILLS" : "MATCH");
-        if (Skills) {
-            bot::bigArm.set_target(bot::bigArm.posLow);
-        } else {
-            bot::bigArm.set_target(bot::bigArm.posHigh);
-        }
+        bot::master.print(2, 0, "%s;; %s    ", routeDisplay[(int)selectedRoute], Coop ? "COOP" : "PRESET");
     }
 
     void runSelectedAuton() {
         bot::set_brake_mode(pros::MotorBrake::brake);
 
-        if (Skills) {
-            autonSkills();
+        if (Coop) {
+            coopSlot();
         } else {
             if (selectedSide == Side::Plus) {
                 if (selectedColor == Color::Red) {
-                    if (selectedVersion) {
-                        plusRedV1();
-                    } else {
-                        plusRedV2();
+                    switch (selectedRoute) {
+                    case 0:
+                        plusRedSoloWP();
+                        break;
+                    case 1:
+                        plusRedElims();
+                        break;
+                    case 2:
+                        // plusRedTwoStakePosCorner();
+                        break;
                     }
                 } else {
-                    if (selectedVersion) {
-                        plusBlueV1();
-                    } else {
-                        plusBlueV2();
+                    switch (selectedRoute) {
+                    case 0:
+                        plusBlueSoloWP();
+                        break;
+                    case 1:
+                        plusBlueElims();
+                        break;
+                    case 2:
+                        // minusBlueTwoStakePosCorner();
+                        break;
                     }
                 }
             } else {
                 if (selectedColor == Color::Red) {
-                    if (selectedVersion) {
-                        minusRedV1();
-                    } else {
-                        minusRedV2();
+                    switch (selectedRoute) {
+                    case 0:
+                        minusRedSoloWP();
+                        break;
+                    case 1:
+                        minusRedElims();
+                        break;
+                    case 2:
+                        // minusRedTwoStakePosCorner();
+                        break;
                     }
                 } else {
-                    if (selectedVersion) {
-                        minusBlueV1();
-                    } else {
-                        minusBlueV2();
+                    switch (selectedRoute) {
+                    case 0:
+                        minusBlueSoloWP();
+                        break;
+                    case 1:
+                        minusBlueElims();
+                        break;
+                    case 2:
+                        // minusBlueTwoStakePosCorner();
+                        break;
                     }
                 }
             }
@@ -90,12 +109,13 @@ namespace auton {
             }
 
             if (bot::master.get_digital_new_press(DIGITAL_B)) {
-                Skills = !Skills;
+                Coop = !Coop;
                 update = 1;
             }
 
             if (bot::master.get_digital_new_press(DIGITAL_Y)) {
-                selectedVersion = !selectedVersion;
+                selectedRoute++;
+                if (selectedRoute > 2) selectedRoute = 0;
                 update = 1;
             }
 
