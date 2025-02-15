@@ -37,7 +37,7 @@ namespace bot {
             bigArmToScore = 27300,
             bigArmScore = 19800;
 
-        intake.initialize(-10);
+        intake.initialize(-10, -6);
 
         chass[0]->calibrate();
 

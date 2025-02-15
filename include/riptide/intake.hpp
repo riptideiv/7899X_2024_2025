@@ -6,7 +6,8 @@
 
 namespace bot {
     struct Intake {
-        pros::Motor *mtr;
+        pros::Motor *upperMtr;
+        pros::Motor *frontMtr;
 
         pros::Task *move_task = nullptr;
 
@@ -29,9 +30,9 @@ namespace bot {
 
         void colorSort() {
             if (throwAway && reverseTime <= 0) {
-                if (mtr->get_position() < 0) {
+                if (upperMtr->get_position() < 0) {
                     throwAway = 0;
-                } else if (colorSortRed && mtr->get_position() > 427 || !colorSortRed && mtr->get_position() > 427) {
+                } else if (colorSortRed && upperMtr->get_position() > 427 || !colorSortRed && upperMtr->get_position() > 427) {
                     throwAway = 0;
                     reverseTime = 75;
                 }
@@ -40,7 +41,7 @@ namespace bot {
                     if ((colorSortSensor.get_hue() < 30 || colorSortSensor.get_hue() > 340) && !colorSortRed ||
                         (colorSortSensor.get_hue() > 120 && colorSortSensor.get_hue() < 270) && colorSortRed) {
                         throwAway = true;
-                        mtr->set_zero_position(0);
+                        upperMtr->set_zero_position(0);
                     }
                     // std::cout << "Yes it's running here\n";
                 }
@@ -48,7 +49,7 @@ namespace bot {
         }
 
         void antiStuck() {
-            if (reverseTime <= 0 && speed > 0 && mtr->get_actual_velocity() / speed < 0.10) {
+            if (reverseTime <= 0 && speed > 0 && upperMtr->get_actual_velocity() / speed < 0.10) {
                 stuckFor += loopDelay;
             } else {
                 stuckFor = 0;
@@ -59,7 +60,7 @@ namespace bot {
             }
         }
 
-        void initialize(int port) {
+        void initialize(int upperPort, int frontPort) {
             doColorSort = true;
             colorSortRed = true;
             doAntiStuck = false;
@@ -78,12 +79,13 @@ namespace bot {
             colorSortSensor.set_led_pwm(100);
             colorSortSensor.set_integration_time(5);
 
-            mtr = new pros::Motor(port);
+            upperMtr = new pros::Motor(upperPort);
+            frontMtr = new pros::Motor(frontPort);
 
-            mtr->set_encoder_units(pros::motor_encoder_units_e::E_MOTOR_ENCODER_COUNTS);
+            upperMtr->set_encoder_units(pros::motor_encoder_units_e::E_MOTOR_ENCODER_COUNTS);
+            upperMtr->set_zero_position(0);
+
             setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
-
-            mtr->set_zero_position(0);
 
             move_task = new pros::Task([](void *intk) {
                 Intake *intake = (Intake *)intk;
@@ -106,10 +108,11 @@ namespace bot {
                     if (intake->reverseTime > 0) {
                         intake->startUpTime = 200;
                         intake->reverseTime -= intake->loopDelay;
-                        intake->mtr->move_voltage(-12000);
+                        intake->upperMtr->move_voltage(-12000);
                     } else {
-                        intake->mtr->move_voltage(120 * intake->speed);
+                        intake->upperMtr->move_voltage(120 * intake->speed);
                     }
+                    intake->frontMtr->move_voltage(120 * intake->speed);
                 }
                 }, this);
         }
@@ -124,7 +127,8 @@ namespace bot {
         }
 
         void setBrakeMode(pros::motor_brake_mode_e_t mode) {
-            mtr->set_brake_mode(mode);
+            upperMtr->set_brake_mode(mode);
+            frontMtr->set_brake_mode(mode);
         }
     }   intake;
 }
