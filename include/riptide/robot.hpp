@@ -8,7 +8,7 @@
 #include "pneumatics.hpp"
 
 namespace bot {
-    lemlib::ExpoDriveCurve driveSteerCurve(5, 15, 1.02);
+    lemlib::ExpoDriveCurve driveSteerCurve(5, 15, 1.01);
 
     pros::Controller master(pros::E_CONTROLLER_MASTER);
 
@@ -34,13 +34,13 @@ namespace bot {
         int bigArmHi = 33400,
             bigArmMid = 33400,
             bigArmLow = 35191,
-            bigArmToScore = 23853,
+            bigArmToScore = 27300,
             bigArmScore = 19800;
 
         intake.initialize(-10);
 
         chass[0]->calibrate();
-        
+
         bigArm.initialize(-4, 5, bigArmLow, bigArmMid, bigArmHi, bigArmToScore, bigArmScore);
     }
 
@@ -103,7 +103,7 @@ namespace bot {
         drivetrain->leftMotors->move_voltage(lPct * 120);
         drivetrain->rightMotors->move_voltage(rPct * 120);
     }
-    
+
     //! spins the intake
     void spin_intk(double pct) {
         intake.set_speed(pct * 1.27);
