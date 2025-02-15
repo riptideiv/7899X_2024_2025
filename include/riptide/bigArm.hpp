@@ -10,7 +10,7 @@ namespace bot {
         pros::Rotation *rotation;
         int posLow, posMid, posHigh, posToScore, posScore;
 
-        const double nkP = 2.8, nkI = 0, nkD = 0; // "normal" kP, kI, kD for resetting after some custom action
+        const double nkP = 4, nkI = 0, nkD = 0; // "normal" kP, kI, kD for resetting after some custom action
         double kP = nkP, kI = nkI, kD = nkD;
 
         int move_target;
