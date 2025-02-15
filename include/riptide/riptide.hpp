@@ -25,7 +25,7 @@ namespace riptide {
         while (1) {
             bot::bigArm.reset();
             pros::delay(100);
-            bot::deactivate_all_pistons();
+            if (bot::intakeLiftUp) bot::toggleIntakeLift();
         }
     }
 
