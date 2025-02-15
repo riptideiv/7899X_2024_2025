@@ -38,6 +38,10 @@ namespace bot {
         getChass()->arcade(leftStickY, rightStickX);
 #endif
 
+        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+            deactivate_all_pistons();
+        }
+
         // intake
         if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
             spin_intk(100);
