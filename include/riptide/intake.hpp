@@ -28,20 +28,21 @@ namespace bot {
         const int loopDelay = 3;
 
         void colorSort() {
-            if (throwAway && reverseTime == 0) {
+            if (throwAway && reverseTime <= 0) {
                 if (mtr->get_position() < 0) {
                     throwAway = 0;
-                } else if (colorSortRed && mtr->get_position() > 425 || !colorSortRed && mtr->get_position() > 437.5) {
+                } else if (colorSortRed && mtr->get_position() > 427 || !colorSortRed && mtr->get_position() > 427) {
                     throwAway = 0;
                     reverseTime = 75;
                 }
             } else {
                 if (!throwAway && speed > 0 && colorSortSensor.get_proximity() > 200) {
-                    if (colorSortSensor.get_hue() < 30 && !colorSortRed ||
-                        colorSortSensor.get_hue() > 180 && colorSortRed) {
+                    if ((colorSortSensor.get_hue() < 30 || colorSortSensor.get_hue() > 340) && !colorSortRed ||
+                        (colorSortSensor.get_hue() > 120 && colorSortSensor.get_hue() < 270) && colorSortRed) {
                         throwAway = true;
                         mtr->set_zero_position(0);
                     }
+                    // std::cout << "Yes it's running here\n";
                 }
             }
         }
@@ -59,6 +60,21 @@ namespace bot {
         }
 
         void initialize(int port) {
+            doColorSort = true;
+            colorSortRed = true;
+            doAntiStuck = false;
+
+            speed = 0;
+
+            throwAway = false;
+
+            stuckFor = 0;
+
+            reverseTime = 0;
+
+            prevSpd = 0;
+            startUpTime = 0;
+
             colorSortSensor.set_led_pwm(100);
             colorSortSensor.set_integration_time(5);
 
