@@ -8,7 +8,7 @@
 #include "pneumatics.hpp"
 
 namespace bot {
-    lemlib::ExpoDriveCurve driveSteerCurve(5, 15, 1.01);
+    lemlib::ExpoDriveCurve driveSteerCurve(10, 15, 1.01);
 
     pros::Controller master(pros::E_CONTROLLER_MASTER);
 
@@ -31,11 +31,11 @@ namespace bot {
         chass[0] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[0], pid::angular_controller[0], *odomSensors[0], &(lemlib::defaultDriveCurve), &driveSteerCurve);
         chass[1] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[1], pid::angular_controller[1], *odomSensors[1], &(lemlib::defaultDriveCurve), &driveSteerCurve);
 
-        int bigArmHi = 33400,
-            bigArmMid = 33400,
+        int bigArmHi = 33300,
+            bigArmMid = 33300, // useless rn
             bigArmLow = 35191,
-            bigArmToScore = 27300,
-            bigArmScore = 19800;
+            bigArmToScore = 27300, // useless rn
+            bigArmScore = 19900;
 
         intake.initialize(-10, -6);
 
@@ -102,11 +102,6 @@ namespace bot {
     void drive_chass(double lPct, double rPct) {
         drivetrain->leftMotors->move_voltage(lPct * 120);
         drivetrain->rightMotors->move_voltage(rPct * 120);
-    }
-
-    //! spins the intake
-    void spin_intk(double pct) {
-        intake.set_speed(pct * 1.27);
     }
 
     //! wrapper for lemlib's moveToPoint function that is aware of the MOGO state.

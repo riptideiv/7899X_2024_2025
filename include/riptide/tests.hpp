@@ -166,10 +166,11 @@ namespace test {
         int t = clock();
         bot::drive_chass(30, -30);
         pros::delay(500);
-        bot::horizTrack[0]->reset();
+        bot::horizTrackRotSensor->reset();
         double initAngle = bot::imu->get_rotation();
         pros::delay(5000);
-        std::cout << "dist: " << bot::horizTrack[0]->getDistanceTraveled()
+        double pos = bot::horizTrackRotSensor->get_position() / 36000.0 * 2.75 * M_PI;
+        std::cout << "dist: " << pos
             << "\nangle: " << bot::imu->get_rotation() - initAngle
             << "\nradius: " << (bot::horizTrack[0]->getDistanceTraveled() / ((bot::imu->get_rotation() - initAngle) / 360 * 2 * M_PI)) << '\n';
     }

@@ -1,13 +1,5 @@
 #pragma once
 
-// #define mv2pt bot::moveToPoint
-
-// #define mv2pose bot::moveToPose
-
-// #define turn2hd bot::turnToHeading
-
-// #define turn2pt bot::turnToPoint
-
 namespace auton {
     void printPose() {
         printf("Pose: %f %f %f\n", bot::getPose().x, bot::getPose().y, bot::getPose().theta);
@@ -35,14 +27,14 @@ namespace auton {
     }
 
     /**
-     * turn in place to face a specified POINT  
+     * turn in place to face a specified POINT
      */
     void turn2pt(double x, double y, double timeout, lemlib::TurnToPointParams params = {}, bool async = false) {
         bot::turnToPoint(x, y, timeout, params, async);
     }
 
     /**
-     * 
+     *
      */
     void drWait(double lMult, double rMult, double dist) {
         bot::driveWait(lMult, rMult, dist);

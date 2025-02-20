@@ -72,67 +72,7 @@ namespace auton {
 
     void plusRedElims() {
         printf("plusRedV2 was run\n");
-        bot::intake.set_colorsort(1, 1);
-        bot::intake.doAntiStuck = true;
-        bot::bigArm.reset();
-        bot::spin_intk(0);
 
-        std::cout << "(begin) intake settings: " << bot::intake.doAntiStuck << ' ' << bot::intake.doColorSort << ' ' << bot::intake.colorSortRed << '\n';
-
-        mv2pt(0, -18, 1000, { .forwards = false, .minSpeed = 10, .earlyExitRange = 7 });
-        turn2pt(6, -26, 500, { .forwards = false });
-        mv2pt(6, -26, 1500, { .forwards = false, .maxSpeed = 40, .minSpeed = 10, .earlyExitRange = 2 }, true);
-        while (bot::getChass()->isInMotion()) {
-            pros::delay(5);
-            if (bot::mogoInRange(63)) {
-                break;
-            }
-        }
-        bot::toggleGoalClamp();
-        pros::delay(50);
-        bot::spin_intk(100);
-        pros::delay(150);
-        while (bot::getChass()->isInMotion()) {
-            pros::delay(5);
-        }
-
-        // first ring
-        turn2pt(-17.2918, -29.7343, 1000, { .minSpeed = 20, .earlyExitRange = 5 });
-        mv2pt(-17.2918, -29.7343, 1000, { .maxSpeed = 60, .minSpeed = 30, .earlyExitRange = 3 });
-        pros::delay(300);
-
-        // turn to mid
-        mv2pt(5.13989, -30.4452, 1000, { .forwards = false, .minSpeed = 20, .earlyExitRange = 2 });
-        turn2pt(20, -7.85, 1000, { .minSpeed = 10, .earlyExitRange = 5 });
-
-        pros::Task toggleLiftTask([=]() {
-            pros::Task::delay(300);
-            bot::toggleIntakeLift();
-            });
-
-        mv2pt(29.815, -7.85, 1000, { .minSpeed = 10, .earlyExitRange = 5 });
-        bot::toggleIntakeLift();
-        mv2pt(29.815, -7.85, 250);
-
-        turn2pt(-21, 0, 1000);
-        mv2pt(-21, 0, 2000, { .minSpeed = 5, .earlyExitRange = 1 });
-        turn2pt(-27.4693, 7.13953, 1000);
-
-        mv2pt(-27.4693, 7.13953, 1000, { .minSpeed = 127, .earlyExitRange = 0.5 });
-        bot::drive_chass(100, 100);
-        pros::delay(750);
-        bot::getChass()->setPose(0, 0, 0);
-        mv2pt(0, -10, 1000, { .forwards = false, .minSpeed = 10, .earlyExitRange = 1 });
-
-        bot::drive_chass(100, 100);
-        pros::delay(1000);
-        bot::getChass()->setPose(0, 0, 0);
-        mv2pt(0, -10, 1000, { .forwards = false, .minSpeed = 10, .earlyExitRange = 1 });
-
-        bot::drive_chass(100, 100);
-        pros::delay(1000);
-        bot::getChass()->setPose(0, 0, 0);
-        mv2pt(0, -10, 1000, { .forwards = false, .minSpeed = 10, .earlyExitRange = 1 });
     }
 
     void plusBlueSoloWP() {

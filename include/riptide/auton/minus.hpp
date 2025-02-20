@@ -72,90 +72,7 @@ namespace auton {
     // recommended
     void minusRedElims() {
         printf("minusRedElims was run\n");
-        bot::intake.doAntiStuck = true;
-        bot::intake.set_colorsort(1, 1);
-        bot::spin_intk(0);
 
-        bot::bigArm.reset();
-
-        std::cout << "(begin) intake settings: " << bot::intake.doAntiStuck << ' ' << bot::intake.doColorSort << ' ' << bot::intake.colorSortRed << '\n';
-
-        mv2pt(0, -18, 1000, { .forwards = false, .minSpeed = 10, .earlyExitRange = 7 });
-        turn2pt(-6, -24.5, 600, { .forwards = false });
-        mv2pt(-6, -24.5, 1500, { .forwards = false, .maxSpeed = 40, .minSpeed = 10, .earlyExitRange = 2 }, true);
-        while (bot::getChass()->isInMotion()) {
-            pros::delay(5);
-            if (bot::mogoInRange(63)) {
-                break;
-            }
-        }
-        bot::toggleGoalClamp();
-        pros::delay(50);
-        bot::spin_intk(100);
-        pros::delay(150);
-        while (bot::getChass()->isInMotion()) {
-            pros::delay(5);
-        }
-        turn2pt(13, -44, 1000, { .minSpeed = 20, .earlyExitRange = 5 });
-
-        bot::intake.set_colorsort(1, 1);
-        bot::intake.doAntiStuck = true;
-
-        // ring #1
-        int t = pros::millis();
-        mv2pt(11, -44, 1000, { .maxSpeed = 60, .minSpeed = 30, .earlyExitRange = 5 });
-        std::cout << "1 " << pros::millis() - t << '\n';
-        pros::delay(500);
-
-        mv2pt(0.475137, -30.0357, 1000, { .forwards = false, .minSpeed = 10, .earlyExitRange = 8 });
-
-        turn2pt(20, -45.0706, 1000, { .minSpeed = 20, .earlyExitRange = 5 });
-
-        t = pros::millis();
-        mv2pt(18, -45.0706, 1000, { .maxSpeed = 60, .minSpeed = 30, .earlyExitRange = 5 });
-        std::cout << "3 " << pros::millis() - t << '\n';
-        pros::delay(500);
-
-        mv2pt(-4.61257, -26.5479, 1000, { .forwards = false, .minSpeed = 10, .earlyExitRange = 8 });
-
-        turn2pt(18.1098, -26.5, 1000, { .minSpeed = 10, .earlyExitRange = 5 });
-
-        t = pros::millis();
-        mv2pt(18.1098, -26.5, 1000, { .maxSpeed = 60, .minSpeed = 30, .earlyExitRange = 5 });
-        std::cout << "4 " << pros::millis() - t << '\n';
-
-        pros::delay(500);
-
-        std::cout << "(afterBegin) intake settings: " << bot::intake.doAntiStuck << ' ' << bot::intake.doColorSort << ' ' << bot::intake.colorSortRed << '\n';
-
-        bot::spin_intk(0);
-
-        turn2pt(-34.0755, -2.19481, 900);
-
-        bot::spin_intk(100);
-
-        pros::Task toggleLiftTask([=]() {
-            pros::Task::delay(300);
-            bot::toggleIntakeLift();
-            });
-
-        mv2pt(-34.0755, -2.19481, 2000, { .minSpeed = 10,.earlyExitRange = 2 });
-        mv2pt(-34.0755, -2.19481, 250);
-        bot::toggleIntakeLift();
-        pros::delay(250);
-
-        std::cout << "(midRing) intake settings: " << bot::intake.doAntiStuck << ' ' << bot::intake.doColorSort << ' ' << bot::intake.colorSortRed << '\n';
-
-        mv2pt(-91.7966, 18, 1500, { .minSpeed = 10,.earlyExitRange = 30 });
-        bot::spin_intk(-100);
-        bot::toggleFrontRightArm();
-        mv2pt(-91.7966, 18, 500, { .minSpeed = 10,.earlyExitRange = 10 });
-        mv2pt(-91.7966, 18, 500);
-        turn2hd(-215, 1000, { .direction = lemlib::AngularDirection::CCW_COUNTERCLOCKWISE, .minSpeed = 127, .earlyExitRange = 90 });
-        bot::toggleFrontRightArm();
-        turn2hd(-215, 1000);
-
-        std::cout << "(end) intake settings: " << bot::intake.doAntiStuck << ' ' << bot::intake.doColorSort << ' ' << bot::intake.colorSortRed << '\n';
     }
 
     void minusRedTwoStakePosCorner() {
@@ -177,7 +94,7 @@ namespace auton {
             bot::bigArm.kP = 5;
             });
         mv2pose(-4.18527, 8.33226, -45.4873, 1000, { .lead = 0.1, .minSpeed = 25, .earlyExitRange = 4 });
-        mv2pt(0.395338, 3.82862, 500, { .minSpeed = 20, .earlyExitRange = 1 });
+        mv2pt(0.395338, 3.82862, 500, { .minSpeed = 30, .earlyExitRange = 1 });
         bot::bigArm.reset();
 
         std::cout << "(afterBegin) intake settings: " << bot::intake.doAntiStuck << ' ' << bot::intake.doColorSort << ' ' << bot::intake.colorSortRed << '\n';

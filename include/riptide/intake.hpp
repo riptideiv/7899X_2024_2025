@@ -15,13 +15,16 @@ namespace bot {
         bool colorSortRed = true;
         bool doAntiStuck = false;
 
-        int speed = 0;
+        int upperSpd = 0;
+        int frontSpd = 0;
 
         bool throwAway = false;
 
         int stuckFor = 0;
 
-        int reverseTime = 0;
+        int upReverseTime = 0;
+
+        int frReverseTime = 0;
 
         int prevSpd = 0;
         int startUpTime = 0;
@@ -29,15 +32,16 @@ namespace bot {
         const int loopDelay = 3;
 
         void colorSort() {
-            if (throwAway && reverseTime <= 0) {
-                if (upperMtr->get_position() < 0) {
+            if (throwAway && upReverseTime <= 0) {
+                if (upperMtr->get_position() < -300) {
                     throwAway = 0;
-                } else if (colorSortRed && upperMtr->get_position() > 427 || !colorSortRed && upperMtr->get_position() > 427) {
+                } else if (colorSortRed && upperMtr->get_position() > 435 || !colorSortRed && upperMtr->get_position() > 435) {
                     throwAway = 0;
-                    reverseTime = 75;
+                    upReverseTime = 110;
+                    frReverseTime = 110;
                 }
             } else {
-                if (!throwAway && speed > 0 && colorSortSensor.get_proximity() > 200) {
+                if (!throwAway && upperSpd > 0 && colorSortSensor.get_proximity() > 200 && bigArm.move_target != bigArm.posHigh) {
                     if ((colorSortSensor.get_hue() < 30 || colorSortSensor.get_hue() > 340) && !colorSortRed ||
                         (colorSortSensor.get_hue() > 120 && colorSortSensor.get_hue() < 270) && colorSortRed) {
                         throwAway = true;
@@ -49,14 +53,15 @@ namespace bot {
         }
 
         void antiStuck() {
-            if (reverseTime <= 0 && speed > 0 && upperMtr->get_actual_velocity() / speed < 0.10) {
+            if (upReverseTime <= 0 && upperSpd > 0 && upperMtr->get_actual_velocity() / upperSpd < 0.05) {
                 stuckFor += loopDelay;
             } else {
                 stuckFor = 0;
             }
 
             if (bot::bigArm.move_target != bot::bigArm.posHigh && stuckFor > 50) {
-                reverseTime = 100;
+                upReverseTime = 150;
+                frReverseTime = 250;
             }
         }
 
@@ -65,13 +70,14 @@ namespace bot {
             colorSortRed = true;
             doAntiStuck = false;
 
-            speed = 0;
+            upperSpd = 0;
 
             throwAway = false;
 
             stuckFor = 0;
 
-            reverseTime = 0;
+            upReverseTime = 0;
+            frReverseTime = 0;
 
             prevSpd = 0;
             startUpTime = 0;
@@ -101,18 +107,23 @@ namespace bot {
                     } else {
                         intake->startUpTime -= intake->loopDelay;
                     }
-                    if (intake->prevSpd == 0 && intake->speed > 0) {
+                    if (intake->prevSpd == 0 && intake->upperSpd > 0) {
                         intake->startUpTime = 200;
                     }
-                    intake->prevSpd = intake->speed;
-                    if (intake->reverseTime > 0) {
-                        intake->startUpTime = 200;
-                        intake->reverseTime -= intake->loopDelay;
+                    intake->prevSpd = intake->upperSpd;
+                    if (intake->upReverseTime > 0) {
+                        intake->startUpTime = 300;
+                        intake->upReverseTime -= intake->loopDelay;
                         intake->upperMtr->move_voltage(-12000);
                     } else {
-                        intake->upperMtr->move_voltage(120 * intake->speed);
+                        intake->upperMtr->move_voltage(120 * intake->upperSpd);
                     }
-                    intake->frontMtr->move_voltage(120 * intake->speed);
+                    if (intake->frReverseTime > 0) {
+                        intake->frReverseTime -= intake->loopDelay;
+                        intake->frontMtr->move_voltage(-12000);
+                    } else {
+                        intake->frontMtr->move_voltage(120 * intake->frontSpd);
+                    }
                 }
                 }, this);
         }
@@ -122,13 +133,38 @@ namespace bot {
             colorSortRed = red;
         }
 
+        void set_upspeed(double spd) {
+            upperSpd = spd;
+        }
+
+        void set_frspeed(double spd) {
+            frontSpd = spd;
+        }
+
         void set_speed(double spd) {
-            speed = spd;
+            set_upspeed(spd);
+            set_frspeed(spd);
         }
 
         void setBrakeMode(pros::motor_brake_mode_e_t mode) {
             upperMtr->set_brake_mode(mode);
             frontMtr->set_brake_mode(mode);
         }
-    }   intake;
+    } intake;
+
+    //! spins the front intake
+    void spin_frintk(double pct) {
+        intake.set_frspeed(pct * 1.27);
+    }
+
+    //! spins the upper intake
+    void spin_upintk(double pct) {
+        intake.set_upspeed(pct * 1.27);
+    }
+
+    //! spins the intake
+    void spin_intk(double pct) {
+        spin_frintk(pct);
+        spin_upintk(pct);
+    }
 }

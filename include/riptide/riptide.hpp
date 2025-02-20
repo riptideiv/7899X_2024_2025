@@ -34,7 +34,7 @@ namespace riptide {
     }
 
     void opcontrol() {
-        // test::pidTune();
+        // test::findTrackingRadius();
         while (1) {
             bot::handleControllerInput();
             pros::delay(20);

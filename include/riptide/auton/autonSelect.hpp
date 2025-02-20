@@ -4,87 +4,72 @@
 
 #include "../auton.hpp"
 
-#include "plus.hpp"
-#include "minus.hpp"
+#include "red.hpp"
+#include "blue.hpp"
+#include "coop.hpp"
 #include "skills.hpp"
 
 namespace auton {
     enum class Color { Red, Blue };
-    enum class Side { Plus, Minus };
-    bool Coop = true;
 
     Color selectedColor = Color::Red;
-    Side selectedSide = Side::Plus;
-    int selectedRoute = 1;
+    int selectedRoute = 3;
+    int selectedKeybinds = 1;
 
-    std::string routeDisplay[] = { "SoloWP", "Elims", "2S_Pos" };
+    std::vector<std::string> routeDisplay = { "Skills", "Coop", "Neg2+1+2", "Neg5+1", "PosRush" };
+    std::string keybindsDisplay[] = { "xr_c", "altf4" };
 
     pros::Task *autonSelectTask;
 
     inline void displaySelectedAuton() {
-        bot::master.print(0, 0, "%s;; %s    ", selectedColor == Color::Red ? "Red" : "Blue", selectedSide == Side::Plus ? "Plus" : "Minus");
+        bot::master.print(0, 0, "%s;; %s    ", selectedColor == Color::Red ? "Red" : "Blue", keybindsDisplay[selectedKeybinds]);
         pros::delay(100);
-        bot::master.print(2, 0, "%s;; %s    ", routeDisplay[(int)selectedRoute], Coop ? "COOP" : "PRESET");
+        bot::master.print(2, 0, "%s            ", routeDisplay[(int)selectedRoute]);
     }
 
     void runSelectedAuton() {
         bot::set_brake_mode(pros::MotorBrake::brake);
-
-        if (Coop) {
-            coopSlot();
+        if (selectedColor == Color::Red) {
+            bot::intake.doAntiStuck = true;
+            bot::intake.set_colorsort(1, 1);
+            bot::spin_intk(0);
+            switch (selectedRoute) {
+            case 0:
+                autonSkills();
+                break;
+            case 1:
+                coopSlot();
+                break;
+            case 2:
+                red::minus2_1_2();
+                break;
+            case 3:
+                red::minus5_1();
+                break;
+            case 4:
+                red::minus6();
+                break;
+            }
         } else {
-            if (selectedSide == Side::Plus) {
-                if (selectedColor == Color::Red) {
-                    switch (selectedRoute) {
-                    case 0:
-                        plusRedSoloWP();
-                        break;
-                    case 1:
-                        plusRedElims();
-                        break;
-                    case 2:
-                        // plusRedTwoStakePosCorner();
-                        break;
-                    }
-                } else {
-                    switch (selectedRoute) {
-                    case 0:
-                        plusBlueSoloWP();
-                        break;
-                    case 1:
-                        plusBlueElims();
-                        break;
-                    case 2:
-                        // minusBlueTwoStakePosCorner();
-                        break;
-                    }
-                }
-            } else {
-                if (selectedColor == Color::Red) {
-                    switch (selectedRoute) {
-                    case 0:
-                        minusRedSoloWP();
-                        break;
-                    case 1:
-                        minusRedElims();
-                        break;
-                    case 2:
-                        // minusRedTwoStakePosCorner();
-                        break;
-                    }
-                } else {
-                    switch (selectedRoute) {
-                    case 0:
-                        minusBlueSoloWP();
-                        break;
-                    case 1:
-                        minusBlueElims();
-                        break;
-                    case 2:
-                        // minusBlueTwoStakePosCorner();
-                        break;
-                    }
-                }
+            bot::intake.doAntiStuck = true;
+            bot::intake.set_colorsort(1, 0);
+            bot::spin_intk(0);
+            switch (selectedRoute) {
+            case 0:
+                autonSkills();
+                break;
+            case 1:
+                coopSlot();
+                break;
+            case 2:
+                blue::minus2_1_2();
+                break;
+            case 3:
+                blue::minus5_1();
+                break;
+            case 4:
+                blue::minus6();
+                break;
             }
         }
     }
@@ -98,24 +83,26 @@ namespace auton {
         while (!pros::competition::is_disabled()) {
             bool update = 0;
 
-            if (bot::master.get_digital_new_press(DIGITAL_X)) {
+            if (bot::master.get_digital_new_press(DIGITAL_Y)) {
                 selectedColor = (selectedColor == Color::Red) ? Color::Blue : Color::Red;
                 update = 1;
             }
 
             if (bot::master.get_digital_new_press(DIGITAL_A)) {
-                selectedSide = (selectedSide == Side::Plus) ? Side::Minus : Side::Plus;
+                selectedKeybinds++;
+                if (selectedKeybinds >= 2) selectedKeybinds = 0;
+                update = 1;
+            }
+
+            if (bot::master.get_digital_new_press(DIGITAL_X)) {
+                selectedRoute++;
+                if (selectedRoute >= routeDisplay.size()) selectedRoute = 0;
                 update = 1;
             }
 
             if (bot::master.get_digital_new_press(DIGITAL_B)) {
-                Coop = !Coop;
-                update = 1;
-            }
-
-            if (bot::master.get_digital_new_press(DIGITAL_Y)) {
-                selectedRoute++;
-                if (selectedRoute > 2) selectedRoute = 0;
+                selectedRoute--;
+                if (selectedRoute < 0) selectedRoute = routeDisplay.size() - 1;
                 update = 1;
             }
 
