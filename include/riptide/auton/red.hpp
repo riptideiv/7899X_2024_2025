@@ -9,7 +9,7 @@ using namespace bot;
 
 namespace red {
     void minus2_1_2() {
-
+        chass[1]->turnToHeading(45, 1000);
     }
 
     void minus5_1() {
@@ -43,21 +43,21 @@ namespace red {
         turn2pt(-30.4014, -27.5, 1000, { .minSpeed = 30, .earlyExitRange = 5 });
         mv2pt(-30.4014, -27.5, 1000, { .maxSpeed = 51, .minSpeed = 50, .earlyExitRange = 1 });
 
-        // get corner
-        mv2pt(-1.7848, -27.5, 1000, { .minSpeed = 20, .earlyExitRange = 1 });
-        turn2pt(23, -50, 550);
-        mv2pt(23, -50, 1000, { .maxSpeed = 60, .minSpeed = 20, .earlyExitRange = 18 });
-        pros::delay(250);
-        mv2pt(5.74047, -31.7604, 1000, { .forwards = false, .maxSpeed = 30, .minSpeed = 10, .earlyExitRange = 3.5 });
-        pros::delay(300);
-        mv2pt(23, -50, 2000, { .maxSpeed = 60, .minSpeed = 20, .earlyExitRange = 18 });
-        pros::delay(250);
-        mv2pt(5.74047, -31.7604, 1000, { .forwards = false, .maxSpeed = 30, .minSpeed = 10, .earlyExitRange = 3.5 });
-        pros::delay(300);
-        mv2pt(23, -50, 2000, { .maxSpeed = 60, .minSpeed = 20, .earlyExitRange = 18 });
-        pros::delay(250);
-        mv2pt(5.74047, -31.7604, 1000, { .forwards = false, .maxSpeed = 30, .minSpeed = 10, .earlyExitRange = 3.5 });
-        pros::delay(300);
+        // // get corner
+        // mv2pt(-1.7848, -27.5, 1000, { .minSpeed = 20, .earlyExitRange = 1 });
+        // turn2pt(23, -50, 550);
+        // mv2pt(23, -50, 1000, { .maxSpeed = 60, .minSpeed = 20, .earlyExitRange = 18 });
+        // pros::delay(250);
+        // mv2pt(5.74047, -31.7604, 1000, { .forwards = false, .maxSpeed = 30, .minSpeed = 10, .earlyExitRange = 3.5 });
+        // pros::delay(300);
+        // mv2pt(23, -50, 2000, { .maxSpeed = 60, .minSpeed = 20, .earlyExitRange = 18 });
+        // pros::delay(250);
+        // mv2pt(5.74047, -31.7604, 1000, { .forwards = false, .maxSpeed = 30, .minSpeed = 10, .earlyExitRange = 3.5 });
+        // pros::delay(300);
+        // mv2pt(23, -50, 2000, { .maxSpeed = 60, .minSpeed = 20, .earlyExitRange = 18 });
+        // pros::delay(250);
+        // mv2pt(5.74047, -31.7604, 1000, { .forwards = false, .maxSpeed = 30, .minSpeed = 10, .earlyExitRange = 3.5 });
+        // pros::delay(300);
     }
 
     void minus6() {

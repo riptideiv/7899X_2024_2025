@@ -2,24 +2,23 @@
 
 #include "main.h"
 
-#include "../auton.hpp"
-
 #include "red.hpp"
 #include "blue.hpp"
 #include "coop.hpp"
 #include "skills.hpp"
 
 namespace auton {
+    pros::Task *autonSelectTask;
+    bool auton_running = false;
+
     enum class Color { Red, Blue };
 
     Color selectedColor = Color::Red;
-    int selectedRoute = 3;
+    int selectedRoute = 0;
     int selectedKeybinds = 1;
 
     std::vector<std::string> routeDisplay = { "Skills", "Coop", "Neg2+1+2", "Neg5+1", "PosRush" };
     std::string keybindsDisplay[] = { "xr_c", "altf4" };
-
-    pros::Task *autonSelectTask;
 
     inline void displaySelectedAuton() {
         bot::master.print(0, 0, "%s;; %s    ", selectedColor == Color::Red ? "Red" : "Blue", keybindsDisplay[selectedKeybinds]);
@@ -28,6 +27,7 @@ namespace auton {
     }
 
     void runSelectedAuton() {
+        auton_running = true;
         bot::set_brake_mode(pros::MotorBrake::brake);
         if (selectedColor == Color::Red) {
             bot::intake.doAntiStuck = true;
@@ -36,6 +36,8 @@ namespace auton {
             switch (selectedRoute) {
             case 0:
                 autonSkills();
+                selectedRoute++;
+                displaySelectedAuton();
                 break;
             case 1:
                 coopSlot();
@@ -57,6 +59,8 @@ namespace auton {
             switch (selectedRoute) {
             case 0:
                 autonSkills();
+                selectedRoute++;
+                displaySelectedAuton();
                 break;
             case 1:
                 coopSlot();
@@ -72,6 +76,9 @@ namespace auton {
                 break;
             }
         }
+
+        auton_running = false;
+        drive_chass(0, 0);
     }
 
     void autonSelectLoop() {
@@ -81,6 +88,22 @@ namespace auton {
         pros::delay(100);
         displaySelectedAuton();
         while (!pros::competition::is_disabled()) {
+            if (auton_running) {
+                pros::delay(20);
+                continue;
+            }
+
+            bigArm.reset();
+            switch (selectedRoute) {
+            case 0: // Skills
+                // bigArm.raise(); // debug
+                // bigArm.toggleUp(); // debug
+                break;
+            case 2: // Neg2+1+2
+            case 3: // Neg5+1
+                bigArm.toggleUp();
+            }
+
             bool update = 0;
 
             if (bot::master.get_digital_new_press(DIGITAL_Y)) {

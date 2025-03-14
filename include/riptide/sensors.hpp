@@ -4,6 +4,8 @@
 
 namespace bot {
     pros::Distance mogoDist(1);
+    pros::Distance rWallDist(8);
+    pros::Distance lWallDist(21);
 
     pros::IMU *imu;
 

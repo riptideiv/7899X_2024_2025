@@ -22,11 +22,7 @@ namespace bot {
         frontRightArm.set_value(frontRightArmDown);
     }
 
-    void toggleGoalClamp() {
-        goalClampClosed = !goalClampClosed;
-        goalClamp.set_value(goalClampClosed);
-        MOGO = goalClampClosed;
-    }
+    // toggleGoalClamp is in robot.hpp
 
     void toggleIntakeLift() {
         intakeLiftUp = !intakeLiftUp;

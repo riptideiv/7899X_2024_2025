@@ -10,8 +10,10 @@ namespace bot {
         pros::Rotation *rotation;
         int posLow, posMid, posHigh, posToScore, posScore;
 
-        const double nkP = 2, nkI = 0, nkD = 0; // "normal" kP, kI, kD for resetting after some custom action
+        const double nkP = 4, nkI = 0, nkD = 0; // "normal" kP, kI, kD for resetting after some custom action
         double kP = nkP, kI = nkI, kD = nkD;
+
+        int maxSpeed = 100;
 
         int move_target;
         pros::Task *move_task = nullptr;
@@ -25,10 +27,15 @@ namespace bot {
         }
 
         void toggleUp() {
-            if (move_target != posHigh || manual) {
+            if (move_target == posScore || move_target == posToScore || manual) {
                 set_target(posHigh);
-            } else {
+                kP = 2.2;
+            } else if (move_target == posHigh) {
                 set_target(posLow);
+                kP = 7;
+            } else {
+                set_target(posHigh);
+                kP = 2.2;
             }
         }
 
@@ -42,13 +49,15 @@ namespace bot {
         }
 
         void raise() {
-            // if (move_target == posToScore) {
-            //     set_target(posScore);
-            //     kP = 2.5;
-            // } else {
-            //     set_target(posToScore);
-            // }
-            set_target(posScore);
+            if (move_target == posToScore) {
+                set_target(posScore);
+                kP = 2.5;
+            } else {
+                set_target(posToScore);
+                kP = 1.5;
+            }
+            // set_target(posScore);
+            // kP = 2;
         }
 
         void initialize(int port, int rotationPort, int posLow, int posMid, int posHigh, int posToScore, int posScore) {
@@ -63,7 +72,7 @@ namespace bot {
             this->posToScore = posToScore;
             this->posScore = posScore;
 
-            move_target = posMid;
+            move_target = posLow;
 
             setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
 
@@ -81,8 +90,10 @@ namespace bot {
 
                     error = arm->move_target - armPos;
 
-                    if (abs(error) < 1000) integral += error;
-                    else integral = 0;
+                    // if (abs(error) < 1000 && arm->mtr->get_actual_velocity() < 20) {
+                    //     arm->manual = true;
+                    //     arm->mtr->move_velocity(0);
+                    // }
 
                     if ((error > 0 && prevError < 0) || (error < 0 && prevError > 0)) {
                         integral = 0;
@@ -93,12 +104,19 @@ namespace bot {
 
                     double power = error * arm->kP + integral * arm->kI + derivative * arm->kD;
 
+                    if (power > arm->maxSpeed / 100.0 * 12000) power = arm->maxSpeed / 100.0 * 12000;
+                    if (power < -arm->maxSpeed / 100.0 * 12000) power = -arm->maxSpeed / 100.0 * 12000;
+
                     arm->mtr->move_voltage(power);
 
                     // std::cout << "BigArm Error: " << error << std::endl;
                     pros::delay(50);
                 }
                 }, this);
+        }
+
+        void setMaxSpeed(int pct) {
+            maxSpeed = pct;
         }
 
         void setBrakeMode(pros::motor_brake_mode_e_t mode) {

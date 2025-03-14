@@ -31,17 +31,17 @@ namespace bot {
         chass[0] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[0], pid::angular_controller[0], *odomSensors[0], &(lemlib::defaultDriveCurve), &driveSteerCurve);
         chass[1] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[1], pid::angular_controller[1], *odomSensors[1], &(lemlib::defaultDriveCurve), &driveSteerCurve);
 
-        int bigArmHi = 33300,
-            bigArmMid = 33300, // useless rn
-            bigArmLow = 35191,
+        int bigArmHi = 33820,
+            bigArmMid = 33820, // useless rn
+            bigArmLow = 35650,
             bigArmToScore = 27300, // useless rn
-            bigArmScore = 19900;
+            bigArmScore = 20100;
 
         intake.initialize(-10, -6);
 
-        chass[0]->calibrate();
-
         bigArm.initialize(-4, 5, bigArmLow, bigArmMid, bigArmHi, bigArmToScore, bigArmScore);
+
+        chass[0]->calibrate();
     }
 
     lemlib::Chassis *getChass() {
@@ -102,6 +102,14 @@ namespace bot {
     void drive_chass(double lPct, double rPct) {
         drivetrain->leftMotors->move_voltage(lPct * 120);
         drivetrain->rightMotors->move_voltage(rPct * 120);
+    }
+
+    //! toggle the mogo clamp and transfer chassis pose
+    void toggleGoalClamp() {
+        goalClampClosed = !goalClampClosed;
+        goalClamp.set_value(goalClampClosed);
+        MOGO = goalClampClosed;
+        chass[MOGO]->setPose(chass[!MOGO]->getPose());
     }
 
     //! wrapper for lemlib's moveToPoint function that is aware of the MOGO state.
