@@ -20,8 +20,8 @@ namespace auton {
             distAvg += mogoDist.get();
             pros::delay(5);
         }
-        while (intake.mtr->get_position() < 500) pros::delay(5);
-        pros::delay(100);
+        while (intake.mtr->get_position() < 520) pros::delay(3);
+        pros::delay(50);
         spin_intk(-50);
         getChass()->setPose(0, (distAvg / 5 - 151) * 0.0393701, 0);
 
@@ -32,10 +32,10 @@ namespace auton {
         turn2pt(20.6659, 12.5, 600, { .forwards = false });
         toggleFrontRightArm(); // expand the aligner
         mv2pt(20.6659, 12.5, 1000, { .forwards = false, .maxSpeed = 50, .minSpeed = 30, .earlyExitRange = 12 });
-        toggleFrontRightArm();
         mv2pt(20.6659, 12.5, 1000, { .forwards = false, .maxSpeed = 40, .minSpeed = 30, .earlyExitRange = 3 });
         toggleGoalClamp();
-        pros::delay(150);
+        pros::delay(250);
+        toggleFrontRightArm();
 
         // first 3 rings
         swing2pt(33, 51.8996, lemlib::DriveSide::RIGHT, 1000, { .minSpeed = 60, .earlyExitRange = 4 });
@@ -44,18 +44,18 @@ namespace auton {
         drWait(0.2, 0.7, 0.25);
         mv2pt(41.5717, 79.9639, 1000, { .minSpeed = 30, .earlyExitRange = 2 });
         swing2pt(57, 100, lemlib::DriveSide::RIGHT, 1000, { .minSpeed = 50, .earlyExitRange = 5 });
-        mv2pt(53, 106, 1000, { .minSpeed = 30, .earlyExitRange = 2 });
+        mv2pt(53, 109, 1000, { .minSpeed = 30, .earlyExitRange = 2 });
         bigArm.toggleUp();
 
         // ring pickup + 1st wall stake ring
-        turn2pt(37.5, 67, 1000, { .forwards = false, .minSpeed = 50, .earlyExitRange = 1.5 });
-        mv2pt(37, 67, 2000, { .forwards = false, .minSpeed = 20, .earlyExitRange = 3 });
+        turn2pt(37.5, 70, 1000, { .forwards = false, .minSpeed = 50, .earlyExitRange = 1.5 });
+        mv2pt(37, 70, 2000, { .forwards = false, .minSpeed = 20, .earlyExitRange = 3 });
         spin_intk(0);
-        turn2pt(63, 65, 1000, { .minSpeed = 1, .earlyExitRange = 20 });
+        turn2pt(63, 64, 1000, { .minSpeed = 1, .earlyExitRange = 20 });
         bigArm.raise(); // posToScore
-        turn2pt(63, 65, 250);
+        turn2pt(63, 64, 250);
         spin_intk(100);
-        mv2pt(63, 65, 1000, { .minSpeed = 20, .earlyExitRange = 7 });
+        mv2pt(63, 64, 1000, { .minSpeed = 20, .earlyExitRange = 7 });
         drive_chass(20, 20);
         pros::delay(50);
         spin_intk(0);
@@ -67,12 +67,13 @@ namespace auton {
         // second wall stake ring
         drWait(0.7, 0.7, -6);
         bigArm.toggleUp();
-        spin_intk(-15);
-        turn2pt(67, 65, 1000, { .minSpeed = 30, .earlyExitRange = 2 });
-        mv2pt(63, 65, 1000, { .minSpeed = 20, .earlyExitRange = 11 });
+        drWait(0.4, 0.4, -2);
+        spin_intk(-30);
+        turn2pt(67, 64, 1000, { .minSpeed = 30, .earlyExitRange = 2 });
+        mv2pt(63, 64, 1000, { .minSpeed = 20, .earlyExitRange = 11 });
         spin_intk(100);
         intake.stuckFor = 0;
-        mv2pt(63, 65, 1000, { .minSpeed = 20, .earlyExitRange = 7 });
+        mv2pt(63, 64, 1000, { .minSpeed = 20, .earlyExitRange = 7 });
         start = pros::millis();
         pros::delay(50);
         while (pros::millis() - start < 600 && intake.stuckFor < 50) pros::delay(3);
@@ -103,6 +104,10 @@ namespace auton {
         mv2pt(42, 6.34163, 1000, { .maxSpeed = 70, .minSpeed = 40, .earlyExitRange = 26 });
         mv2pt(42, 6.34163, 1000, { .maxSpeed = 50, .minSpeed = 45, .earlyExitRange = 1 });
 
+        intake.mtr->set_zero_position(0);
+        spin_intk(100);
+        while (intake.mtr->get_position() < 450) pros::delay(3);
+
         // final mogo ring & place mogo into corner
         spin_intk(0);
         turn2pt(53.3294, 18, 1000, { .minSpeed = 35, .earlyExitRange = 5 });
@@ -115,6 +120,7 @@ namespace auton {
         spin_intk(0);
         toggleGoalClamp();
         mv2pt(63, 8, 300, { .forwards = false, .maxSpeed = 50, .minSpeed = 30 });
+        spin_intk(-30);
 
         // reset for next part
         drWait(0.8, 0.8, 2.2);
@@ -137,8 +143,8 @@ namespace auton {
         while (drivetrain->leftMotors->get_actual_velocity() > 15 || drivetrain->rightMotors->get_actual_velocity() > 15) pros::delay(3);
         spin_intk(0);
         drive_chass(0, 0);
-        getChass()->setPose(0, 0, 90);
-        drWait(0.6, 0.6, -10);
+        getChass()->setPose(0, 0, getChass()->getPose().theta);
+        drWait(0.62, 0.6, -10);
         double distAvg = 0;
         for (int i = 0; i < 5; i++) {
             distAvg += rWallDist.get();
@@ -148,32 +154,32 @@ namespace auton {
         double theta = getChass()->getPose().theta;
         double y = -0.400964 + (distAvg / 5 - 444) * 0.0393701;
         getChass()->setPose(x, y, theta);
-        drWait(0.8, 0.7, -5);
-        mv2pt(-65, -1, 5000, { .forwards = false, .minSpeed = 30, .earlyExitRange = 1 });
-        turn2pt(-85, -2.2, 1000, { .forwards = false, .minSpeed = 40, .earlyExitRange = 2 });
-        mv2pt(-85, -2.2, 1000, { .forwards = false, .maxSpeed = 50, .minSpeed = 35, .earlyExitRange = 2 });
+
+        mv2pt(-66.282, -3.35281, 5000, { .forwards = false, .maxSpeed = 80, .minSpeed = 30, .earlyExitRange = 0.5 });
+        turn2pt(-90.0252, -4, 1000, { .forwards = false, .minSpeed = 40, .earlyExitRange = 1 });
+        mv2pt(-90.0252, -4, 1000, { .forwards = false, .maxSpeed = 50, .minSpeed = 40, .earlyExitRange = 2 });
         toggleGoalClamp();
-        pros::delay(150);
+        pros::delay(250);
 
         // first 3 rings
-        swing2pt(-106, 40, lemlib::DriveSide::LEFT, 1000, { .minSpeed = 60, .earlyExitRange = 4 });
+        swing2pt(-107.733, 39.1538, lemlib::DriveSide::LEFT, 1000, { .minSpeed = 60, .earlyExitRange = 4 });
         spin_intk(100);
-        mv2pt(-106, 42, 1000, { .minSpeed = 40, .earlyExitRange = 3 });
-        drWait(0.7, 0.2, 0.25);
-        mv2pt(-117, 67.5, 1000, { .minSpeed = 50, .earlyExitRange = 2 });
-        swing2pt(-134, 92, lemlib::DriveSide::LEFT, 1000, { .minSpeed = 50, .earlyExitRange = 4 });
-        mv2pt(-134, 94, 1000, { .minSpeed = 30, .earlyExitRange = 2 });
+        mv2pt(-107.733, 41.1538, 1000, { .minSpeed = 40, .earlyExitRange = 3 });
+        drWait(0.7, 0.2, 0.35);
+        mv2pt(-118.145, 69.1572, 1000, { .minSpeed = 50, .earlyExitRange = 2 });
+        swing2pt(-134.891, 91, lemlib::DriveSide::LEFT, 1000, { .minSpeed = 50, .earlyExitRange = 4 });
+        mv2pt(-134.891, 94, 1000, { .minSpeed = 30, .earlyExitRange = 2 });
         bigArm.toggleUp();
 
         // ring pickup + 1st wall stake ring
-        turn2pt(-119, 50, 1000, { .forwards = false, .minSpeed = 50, .earlyExitRange = 1.5 });
-        mv2pt(-117, 50, 2000, { .forwards = false, .minSpeed = 20, .earlyExitRange = 3 });
+        turn2pt(-113.315, 48, 1000, { .forwards = false, .minSpeed = 50, .earlyExitRange = 1.5 });
+        mv2pt(-113.315, 48, 2000, { .forwards = false, .minSpeed = 20, .earlyExitRange = 3 });
         spin_intk(0);
-        turn2pt(-138, 45, 1000, { .minSpeed = 1, .earlyExitRange = 20 });
+        turn2pt(-141, 42, 1000, { .minSpeed = 1, .earlyExitRange = 20 });
         bigArm.raise(); // posToScore
-        turn2pt(-138, 45, 250);
+        turn2pt(-141, 42, 250);
         spin_intk(100);
-        mv2pt(-138, 45, 600, { .minSpeed = 20, .earlyExitRange = 4 });
+        mv2pt(-141, 42, 600, { .minSpeed = 20, .earlyExitRange = 4 });
         drive_chass(20, 20);
         pros::delay(100);
         bigArm.set_target(18000);
@@ -184,14 +190,14 @@ namespace auton {
         while (pros::millis() - start < 400 && bigArm.rotation->get_position() > 19450) pros::delay(3);
 
         // second wall stake ring
-        drWait(0.6, 0.6, -3);
+        drWait(0.7, 0.7, -6);
         bigArm.toggleUp();
-        mv2pt(-121.966, 45, 500, { .forwards = false }); // trying -121.966, 46.6591
-        spin_intk(-15);
-        mv2pt(-138, 45, 1000, { .minSpeed = 20, .earlyExitRange = 8 });
+        drWait(0.4, 0.4, -2);
+        spin_intk(-30);
+        mv2pt(-141, 42, 1000, { .minSpeed = 20, .earlyExitRange = 8 });
         spin_intk(100);
         intake.stuckFor = 0;
-        mv2pt(-138, 45, 1000, { .minSpeed = 20, .earlyExitRange = 4 });
+        mv2pt(-141, 42, 1000, { .minSpeed = 20, .earlyExitRange = 4 });
         start = pros::millis();
         pros::delay(200);
         while (pros::millis() - start < 600 && intake.stuckFor < 50) pros::delay(3);
@@ -223,28 +229,33 @@ namespace auton {
         mv2pt(-113.5, -16.7421, 1000, { .maxSpeed = 70, .minSpeed = 40, .earlyExitRange = 26 });
         mv2pt(-113.5, -16.7421, 1000, { .maxSpeed = 50, .minSpeed = 45, .earlyExitRange = 2 });
 
+        intake.mtr->set_zero_position(0);
+        spin_intk(100);
+        while (intake.mtr->get_position() < 450) pros::delay(3);
+
         // final mogo ring & place mogo into corner
         spin_intk(0);
         turn2pt(-127.618, -9, 1000, { .minSpeed = 40, .earlyExitRange = 5 });
         spin_intk(100);
         turn2pt(-127.618, -9, 1000, { .minSpeed = 40, .earlyExitRange = 2 });
-        mv2pt(-129.885, 3, 1000, { .minSpeed = 40, .earlyExitRange = 6 });
-        mv2pt(-129.885, 3, 50);
+        mv2pt(-129.885, 5, 1000, { .minSpeed = 40, .earlyExitRange = 6 });
+        mv2pt(-129.885, 5, 50);
         turn2pt(-128, -20, 1000, { .forwards = false, .minSpeed = 60, .earlyExitRange = 3 });
         mv2pt(-134, -20, 1000, { .forwards = false, .maxSpeed = 70, .minSpeed = 40, .earlyExitRange = 8 });
         spin_intk(0);
         toggleGoalClamp();
         mv2pt(-136, -20, 300, { .forwards = false, .maxSpeed = 50, .minSpeed = 30 });
+        spin_intk(-30);
 
         // reset for next part
         // drWait(1, 0, 2);
-        mv2pt(-122, 8.70515, 1000, { .minSpeed = 50, .earlyExitRange = 3 });
+        mv2pt(-120, 8.70515, 1000, { .minSpeed = 50, .earlyExitRange = 3 });
     }
 
     void blueCorner() {
         turn2hd(0, 1000, { .minSpeed = 30, .earlyExitRange = 1 });
-        turn2hd(0, 100, {}, true);
-        pros::delay(50);
+        turn2hd(0, 800, {}, true);
+        pros::delay(700);
         double distAvgL = 0, distAvgBack = 0;
         for (int i = 0; i < 5; i++) {
             distAvgL += lWallDist.get();
@@ -270,7 +281,7 @@ namespace auton {
         mv2pt(20.4076, 97.3289, 1000, { .forwards = false, .maxSpeed = 40, .minSpeed = 30, .earlyExitRange = 7 });
         spin_intk(0);
         toggleGoalClamp();
-        pros::delay(150);
+        pros::delay(250);
 
         // clear corner & insert mogo
         turn2hd(-89, 1000, { .minSpeed = 40, .earlyExitRange = 5 });
@@ -282,8 +293,8 @@ namespace auton {
         toggleGoalClamp();
         drive_chass(-70, -70);
         pros::delay(300);
-        drive_chass(-10, -10);
-        pros::delay(150);
+        drive_chass(-20, -20);
+        pros::delay(250);
 
         // grab empty mogo
         mv2pt(0, 90, 1000, { .minSpeed = 40, .earlyExitRange = 3 });
@@ -364,18 +375,28 @@ namespace auton {
         spin_intk(0);
         pros::delay(300);
         drive_chass(-20, -20);
-        pros::delay(150);
+        pros::delay(250);
+        spin_intk(-30);
 
         // hang
         drWait(1, 1, 2);
         spin_intk(-100);
-        turn2pt(16.8301, -58.6912, 1000, { .forwards = false, .minSpeed = 30, .earlyExitRange = 0.5 });
+        turn2pt(32.1317, -40, 1000, { .forwards = false, .minSpeed = 35, .earlyExitRange = 2 });
         bigArm.raise();
-        mv2pt(16.8301, -58.6912, 1000, { .forwards = false, .minSpeed = 20, .earlyExitRange = 3 });
-        mv2pt(16.8301, -58.6912, 1000, { .forwards = false, .maxSpeed = 37, .minSpeed = 20, .earlyExitRange = 1 });
+        mv2pt(32.1317, -40, 1000, { .forwards = false, .minSpeed = 40, .earlyExitRange = 0.5 });
+        turn2hd(45, 1000, { .minSpeed = 30, .earlyExitRange = 1 });
         spin_intk(0);
-        drive_chass(-40, -40);
-        pros::delay(1000);
+        const double kP = 2.5;
+        const double chass_rpm = 600;
+        const double targ_spdPct = -0.39 * chass_rpm;
+        while (1) {
+            double error = targ_spdPct - getChassVelo();
+            double chassPower = error * kP + targ_spdPct;
+            chassPower = chassPower / chass_rpm * 100;
+            drive_chass(chassPower, chassPower);
+            pros::delay(5);
+        }
+        pros::delay(2000);
     }
 
     void autonSkills() {
@@ -393,5 +414,7 @@ namespace auton {
         blueCorner();
 
         blueAlliStake_finalMogo();
+
+
     }
 }

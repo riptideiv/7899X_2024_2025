@@ -77,6 +77,29 @@ namespace bot {
         return (getLeftPos() + getRightPos()) / 2;
     }
 
+    double getLeftVelo() {
+        std::vector<double> v = drivetrain->leftMotors->get_actual_velocity_all();
+        double avg = 0;
+        for (double i : v) {
+            avg += i;
+        }
+        return avg / v.size();
+    }
+
+    double getRightVelo() {
+        std::vector<double> v = drivetrain->rightMotors->get_actual_velocity_all();
+        double avg = 0;
+        for (double i : v) {
+            avg += i;
+        }
+        return avg / v.size();
+    }
+
+    //! gets average velocities of the left and right drivetrain sides
+    double getChassVelo() {
+        return (getLeftVelo() + getRightVelo()) / 2;
+    }
+
     void reset_imu() {
         imu->set_rotation(0);
     }

@@ -64,25 +64,56 @@ namespace bot {
 
     void alliStakeMacro() {
         bool immed = bigArm.move_target >= bigArm.posHigh;
-        getChass()->setPose(0, 0, 0);
+        double theta = getChass()->getPose().theta * M_PI / 180;
+        double x = -8 * std::sin(theta);
+        double y = -8 * std::cos(theta) + 0.5;
+        double targx = -16.5 * std::sin(theta);
+        double targy = -16.5 * std::cos(theta) + 0.5;
+        getChass()->setPose(x, y, getChass()->getPose().theta);
         if (immed) {
             bigArm.setMaxSpeed(70);
             bigArm.set_target(14300);
             bigArm.kP = 5;
         }
-        mv2pt(0, -8.5, 1000, { .forwards = false, .minSpeed = 40, .earlyExitRange = 3 });
+        mv2pt(targx, targy, 1000, { .forwards = false, .minSpeed = 40, .earlyExitRange = 7 });
         if (!immed) {
-            bigArm.setMaxSpeed(70);
+            bigArm.setMaxSpeed(60);
             bigArm.set_target(14300);
             bigArm.kP = 5;
         }
-        mv2pt(0, -8.5, 500, { .forwards = false }, true);
-        while (getChass()->isInMotion() && bigArm.rotation->get_position() > 15650) pros::delay(3);
+        mv2pt(targx, targy, 800, {}, true);
+        while (getChass()->isInMotion() && bigArm.rotation->get_position() > 17191) pros::delay(3);
         getChass()->cancelAllMotions();
         pros::delay(10);
-        drWait(1, 1, -4);
-        bigArm.setMaxSpeed(100);
+        drWait(0.9, 1, -2.5);
         bigArm.reset();
+        bigArm.setMaxSpeed(100);
+        drive_chass(0, 0);
+    }
+
+    void hangMacro() {
+        bigArm.reset();
+        bigArm.raise();
+        if (auton::selectedRoute == 0) {
+            turn2hd(45, 1000, { .minSpeed = 20, .earlyExitRange = 2 });
+        }
+        const double kP = 2.5;
+        const double chass_rpm = 600;
+        const double targ_spdPct = -0.39 * chass_rpm;
+        while (1) {
+            double error = targ_spdPct - getChassVelo();
+            double chassPower = error * kP + targ_spdPct;
+            chassPower = chassPower / chass_rpm * 100;
+            drive_chass(chassPower, chassPower);
+            if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1) || master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+                break;
+            }
+            pros::delay(5);
+        }
+        std::cout << "actual velocity at exit: " << getChassVelo() / chass_rpm << std::endl;
+        if (MOGO) {
+            toggleGoalClamp();
+        }
     }
 
     void debugPrint() {
@@ -110,8 +141,8 @@ namespace bot {
                 distAvg += mogoDist.get();
                 pros::delay(5);
             }
-            while (intake.mtr->get_position() < 500) pros::delay(5);
-            pros::delay(100);
+            while (intake.mtr->get_position() < 520) pros::delay(3);
+            pros::delay(50);
             spin_intk(-50);
             getChass()->setPose(0, (distAvg / 5 - 151) * 0.0393701, 0);
 
@@ -121,10 +152,10 @@ namespace bot {
             turn2pt(20.6659, 12.5, 600, { .forwards = false });
             toggleFrontRightArm(); // expand the aligner
             mv2pt(20.6659, 12.5, 1000, { .forwards = false, .maxSpeed = 50, .minSpeed = 30, .earlyExitRange = 12 });
-            toggleFrontRightArm();
             mv2pt(20.6659, 12.5, 1000, { .forwards = false, .maxSpeed = 40, .minSpeed = 30, .earlyExitRange = 3 });
             toggleGoalClamp();
             pros::delay(150);
+            toggleFrontRightArm();
         }
 
         bot::intake.doAntiStuck = true;
@@ -162,7 +193,7 @@ namespace bot {
         }
         // intake lift
         if (master.get_digital_new_press(keybindsList[selectedKeybinds].intakeLiftToggle)) {
-            toggleIntakeLift();
+            hangMacro();
         }
 
         // big arm

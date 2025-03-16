@@ -9,127 +9,184 @@ using namespace bot;
 
 namespace blue {
     void minus2_1_2() {
-        // // bigArm.reset();
-        // // rush 1 ring
-        // spin_frintk(100);
-        // mv2pt(6.41525, 16.7389, 1000, { .minSpeed = 20, .earlyExitRange = 10 });
-        // mv2pt(10.5, 43.3794, 1300, { .minSpeed = 10, .earlyExitRange = 15 });
-        // mv2pt(10.5, 43.3794, 850, { .maxSpeed = 40 });
+        // score alliance stake
+        turn2pt(-15.5, 18.504, 1000, { .minSpeed = 30, .earlyExitRange = 3 });
+        bigArm.setMaxSpeed(70);
+        bigArm.set_target(14300);
+        mv2pt(-6.48405, 7.30317, 1000, { .minSpeed = 30, .earlyExitRange = 1 });
+        mv2pt(-6.48405, 7.30317, 300);
 
-        // // get mogo
-        // turn2pt(-2.52609, 39, 1000, { .forwards = false, .minSpeed = 10, .earlyExitRange = 2 });
-        // spin_frintk(0);
-        // drWait(0.65, 0.8, -3.5);
-        // mv2pt(-6.65004, 31.3562, 1100, { .forwards = false, .maxSpeed = 50, .minSpeed = 20, .earlyExitRange = 0.5 });
-        // toggleGoalClamp();
-        // pros::delay(200);
+        // setup to grab 1st mogo
+        mv2pt(14, -13.4615, 1000, { .forwards = false, .minSpeed = 30, .earlyExitRange = 3 });
+        bigArm.setMaxSpeed(100);
+        bigArm.reset();
 
-        // // load norush ring into big arm
-        // spin_intk(100);
-        // turn2pt(24.7293, 36, 1000, { .minSpeed = 20, .earlyExitRange = 5 });
-        // mv2pt(24.7293, 36, 1000, { .maxSpeed = 50, .minSpeed = 30, .earlyExitRange = 5 });
-        // bigArm.toggleUp();
-        // mv2pt(24.7293, 36, 300, { .maxSpeed = 30 });
+        // grab 1st mogo
+        turn2pt(33.7049, -3.48534, 1000, { .forwards = false, .minSpeed = 30, .earlyExitRange = 3 });
+        mv2pt(33.7049, -3.48534, 1000, { .forwards = false, .maxSpeed = 50, .minSpeed = 45, .earlyExitRange = 10 });
+        toggleGoalClamp();
+        mv2pt(33.7049, -3.48534, 1000, { .forwards = false, .minSpeed = 40, .earlyExitRange = 3 });
 
-        // // move toward alliance stake
-        // turn2pt(3, 20.5607, 1000, { .minSpeed = 20, .earlyExitRange = 5 });
-        // mv2pt(3, 20.5607, 1000, { .minSpeed = 20, .earlyExitRange = 10 });
+        // get contested rings
+        turn2pt(47.5907, -17.1683, 1000, { .minSpeed = 40, .earlyExitRange = 3 });
+        spin_intk(100);
+        mv2pt(47.5907, -17.1683, 1000, { .maxSpeed = 70, .minSpeed = 60, .earlyExitRange = 3 });
+        turn2pt(49.9431, -40, 1000, { .minSpeed = 40, .earlyExitRange = 5 });
+        mv2pose(49.9431, -40, -180, 1000, { .minSpeed = 40, .earlyExitRange = 1 });
 
-        // // score alliance stake
-        // turn2pt(-28.1, -13, 1000, { .minSpeed = 15, .earlyExitRange = 1 });
-        // mv2pt(-28.1, -13, 1000, { .minSpeed = 20, .earlyExitRange = 45 });
-        // mv2pt(-28.1, -13, 1000, { .maxSpeed = 60, .minSpeed = 20, .earlyExitRange = 25 });
-        // mv2pt(-28.1, -13, 1000, { .maxSpeed = 40, .minSpeed = 10, .earlyExitRange = 19 });
-        // spin_frintk(-100);
-        // spin_upintk(0);
-        // bigArm.set_target(14300);
-        // mv2pt(-28.1, -12.484602, 1000, { .maxSpeed = 40, .minSpeed = 10, .earlyExitRange = 16 });
-        // double x = getChass()->getPose().x;
-        // double y = getChass()->getPose().y;
-        // double theta = getChass()->getPose().theta;
-        // mv2pose(x, y, theta, 500);
-        // toggleIntakeLift();
-        // mv2pt(3, 20.5607, 1000, { .minSpeed = 10, .earlyExitRange = 15 });
-        // bigArm.reset();
+        // get norush ring
+        drWait(0.7, 0, 2);
+        turn2pt(28.9244, -27.8521, 1000, { .minSpeed = 40, .earlyExitRange = 3 });
+        mv2pt(28.9244, -27.8521, 1000, { .maxSpeed = 50, .minSpeed = 45, .earlyExitRange = 3 });
 
-        // // get mid ring
-        // spin_intk(100);
-        // turn2pt(-30.3251, 7.0858, 1000, { .minSpeed = 15, .earlyExitRange = 5 });
-        // toggleGoalClamp();
-        // mv2pt(-30.3251, 7.0858, 1000, { .minSpeed = 20, .earlyExitRange = 5 });
-        // toggleIntakeLift();
-        // mv2pt(-30.3251, 7.0858, 500);
-        // spin_intk(0);
+        // setup for mid
+        mv2pt(9.26243, -16.4627, 1000, { .minSpeed = 40, .earlyExitRange = 3 });
 
-        // // get 2nd mogo
-        // turn2pt(-50, 30.9903, 1000, { .forwards = false, .direction = lemlib::AngularDirection::CCW_COUNTERCLOCKWISE, .minSpeed = 15, .earlyExitRange = 3 });
-        // mv2pt(-54.5671, 30.9903, 1000, { .forwards = false, .maxSpeed = 50, .minSpeed = 20, .earlyExitRange = 5 });
-        // toggleGoalClamp();
-        // pros::delay(200);
+        // get mid
+        turn2pt(10.6929, 7.01729, 1000, { .minSpeed = 40, .earlyExitRange = 3 });
+        mv2pt(10.6929, 7.01729, 1000, { .minSpeed = 30, .earlyExitRange = 3 });
+        mv2pt(11.5817, 31.4829, 1000, { .maxSpeed = 50, .minSpeed = 45, .earlyExitRange = 1 });
 
-        // // get last ring
-        // turn2pt(-69.93, 31.5863, 1000, { .minSpeed = 20, .earlyExitRange = 10 });
-        // spin_intk(100);
-        // mv2pt(-75.0669, 30.5846, 1000, { .minSpeed = 30, .earlyExitRange = 5 });
-        // mv2pt(-75.0669, 30.5846, 250);
-        // mv2pt(-49.6032, 31.3722, 1000, { .forwards = false, .minSpeed = 20, .earlyExitRange = 5 });;
-        // turn2pt(-50, 44.7983, 1000, { .minSpeed = 20, .earlyExitRange = 5 });
-        // mv2pt(-50, 44.7983, 1000, { .minSpeed = 40, .earlyExitRange = 5 });
-        // getChass()->setBrakeMode(pros::E_MOTOR_BRAKE_COAST);
-        // drive_chass(0, 0);
+        // set up for other norush ring
+        mv2pt(12.7124, 50.2427, 1000, { .minSpeed = 40, .earlyExitRange = 3 });
+        toggleGoalClamp();
+
+        // get other norush ring
+        turn2pt(35.1501, 64.5498, 1000, { .minSpeed = 40, .earlyExitRange = 3 });
+        mv2pt(35.1501, 64.5498, 1000, { .maxSpeed = 50, .minSpeed = 45, .earlyExitRange = 1 });
+
+        pros::Task autoStopIntakeTask([]() {
+            while (1) {
+                pros::Task::delay(10);
+                if (colorSortSensor.get_proximity() > 200) {
+                    spin_intk(0);
+                    break;
+                }
+            }
+            });
+
+        // get mogo
+        turn2pt(33.4189, 42.6774, 1000, { .forwards = false, .minSpeed = 30, .earlyExitRange = 2 });
+        mv2pt(33.4189, 42.6774, 1000, { .forwards = false, .minSpeed = 30, .earlyExitRange = 1 });
+        toggleGoalClamp();
+        mv2pt(33.1288, 37.3024, 1000, { .forwards = false, .minSpeed = 40, .earlyExitRange = 3 }, 1);
+        autoStopIntakeTask.suspend();
+        pros::delay(150);
+        spin_intk(100);
+
+        pros::delay(5000);
+        /*
+        setup for mid
+        x,y,theta: 9.26243, -16.4627, -57.8661, lWall: 958, rWall: 9999, mogoDist: 113
+
+        right before mid
+        x,y,theta: 10.6929, 7.01729, 1.16479, lWall: 464, rWall: 9999, mogoDist: 111
+
+        after mid
+        x,y,theta: 11.5817, 31.4829, 3.08998, lWall: 481, rWall: 9999, mogoDist: 97
+
+        setup for ring
+        x,y,theta: 12.7124, 50.2427, 3.10483, lWall: 509, rWall: 9999, mogoDist: 574
+
+        pick up ring
+        x,y,theta: 35.1501, 64.5498, 53.67, lWall: 620, rWall: 9999, mogoDist: 1355
+
+        mogo pickup spot
+        x,y,theta: 33.4189, 42.6774, 3.51782, lWall: 1075, rWall: 424, mogoDist: 2337
+
+        drive through the mogo pickup spot
+        x,y,theta: 33.1288, 37.3024, 3.05034, lWall: 1066, rWall: 2274, mogoDist: 2218
+
+        touch ladder
+        x,y,theta: 42.2523, 26.2728, -44.0295, lWall: 9999, rWall: 371, mogoDist: 254
+        x,y,theta: 42.3012, 26.2057, -43.8886, lWall: 9999, rWall: 374, mogoDist: 258
+        */
     }
 
     void minus5_1() {
-        // alliance stake
-        pros::Task alliStakeBigArmTask([=]() {
-            pros::Task::delay(300);
-            bot::bigArm.set_target(14300);
-            bot::bigArm.kP = 5;
-            });
-        mv2pose(-4.18527, 8.33226, -45.4873, 1000, { .lead = 0.1, .minSpeed = 25, .earlyExitRange = 4 });
-        // pros::delay(250);
-        mv2pt(0.395338, 3.82862, 500, { .minSpeed = 30, .earlyExitRange = 1 });
-        bot::bigArm.reset();
+        /*
+        score alli
+        x,y,theta: -6.29983, 9.44707, -44.7887, lWall: 190, rWall: 9999, mogoDist: 346
+
+        setup for mogo
+        x,y,theta: 16.2361, -12.586, -46.5897, lWall: 522, rWall: 9999, mogoDist: 402
+
+        get mogo
+        x,y,theta: 30.5122, -5.55534, -123.927, lWall: 1327, rWall: 9999, mogoDist: 9999
+
+        get contested rings (2nd one)
+        x,y,theta: 50.9451, -36.0005, -180.042, lWall: 1855, rWall: 1492, mogoDist: 248
+
+        get norush ring
+        x,y,theta: 33.3634, -29.9753, -85.6723, lWall: 446, rWall: 1050, mogoDist: 249
+
+        setup for corner
+        x,y,theta: 9.9057, -28.375, -83.9335, lWall: 496, rWall: 9999, mogoDist: 244
+
+        get corner
+        x,y,theta: -2.24152, -42.3405, -132.316, lWall: 244, rWall: 212, mogoDist: 251
+
+        setup for mid
+        x,y,theta: 11.06, -2.75885, -1.1451, lWall: 475, rWall: 9999, mogoDist: 245
+
+        get mid
+        x,y,theta: 9.33841, 18.1733, -1.63779, lWall: 354, rWall: 436, mogoDist: 165
+        */
+        // score alli stake
+        bigArm.setMaxSpeed(70);
+        bigArm.set_target(14300);
+        int start = pros::millis();
+        mv2pt(-6.29983, 9.44707, 1000, { .minSpeed = 20, .earlyExitRange = 2.5 });
+        while (pros::millis() - start < 1000 && bigArm.rotation->get_position() > 17000) pros::delay(3);
+
+        // position to get mogo
+        drWait(0.55, 0.6, -2);
+        bigArm.reset();
+        mv2pt(15.2361, -11.586, 1000, { .forwards = false, .minSpeed = 20, .earlyExitRange = 2 });
 
         // get mogo
-        turn2pt(10.2104, 4.58229, 1000, { .forwards = false, .minSpeed = 30, .earlyExitRange = 5 });
-        mv2pt(10.2104, 4.58229, 1000, { .forwards = false, .minSpeed = 20, .earlyExitRange = 2 });
-        turn2pt(30.7587, -6.40583, 1000, { .forwards = false, .minSpeed = 10, .earlyExitRange = 10 });
-        mv2pt(30.7587, -6.40583, 1000, { .forwards = false, .maxSpeed = 50, .minSpeed = 20, .earlyExitRange = 5 });
+        turn2pt(32.9099, -5.84154, 1000, { .forwards = false, .minSpeed = 25, .earlyExitRange = 2 });
+        toggleFrontRightArm();
+        mv2pt(32.9099, -5.84154, 1000, { .forwards = false, .maxSpeed = 50, .minSpeed = 45, .earlyExitRange = 4 });
         toggleGoalClamp();
-        pros::delay(200);
-        spin_intk(100);
+        mv2pt(32.9099, -5.84154, 1000, { .forwards = false, .maxSpeed = 50, .minSpeed = 45, .earlyExitRange = 2 });
+        toggleFrontRightArm();
 
         // get contested rings
-        turn2pt(50.5, -24.5, 700);
-        mv2pt(50.5, -24.5, 1000, { .maxSpeed = 60, .minSpeed = 10, .earlyExitRange = 5 });
-        turn2pt(51, -38.2363, 1000, { .minSpeed = 10, .earlyExitRange = 5 });
-        mv2pt(51, -38.2363, 850);
+        turn2pt(50.9451, -22.6, 1000, { .minSpeed = 30, .earlyExitRange = 3 });
+        spin_intk(100);
+        mv2pt(50.9451, -22.6, 1000, { .maxSpeed = 60, .minSpeed = 20, .earlyExitRange = 3 });
+        turn2pt(50.9451, -36.0005, 1000, { .minSpeed = 30, .earlyExitRange = 2 });
+        mv2pt(50.9451, -36.0005, 1000, { .maxSpeed = 60, .minSpeed = 30, .earlyExitRange = 1 });
 
         // get norush ring
-        turn2pt(30.4014, -33.5, 1000, { .minSpeed = 30, .earlyExitRange = 5 });
-        mv2pt(30.4014, -33.5, 1000, { .maxSpeed = 51, .minSpeed = 50, .earlyExitRange = 1 });
+        drWait(0.7, 0, -1);
+        turn2pt(33.3634, -29.9753, 1000, { .minSpeed = 30, .earlyExitRange = 3 });
+        mv2pt(33.3634, -29.9753, 1000, { .maxSpeed = 60, .minSpeed = 30, .earlyExitRange = 3 });
 
-        // // get corner
-        // mv2pt(13.7848, -33.6309, 1000, { .minSpeed = 40, .earlyExitRange = 2 });
-        // turn2pt(-3.54008, -47.7159, 550);
-        // mv2pt(-7, -52.7159, 1000, { .maxSpeed = 60, .minSpeed = 20, .earlyExitRange = 6 });
-        // pros::delay(250);
-        // mv2pt(1.79702, -42.686, 1000, { .forwards = false, .maxSpeed = 30, .minSpeed = 10, .earlyExitRange = 2.5 });
-        // pros::delay(300);
-        // mv2pt(-7, -52.7159, 2000, { .maxSpeed = 60, .minSpeed = 20, .earlyExitRange = 6 });
-        // pros::delay(250);
-        // mv2pt(1.79702, -42.686, 1000, { .forwards = false, .maxSpeed = 30, .minSpeed = 10, .earlyExitRange = 2.5 });
-        // pros::delay(300);
-        // mv2pt(-7, -52.7159, 2000, { .maxSpeed = 60, .minSpeed = 20, .earlyExitRange = 6 });
-        // pros::delay(250);
-        // mv2pt(1.79702, -42.686, 1000, { .forwards = false, .maxSpeed = 30, .minSpeed = 10, .earlyExitRange = 2.5 });
-        // pros::delay(300);
+        // get corner
+        mv2pt(9.9057, -28.375, 1000, { .minSpeed = 30, .earlyExitRange = 3 });
+        turn2pt(-2.24152, -42.3405, 1000, { .minSpeed = 30, .earlyExitRange = 3 });
+        mv2pt(-2.24152, -42.3405, 1000, { .minSpeed = 30, .earlyExitRange = 2 });
+        intake.doAntiStuck = false;
+        drive_chass(40, 40);
+        pros::delay(1000);
+        drWait(0.6, 0.6, -5);
+        intake.doAntiStuck = true;
+
+        // get mid
+        turn2pt(11.06, -5, 1000, { .minSpeed = 40, .earlyExitRange = 2 });
+        mv2pt(11.06, -5, 1000, { .minSpeed = 20, .earlyExitRange = 2 });
+        toggleIntakeLift();
+        turn2pt(9.33841, 18.1733, 1000, { .minSpeed = 20, .earlyExitRange = 1 });
+        mv2pt(9.33841, 18.1733, 1000, { .minSpeed = 30, .earlyExitRange = 2 });
+        toggleIntakeLift();
+        drWait(0.6, 0.6, -5);
+        drive_chass(0, 0);
+        pros::delay(5000);
     }
 
-    void minus6() {
-
-    }
+    void minus6() {}
 
     void minus5clear() {
 

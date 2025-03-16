@@ -17,7 +17,7 @@ namespace auton {
     int selectedRoute = 0;
     int selectedKeybinds = 1;
 
-    std::vector<std::string> routeDisplay = { "Skills", "Coop", "Neg2+1+2", "Neg5+1", "PosRush" };
+    std::vector<std::string> routeDisplay = { "Skills", "Coop", "Neg2+1+2", "Neg5+1", "Neg6" };
     std::string keybindsDisplay[] = { "xr_c", "altf4" };
 
     inline void displaySelectedAuton() {
@@ -76,8 +76,6 @@ namespace auton {
                 break;
             }
         }
-
-        auton_running = false;
         drive_chass(0, 0);
     }
 
@@ -134,6 +132,7 @@ namespace auton {
                 bot::master.get_digital_new_press(DIGITAL_UP) ||
                 bot::master.get_digital_new_press(DIGITAL_DOWN)) {
                 runSelectedAuton();
+                auton_running = false;
             }
 
             if (bot::master.get_digital_new_press(DIGITAL_L1) ||
