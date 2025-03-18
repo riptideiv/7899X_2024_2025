@@ -17,7 +17,7 @@ namespace red {
         bigArm.setMaxSpeed(70);
         bigArm.set_target(14300);
         int start = pros::millis();
-        mv2pt(4.82649, 9.65794, 1000, { .minSpeed = 30, .earlyExitRange = 2 });
+        mv2pt(4.82649, 9.65794, 1000, { .minSpeed = 30, .earlyExitRange = 3 });
         while (pros::millis() - start < 1000 && bigArm.rotation->get_position() > 17000) pros::delay(3);
 
         // position to get mogo
@@ -34,22 +34,22 @@ namespace red {
         toggleFrontRightArm();
 
         // get contested rings
-        turn2pt(-45.75, -24.0684, 1000, { .minSpeed = 30, .earlyExitRange = 3 });
+        turn2pt(-46.25, -24.0684, 1000, { .minSpeed = 30, .earlyExitRange = 3 });
         spin_intk(100);
-        mv2pt(-45.75, -24.0684, 1000, { .maxSpeed = 60, .minSpeed = 30, .earlyExitRange = 2 });
-        turn2pt(-45.75, -37.394, 1000, { .minSpeed = 30, .earlyExitRange = 2 });
-        mv2pt(-45.75, -37.394, 1000, { .maxSpeed = 60, .minSpeed = 30, .earlyExitRange = 1 });
+        mv2pt(-46.25, -24.0684, 1000, { .maxSpeed = 60, .minSpeed = 30, .earlyExitRange = 2 });
+        turn2pt(-46, -37.394, 1000, { .minSpeed = 30, .earlyExitRange = 2 });
+        mv2pt(-46.25, -37.394, 1000, { .maxSpeed = 60, .minSpeed = 30, .earlyExitRange = 1 });
 
         // get norush ring
         drWait(0, 0.7, -1);
         turn2pt(-29.9316, -29.3272, 1000, { .minSpeed = 30, .earlyExitRange = 3 });
-        mv2pt(-29.9316, -29.3272, 1000, { .maxSpeed = 60, .minSpeed = 30, .earlyExitRange = 3 });
+        mv2pt(-29.9316, -29.3272, 1000, { .maxSpeed = 75, .minSpeed = 70, .earlyExitRange = 3 });
 
         // get corner
         mv2pt(-3.4428, -27.2393, 1000, { .minSpeed = 30, .earlyExitRange = 3 });
         turn2pt(10.436, -39.2978, 1000, { .minSpeed = 30, .earlyExitRange = 3 });
         mv2pt(10.436, -39.2978, 1000, { .minSpeed = 30, .earlyExitRange = 2 });
-        drive_chass(40, 40);
+        drive_chass(30, 30);
         pros::delay(1000);
         drWait(0.6, 0.6, -10);
 
@@ -57,8 +57,8 @@ namespace red {
         turn2pt(-8.14447, 6.37123, 1000, { .minSpeed = 40, .earlyExitRange = 2 });
         mv2pt(-8.14447, 6.37123, 1000, { .minSpeed = 20, .earlyExitRange = 2 });
         toggleIntakeLift();
-        turn2pt(-6.68803, 26.3079, 1000, { .minSpeed = 20, .earlyExitRange = 1 });
-        mv2pt(-6.68803, 26.3079, 1000, { .minSpeed = 30, .earlyExitRange = 2 });
+        turn2pt(-4.68803, 26.3079, 1000, { .minSpeed = 20, .earlyExitRange = 1 });
+        mv2pt(-4.68803, 26.3079, 1000, { .minSpeed = 30, .earlyExitRange = 2 });
         toggleIntakeLift();
         drWait(0.6, 0.6, -5);
         drive_chass(0, 0);

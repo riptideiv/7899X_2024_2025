@@ -162,14 +162,14 @@ namespace blue {
         // get norush ring
         drWait(0.7, 0, -1);
         turn2pt(33.3634, -29.9753, 1000, { .minSpeed = 30, .earlyExitRange = 3 });
-        mv2pt(33.3634, -29.9753, 1000, { .maxSpeed = 60, .minSpeed = 30, .earlyExitRange = 3 });
+        mv2pt(33.3634, -29.9753, 1000, { .maxSpeed = 75, .minSpeed = 70, .earlyExitRange = 3 });
 
         // get corner
         mv2pt(9.9057, -28.375, 1000, { .minSpeed = 30, .earlyExitRange = 3 });
         turn2pt(-2.24152, -42.3405, 1000, { .minSpeed = 30, .earlyExitRange = 3 });
         mv2pt(-2.24152, -42.3405, 1000, { .minSpeed = 30, .earlyExitRange = 2 });
         intake.doAntiStuck = false;
-        drive_chass(40, 40);
+        drive_chass(30, 30);
         pros::delay(1000);
         drWait(0.6, 0.6, -5);
         intake.doAntiStuck = true;

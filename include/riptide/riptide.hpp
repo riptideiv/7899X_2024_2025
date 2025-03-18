@@ -38,7 +38,7 @@ namespace riptide {
         // test::findTrackingRadius();
         while (1) {
             bot::handleControllerInput();
-            pros::delay(20);
+            pros::delay(8);
         }
     }
 }

@@ -29,7 +29,7 @@ namespace bot {
         int prevSpd = 0;
         int startUpTime = 0;
 
-        const int loopDelay = 3;
+        const int loopDelay = 5;
 
         void colorSort() {
             if (throwAway && revTime <= 0) {
