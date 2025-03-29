@@ -20,8 +20,8 @@ namespace display {
         displayMotorCurrentAndTemperature();
         std::vector<double> lvals = bot::drivetrain->leftMotors->get_position_all();
         std::vector<double> rvals = bot::drivetrain->rightMotors->get_position_all();
-        lv_label_set_text_fmt(leftMotorsDisplay[0], "mogoDist: %i ;; intakeMtr: %i", (bot::mogoDist.get()), (int)(intake.mtr->get_position()));
-        lv_label_set_text_fmt(rightMotorsDisplay[0], "rotSensor: %i ;; chassVelo: %i", (int)(bot::bigArm.rotation->get_position()), (int)(bot::getChassVelo() / 600.0 * 100));
+        lv_label_set_text_fmt(leftMotorsDisplay[0], "bigArm: %i ;; intakeMtr: %i", (bot::bigArm.rotation->get_position()), (int)(intake.mtr->get_position()));
+        lv_label_set_text_fmt(rightMotorsDisplay[0], "proxim: %i ;; chassVelo: %i", (int)(colorSortSensor.get_proximity()), (int)(bot::getChassVelo() / 600.0 * 100));
         // lv_label_set_text_fmt(otherDisplay, "Arm: %i", bot::bigArm.rotation->get_position());
         lv_label_set_text_fmt(otherDisplay, "chassis pose: %i %i %i", (int)(100 * bot::chass[0]->getPose().x), (int)(100 * bot::chass[0]->getPose().y), (int)(100 * bot::chass[0]->getPose().theta));
     }

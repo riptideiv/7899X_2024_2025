@@ -12,11 +12,6 @@ namespace bot {
     pros::adi::DigitalOut intakeLift('A');
     bool intakeLiftUp = false;
 
-    void toggleFrontLeftArm() {
-        frontLeftArmDown = !frontLeftArmDown;
-        frontLeftArm.set_value(frontLeftArmDown);
-    }
-
     void toggleFrontRightArm() {
         frontRightArmDown = !frontRightArmDown;
         frontRightArm.set_value(frontRightArmDown);
@@ -27,5 +22,11 @@ namespace bot {
     void toggleIntakeLift() {
         intakeLiftUp = !intakeLiftUp;
         intakeLift.set_value(intakeLiftUp);
+    }
+
+    void toggleFrontLeftArm() {
+        // frontLeftArmDown = !frontLeftArmDown;
+        // frontLeftArm.set_value(frontLeftArmDown);
+        toggleIntakeLift();
     }
 }

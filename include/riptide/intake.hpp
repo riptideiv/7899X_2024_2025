@@ -14,6 +14,7 @@ namespace bot {
         bool doColorSort = true;
         bool colorSortRed = true;
         bool doAntiStuck = false;
+        bool confirmThrow = false;
 
         int speed = 0;
         // int frontSpd = 0;
@@ -35,7 +36,7 @@ namespace bot {
             if (throwAway && revTime <= 0) {
                 if (mtr->get_position() < -300) {
                     throwAway = 0;
-                } else if (colorSortRed && mtr->get_position() > 287 || !colorSortRed && mtr->get_position() > 287) {
+                } else if (colorSortRed && mtr->get_position() > 261 || !colorSortRed && mtr->get_position() > 261) {
                     throwAway = 0;
                     revTime = 100;
                     // frReverseTime = 100;
@@ -43,7 +44,9 @@ namespace bot {
             } else {
                 if (!throwAway && speed > 0 && colorSortSensor.get_proximity() > 200 && bigArm.move_target != bigArm.posHigh) {
                     if ((colorSortSensor.get_hue() < 30 || colorSortSensor.get_hue() > 340) && !colorSortRed ||
-                        (colorSortSensor.get_hue() > 120 && colorSortSensor.get_hue() < 270) && colorSortRed) {
+                        (colorSortSensor.get_hue() > 120 && colorSortSensor.get_hue() < 270) && colorSortRed ||
+                        confirmThrow) {
+                        confirmThrow = false;
                         throwAway = true;
                         mtr->set_zero_position(0);
                     }
@@ -53,13 +56,21 @@ namespace bot {
         }
 
         void antiStuck() {
-            if (revTime <= 0 && speed > 0 && mtr->get_actual_velocity() / speed < 0.05) {
+            if (revTime <= 0 && speed > 0 && mtr->get_actual_velocity() / speed < 0.075) {
                 stuckFor += loopDelay;
             } else {
                 stuckFor = 0;
             }
 
-            if (bot::bigArm.move_target != bot::bigArm.posHigh && stuckFor > 50) {
+            if (bot::bigArm.move_target == bot::bigArm.posHigh) {
+                if (!bot::bigArm.intakeSawRing && colorSortSensor.get_proximity() > 55) {
+                    bot::bigArm.intakeSawRing = true;
+                    stuckFor = 0;
+                }
+                if (!bot::bigArm.intakeSawRing && stuckFor > 50) {
+                    revTime = 100;
+                }
+            } else if (stuckFor > 50) {
                 revTime = 100;
                 // frReverseTime = 100;
             }
@@ -69,6 +80,7 @@ namespace bot {
             doColorSort = true;
             colorSortRed = true;
             doAntiStuck = false;
+            confirmThrow = false;
 
             speed = 0;
 
@@ -116,9 +128,14 @@ namespace bot {
                         intake->revTime -= intake->loopDelay;
                         intake->mtr->move_voltage(-12000);
                     } else {
-                        if (bigArm.move_target != bigArm.posHigh)
-                            intake->mtr->move_voltage(110 * intake->speed);
-                        else
+                        if (false && bigArm.rotation->get_position() < 29500) { //"false" - disabled
+                            if (intake->revTime <= 0 && intake->speed > 0 && colorSortSensor.get_proximity() > 55) {
+                                intake->mtr->move_voltage(0);
+                                intake->stuckFor = 0;
+                            } else {
+                                intake->mtr->move_voltage(80 * intake->speed);
+                            }
+                        } else
                             intake->mtr->move_voltage(120 * intake->speed);
                     }
                     // if (intake->frReverseTime > 0) {

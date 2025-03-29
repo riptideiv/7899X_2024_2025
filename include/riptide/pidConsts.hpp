@@ -6,20 +6,20 @@ namespace pid {
     // lateral PID controllers (0 = no mogo, 1 = mogo)
     lemlib::ControllerSettings lateral_controller[2] = {
         lemlib::ControllerSettings(
-            7.5, // proportional gain (kP)
+            15, // proportional gain (kP)
             0, // integral gain (kI)
-            68.75, // derivative gain (kD)
+            156.25, // derivative gain (kD)
             0, // anti windup
             0, // small error range, in inches
             0, // small error range timeout, in milliseconds
             0, // large error range, in inches
             0, // large error range timeout, in milliseconds
-            10 // maximum acceleration (slew)
+            0 // maximum acceleration (slew)
         ),
         lemlib::ControllerSettings(
-            7.5, // proportional gain (kP)
+            15, // proportional gain (kP)
             0, // integral gain (kI)
-            75, // derivative gain (kD)
+            131.25, // derivative gain (kD)
             0, // anti windup
             0, // small error range, in inches
             0, // small error range timeout, in milliseconds
@@ -32,9 +32,9 @@ namespace pid {
     // angular PID controllers (0 = no mogo, 1 = mogo)
     lemlib::ControllerSettings angular_controller[2] = {
         lemlib::ControllerSettings(
-            1.09375, // proportional gain (kP)
+            4, // proportional gain (kP)
             0, // integral gain (kI)
-            6.875, // derivative gain (kD)
+            34.375, // derivative gain (kD)
             0, // anti windup
             0, // small error range, in degrees
             0, // small error range timeout, in milliseconds
@@ -43,9 +43,9 @@ namespace pid {
             0 // maximum acceleration (slew)
         ),
         lemlib::ControllerSettings(
-            1.5, // proportional gain (kP)
+            5, // proportional gain (kP)
             0, // integral gain (kI)
-            13.75, // derivative gain (kD)
+            43.75, // derivative gain (kD)
             0, // anti windup
             0, // small error range, in degrees
             0, // small error range timeout, in milliseconds

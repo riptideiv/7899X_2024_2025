@@ -6,11 +6,13 @@
 
 namespace bot {
     struct BigArm {
+        bool intakeSawRing = true; // intake saw ring after bigarm going to posHigh
+
         pros::Motor *mtr;
         pros::Rotation *rotation;
         int posLow, posMid, posHigh, posToScore, posScore;
 
-        const double nkP = 4, nkI = 0, nkD = 0; // "normal" kP, kI, kD for resetting after some custom action
+        const double nkP = 2.5, nkI = 0, nkD = 0; // "normal" kP, kI, kD for resetting after some custom action
         double kP = nkP, kI = nkI, kD = nkD;
 
         int maxSpeed = 100;
@@ -21,6 +23,9 @@ namespace bot {
         bool manual = false;
 
         void set_target(int target) {
+            if (target == posHigh) {
+                intakeSawRing = false;
+            }
             manual = false;
             move_target = target;
             kP = nkP, kI = nkI, kD = nkD;
@@ -29,13 +34,13 @@ namespace bot {
         void toggleUp() {
             if (move_target == posScore || move_target == posToScore || manual) {
                 set_target(posHigh);
-                kP = 2.2;
+                kP = 2.75;
             } else if (move_target == posHigh) {
                 set_target(posLow);
-                kP = 7;
+                kP = 3;
             } else {
                 set_target(posHigh);
-                kP = 2.2;
+                kP = 2.75;
             }
         }
 
@@ -58,6 +63,19 @@ namespace bot {
             }
             // set_target(posScore);
             // kP = 2;
+        }
+
+        void cycle() {
+            if (move_target == posLow) {
+                set_target(posHigh);
+            } else if (move_target == posHigh) {
+                set_target(posToScore);
+                kP = 1.5;
+            } else if (move_target == posToScore) {
+                set_target(posScore);
+            } else if (move_target == posScore) {
+                set_target(11300);
+            }
         }
 
         void initialize(int port, int rotationPort, int posLow, int posMid, int posHigh, int posToScore, int posScore) {
@@ -110,7 +128,7 @@ namespace bot {
                     arm->mtr->move_voltage(power);
 
                     // std::cout << "BigArm Error: " << error << std::endl;
-                    pros::delay(50);
+                    pros::delay(20);
                 }
                 }, this);
         }

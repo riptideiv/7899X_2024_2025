@@ -14,11 +14,11 @@ namespace auton {
     enum class Color { Red, Blue };
 
     Color selectedColor = Color::Red;
-    int selectedRoute = 0;
-    int selectedKeybinds = 1;
+    int selectedRoute = 1;
+    int selectedKeybinds = 0;
 
-    std::vector<std::string> routeDisplay = { "Skills", "Coop", "Neg2+1+2", "Neg5+1", "Neg6" };
-    std::string keybindsDisplay[] = { "xr_c", "altf4" };
+    std::vector<std::string> routeDisplay = { "Skills", "Coop", "Pos6", "Neg5+1", "Neg6", "Neg3+2+1" };
+    std::string keybindsDisplay[] = { "ryan", "altf4" };
 
     inline void displaySelectedAuton() {
         bot::master.print(0, 0, "%s;; %s    ", selectedColor == Color::Red ? "Red" : "Blue", keybindsDisplay[selectedKeybinds]);
@@ -29,6 +29,10 @@ namespace auton {
     void runSelectedAuton() {
         auton_running = true;
         bot::set_brake_mode(pros::MotorBrake::brake);
+
+        bigArm.manual = false;
+        bigArm.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
+
         if (selectedColor == Color::Red) {
             bot::intake.doAntiStuck = true;
             bot::intake.set_colorsort(1, 1);
@@ -43,13 +47,16 @@ namespace auton {
                 coopSlot();
                 break;
             case 2:
-                red::minus2_1_2();
+                red::plus6();
                 break;
             case 3:
                 red::minus5_1();
                 break;
             case 4:
                 red::minus6();
+                break;
+            case 5:
+                red::minus3_2_1();
                 break;
             }
         } else {
@@ -66,13 +73,16 @@ namespace auton {
                 coopSlot();
                 break;
             case 2:
-                blue::minus2_1_2();
+                blue::plus6();
                 break;
             case 3:
                 blue::minus5_1();
                 break;
             case 4:
                 blue::minus6();
+                break;
+            case 5:
+                blue::minus3_2_1();
                 break;
             }
         }
@@ -89,17 +99,6 @@ namespace auton {
             if (auton_running) {
                 pros::delay(20);
                 continue;
-            }
-
-            bigArm.reset();
-            switch (selectedRoute) {
-            case 0: // Skills
-                // bigArm.raise(); // debug
-                // bigArm.toggleUp(); // debug
-                break;
-            case 2: // Neg2+1+2
-            case 3: // Neg5+1
-                bigArm.toggleUp();
             }
 
             bool update = 0;
@@ -148,8 +147,26 @@ namespace auton {
 
             if (!update) continue;
 
+            // update stuff when selected auton is changed
+
             // Display the selected attributes on the controller screen
             displaySelectedAuton();
+
+            // set the big arm settings
+            bigArm.reset();
+            switch (selectedRoute) {
+            case 1: // Coop
+            case 2: // Pos4+1
+            case 3: // Neg5+1
+            case 5: // Neg3+2+1
+                bigArm.manual_move(0);
+                bigArm.setBrakeMode(pros::E_MOTOR_BRAKE_COAST);
+                break;
+            default:
+                bigArm.manual = false;
+                bigArm.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
+                break;
+            }
         }
         printf("Auton select loop ended.\n");
     }

@@ -21,19 +21,19 @@ namespace bot {
     };
 
     std::vector<keybinds> keybindsList = {
-        { // xr_c
-            .debugPrint = pros::E_CONTROLLER_DIGITAL_UP,
+        { // ryan
+            .debugPrint = pros::E_CONTROLLER_DIGITAL_RIGHT,
             .colorSortToggle = pros::E_CONTROLLER_DIGITAL_DOWN,
             .intakeIn = pros::E_CONTROLLER_DIGITAL_R1,
-            .intakeOut = pros::E_CONTROLLER_DIGITAL_R2,
-            .intakeLiftToggle = pros::E_CONTROLLER_DIGITAL_LEFT,
-            .bigArmRaise = pros::E_CONTROLLER_DIGITAL_X,
-            .bigArmToggle = pros::E_CONTROLLER_DIGITAL_A,
-            .bigArmDown = pros::E_CONTROLLER_DIGITAL_L2,
-            .bigArmUp = pros::E_CONTROLLER_DIGITAL_L1,
-            .frontRightArmToggle = pros::E_CONTROLLER_DIGITAL_Y,
-            .frontLeftArmToggle = pros::E_CONTROLLER_DIGITAL_RIGHT,
-            .mogoToggle = pros::E_CONTROLLER_DIGITAL_B
+            .intakeOut = pros::E_CONTROLLER_DIGITAL_A,
+            .intakeLiftToggle = pros::E_CONTROLLER_DIGITAL_DOWN,
+            .bigArmRaise = pros::E_CONTROLLER_DIGITAL_X, // useless
+            .bigArmToggle = pros::E_CONTROLLER_DIGITAL_A, // useless
+            .bigArmDown = pros::E_CONTROLLER_DIGITAL_L2, // useless
+            .bigArmUp = pros::E_CONTROLLER_DIGITAL_L1, // useless
+            .frontRightArmToggle = pros::E_CONTROLLER_DIGITAL_UP,
+            .frontLeftArmToggle = pros::E_CONTROLLER_DIGITAL_LEFT,
+            .mogoToggle = pros::E_CONTROLLER_DIGITAL_R2
         },
         { // alt_f4_jpg
             .debugPrint = pros::E_CONTROLLER_DIGITAL_UP,
@@ -65,8 +65,8 @@ namespace bot {
     void alliStakeMacro() {
         bool immed = bigArm.move_target >= bigArm.posHigh;
         double theta = getChass()->getPose().theta * M_PI / 180;
-        double x = -8 * std::sin(theta);
-        double y = -8 * std::cos(theta) + 0.5;
+        double x = -9.5 * std::sin(theta);
+        double y = -9.5 * std::cos(theta) + 0.5;
         double targx = -16.5 * std::sin(theta);
         double targy = -16.5 * std::cos(theta) + 0.5;
         getChass()->setPose(x, y, getChass()->getPose().theta);
@@ -85,7 +85,7 @@ namespace bot {
         while (getChass()->isInMotion() && bigArm.rotation->get_position() > 17191) pros::delay(3);
         getChass()->cancelAllMotions();
         pros::delay(10);
-        drWait(0.9, 1, -2.5);
+        drWait(1, 1, -2.5);
         bigArm.reset();
         bigArm.setMaxSpeed(100);
         drive_chass(0, 0);
@@ -158,6 +158,8 @@ namespace bot {
             toggleFrontRightArm();
         }
 
+        bot::bigArm.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
+
         bot::intake.doAntiStuck = true;
 
         // // debug & program
@@ -193,22 +195,32 @@ namespace bot {
         }
         // intake lift
         if (master.get_digital_new_press(keybindsList[selectedKeybinds].intakeLiftToggle)) {
-            hangMacro();
+            toggleIntakeLift();
         }
 
-        // big arm
-        if (master.get_digital_new_press(keybindsList[selectedKeybinds].bigArmRaise)) {
-            bigArm.raise();
+        // // big arm
+        // if (master.get_digital_new_press(keybindsList[selectedKeybinds].bigArmRaise)) {
+        //     bigArm.raise();
+        // }
+        // if (master.get_digital_new_press(keybindsList[selectedKeybinds].bigArmToggle)) {
+        //     bigArm.toggleUp();
+        // }
+        // if (master.get_digital(keybindsList[selectedKeybinds].bigArmDown)) {
+        //     bigArm.manual_move(-100);
+        // } else if (master.get_digital(keybindsList[selectedKeybinds].bigArmUp)) {
+        //     bigArm.manual_move(100);
+        // } else if (bigArm.manual) {
+        //     bigArm.manual_move(0);
+        // }
+        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1)) {
+            bigArm.cycle();
         }
-        if (master.get_digital_new_press(keybindsList[selectedKeybinds].bigArmToggle)) {
-            bigArm.toggleUp();
-        }
-        if (master.get_digital(keybindsList[selectedKeybinds].bigArmDown)) {
-            bigArm.manual_move(-100);
-        } else if (master.get_digital(keybindsList[selectedKeybinds].bigArmUp)) {
-            bigArm.manual_move(100);
-        } else if (bigArm.manual) {
-            bigArm.manual_move(0);
+        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
+            if (bigArm.move_target < bigArm.posHigh) {
+                bigArm.set_target(bigArm.posHigh);
+            } else {
+                bigArm.set_target(bigArm.posLow);
+            }
         }
 
         // front arms
@@ -221,23 +233,7 @@ namespace bot {
 
         // mogo
         if (master.get_digital_new_press(keybindsList[selectedKeybinds].mogoToggle)) {
-            if (bot::goalClampClosed) {
-                bot::toggleGoalClamp();
-                autoMogoCnt = -30;
-            }
-        }
-        if (master.get_digital(keybindsList[selectedKeybinds].mogoToggle) && !bot::goalClampClosed) {
-            autoMogoCnt++;
-            if (autoMogoCnt > 10) {
-                if (bot::mogoInRange()) {
-                    toggleMogoTask.notify();
-                }
-            }
-        } else {
-            if (autoMogoCnt > 0 && autoMogoCnt <= 10) {
-                bot::toggleGoalClamp();
-            }
-            autoMogoCnt = 0;
+            bot::toggleGoalClamp();
         }
     }
 }

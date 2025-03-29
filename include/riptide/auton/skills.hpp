@@ -23,10 +23,10 @@ namespace auton {
         while (intake.mtr->get_position() < 520) pros::delay(3);
         pros::delay(50);
         spin_intk(-50);
-        getChass()->setPose(0, (distAvg / 5 - 151) * 0.0393701, 0);
+        getChass()->setPose(0, (distAvg / 5 - 130) * 0.0393701, 0);
 
         // get mogo
-        mv2pt(0, 11, 1000, { .minSpeed = 30, .earlyExitRange = 3 });
+        mv2pt(0, 11, 1000, { .minSpeed = 15, .earlyExitRange = 3 });
 
         spin_intk(0);
         turn2pt(20.6659, 12.5, 600, { .forwards = false });
@@ -265,7 +265,7 @@ namespace auton {
         distAvgL /= 5;
         distAvgBack /= 5;
         double x = 2 + (distAvgL - 489) * 0.0393701;
-        double y = 2 + (distAvgBack - 773) * 0.0393701;
+        double y = 2 + (distAvgBack - 752) * 0.0393701;
         double theta = getChass()->getPose().theta;
         getChass()->setPose(x, y, theta);
 
