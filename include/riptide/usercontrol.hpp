@@ -11,10 +11,6 @@ namespace bot {
         pros::controller_digital_e_t intakeIn;
         pros::controller_digital_e_t intakeOut;
         pros::controller_digital_e_t intakeLiftToggle;
-        pros::controller_digital_e_t bigArmRaise;
-        pros::controller_digital_e_t bigArmToggle;
-        pros::controller_digital_e_t bigArmDown;
-        pros::controller_digital_e_t bigArmUp;
         pros::controller_digital_e_t frontRightArmToggle;
         pros::controller_digital_e_t frontLeftArmToggle;
         pros::controller_digital_e_t mogoToggle;
@@ -27,24 +23,16 @@ namespace bot {
             .intakeIn = pros::E_CONTROLLER_DIGITAL_R1,
             .intakeOut = pros::E_CONTROLLER_DIGITAL_A,
             .intakeLiftToggle = pros::E_CONTROLLER_DIGITAL_DOWN,
-            .bigArmRaise = pros::E_CONTROLLER_DIGITAL_X, // useless
-            .bigArmToggle = pros::E_CONTROLLER_DIGITAL_A, // useless
-            .bigArmDown = pros::E_CONTROLLER_DIGITAL_L2, // useless
-            .bigArmUp = pros::E_CONTROLLER_DIGITAL_L1, // useless
             .frontRightArmToggle = pros::E_CONTROLLER_DIGITAL_UP,
             .frontLeftArmToggle = pros::E_CONTROLLER_DIGITAL_LEFT,
             .mogoToggle = pros::E_CONTROLLER_DIGITAL_R2
         },
-        { // alt_f4_jpg
+        { // alt
             .debugPrint = pros::E_CONTROLLER_DIGITAL_UP,
             .colorSortToggle = pros::E_CONTROLLER_DIGITAL_UP,
             .intakeIn = pros::E_CONTROLLER_DIGITAL_R1,
             .intakeOut = pros::E_CONTROLLER_DIGITAL_R2,
             .intakeLiftToggle = pros::E_CONTROLLER_DIGITAL_DOWN,
-            .bigArmRaise = pros::E_CONTROLLER_DIGITAL_X,
-            .bigArmToggle = pros::E_CONTROLLER_DIGITAL_A,
-            .bigArmDown = pros::E_CONTROLLER_DIGITAL_L2,
-            .bigArmUp = pros::E_CONTROLLER_DIGITAL_L1,
             .frontRightArmToggle = pros::E_CONTROLLER_DIGITAL_RIGHT,
             .frontLeftArmToggle = pros::E_CONTROLLER_DIGITAL_LEFT,
             .mogoToggle = pros::E_CONTROLLER_DIGITAL_B
@@ -198,28 +186,32 @@ namespace bot {
             toggleIntakeLift();
         }
 
-        // // big arm
-        // if (master.get_digital_new_press(keybindsList[selectedKeybinds].bigArmRaise)) {
-        //     bigArm.raise();
-        // }
-        // if (master.get_digital_new_press(keybindsList[selectedKeybinds].bigArmToggle)) {
-        //     bigArm.toggleUp();
-        // }
-        // if (master.get_digital(keybindsList[selectedKeybinds].bigArmDown)) {
-        //     bigArm.manual_move(-100);
-        // } else if (master.get_digital(keybindsList[selectedKeybinds].bigArmUp)) {
-        //     bigArm.manual_move(100);
-        // } else if (bigArm.manual) {
-        //     bigArm.manual_move(0);
-        // }
-        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1)) {
-            bigArm.cycle();
-        }
-        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
-            if (bigArm.move_target < bigArm.posHigh) {
-                bigArm.set_target(bigArm.posHigh);
-            } else {
-                bigArm.set_target(bigArm.posLow);
+        // big arm
+        if (selectedKeybinds == 1) { // alt
+            if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_X)) {
+                bigArm.raise();
+            }
+            if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
+                bigArm.set_load();
+            }
+            if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) {
+                bigArm.reset();
+            }
+            if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+                bigArm.manual_move(-100);
+            } else if (bigArm.manual) {
+                bigArm.manual_move(0);
+            }
+        } else if (selectedKeybinds == 0) { // ryan
+            if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1)) {
+                bigArm.cycle();
+            }
+            if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
+                if (bigArm.move_target < bigArm.posHigh) {
+                    bigArm.set_target(bigArm.posHigh);
+                } else {
+                    bigArm.set_target(bigArm.posLow);
+                }
             }
         }
 

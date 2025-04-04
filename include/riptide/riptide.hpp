@@ -26,6 +26,7 @@ namespace riptide {
             bot::bigArm.reset();
             pros::delay(100);
             if (bot::intakeLiftUp) bot::toggleIntakeLift();
+            if (bot::frontRightArmDown) bot::toggleFrontRightArm();
             if (auton::selectedRoute == 0) bot::deactivate_all_pistons();
         }
     }

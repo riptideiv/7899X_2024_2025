@@ -128,11 +128,7 @@ namespace red {
         */
     }
 
-    void plus5() {
-
-    }
-
-    void plus6() {
+    void plus5begin() {
         bigArm.reset();
 
         // get mogo
@@ -176,7 +172,8 @@ namespace red {
         mv2pt(-18.1149, -9.46125, 1000, { .forwards = false, .minSpeed = 20, .earlyExitRange = 2 });
         bigArm.reset();
         bigArm.raise();
-        turn2hd(162, 1000, { .maxSpeed = 40, .minSpeed = 25, .earlyExitRange = 2 });
+        pros::delay(250);
+        turn2hd(162, 1000, { .maxSpeed = 50, .minSpeed = 35, .earlyExitRange = 2 });
         toggleFrontLeftArm();
         toggleFrontRightArm();
         pros::delay(250);
@@ -185,8 +182,9 @@ namespace red {
         turn2pt(-3.14406, -24.5474, 1000, { .minSpeed = 20, .earlyExitRange = 2 });
         spin_intk(100);
         mv2pt(-3.14406, -24.5474, 1000, { .maxSpeed = 60, .minSpeed = 20, .earlyExitRange = 5 });
-        swing2hd(180, lemlib::DriveSide::RIGHT, 1000, { .minSpeed = 20, .earlyExitRange = 2 });
+        swing2hd(180, lemlib::DriveSide::RIGHT, 1000, { .minSpeed = 20, .earlyExitRange = 10 });
         spin_intk(0);
+        swing2hd(180, lemlib::DriveSide::RIGHT, 1000, { .minSpeed = 20, .earlyExitRange = 2 });
         turn2pt(-33.6566, -25.7769, 1000, { .minSpeed = 20, .earlyExitRange = 2 });
         drWait(0.4, 0.4, 2);
         spin_intk(100);
@@ -200,13 +198,35 @@ namespace red {
         bigArm.raise();
         mv2pt(-33.4264, -3.611046, 1000, { .maxSpeed = 60, .minSpeed = 20, .earlyExitRange = 1 });
         turn2hd(-45, 1000, { .minSpeed = 20, .earlyExitRange = 2 });
-        mv2pt(-50.1902, 9.77174, 1000, { .minSpeed = 20, .earlyExitRange = 8 });
-        bigArm.set_target(16000);
-        bigArm.kP = 2.5;
-        spin_intk(100);
-        mv2pt(-50.1902, 9.77174, 1000, { .minSpeed = 90, .earlyExitRange = 1 });
-        drive_chass(50, 50);
-        pros::delay(500);
+        pros::delay(650);
+        mv2pt(-45.609, 5.89776, 1000, { .minSpeed = 20, .earlyExitRange = 2 });
+        mv2pt(-46.9273, 7.29799, 750, { .maxSpeed = 60, .minSpeed = 50, .earlyExitRange = 0.5 });
+        drive_chass(30, 30);
+        pros::delay(250);
+
+    }
+
+    void plus5_cornerprep() {
+        plus5begin();
+
+        mv2pt(-41.045, 1.36698, 1000, { .forwards = false, .minSpeed = 25, .earlyExitRange = 1 });
+        toggleFrontRightArm();
+        pros::delay(150);
+        drWait(0.5, 0.5, 2);
+        turn2hd(180, 1000, { .direction = lemlib::AngularDirection::CCW_COUNTERCLOCKWISE, .minSpeed = 127, .earlyExitRange = 50 });
+        turn2hd(180, 1000, { .direction = lemlib::AngularDirection::CCW_COUNTERCLOCKWISE, .maxSpeed = 40, .minSpeed = 20, .earlyExitRange = 5 });
+        toggleFrontRightArm();
+    }
+
+    void plus5_rushprep() {
+        plus5begin();
+        // ending position
+        mv2pt(-39.3694, -0.386489, 1000, { .forwards = false, .minSpeed = 25, .earlyExitRange = 2 });
+        turn2hd(90, 1000, { .minSpeed = 30, .earlyExitRange = 20 });
+        toggleGoalClamp();
+        turn2hd(90, 250);
+        drWait(0.6, 0, 2);
+        turn2hd(0, 1000);
     }
 
     void plusRush3_1() {

@@ -102,11 +102,7 @@ namespace blue {
 
     }
 
-    void plus5() {
-
-    }
-
-    void plus6() {
+    void plus5begin() {
         bigArm.reset();
 
         // get mogo
@@ -152,6 +148,7 @@ namespace blue {
         mv2pt(11.9671, -15.247, 1000, { .forwards = false, .minSpeed = 20, .earlyExitRange = 2 });
         bigArm.reset();
         bigArm.raise();
+        pros::delay(250);
         turn2hd(178, 1000, { .maxSpeed = 50, .minSpeed = 23, .earlyExitRange = 2 });
         toggleFrontLeftArm();
         toggleFrontRightArm();
@@ -175,14 +172,37 @@ namespace blue {
         bigArm.raise();
         mv2pt(35.2786, -2.414121, 1000, { .maxSpeed = 80, .minSpeed = 20, .earlyExitRange = 2 });
         turn2hd(45, 1000, { .minSpeed = 20, .earlyExitRange = 2 });
-
-        mv2pt(-50.1902, 9.77174, 1000, { .minSpeed = 20, .earlyExitRange = 8 });
+        pros::delay(500);
+        mv2pt(46.2442, 11.1635, 1000, { .minSpeed = 20, .earlyExitRange = 4 });
         bigArm.set_target(16000);
         bigArm.kP = 2.5;
         spin_intk(100);
-        mv2pt(-50.1902, 9.77174, 1000, { .minSpeed = 90, .earlyExitRange = 1 });
-        drive_chass(50, 50);
-        pros::delay(500);
+        mv2pt(46.2442, 11.1635, 750, { .maxSpeed = 60, .minSpeed = 50, .earlyExitRange = 0.5 });
+        drive_chass(30, 30);
+        pros::delay(150);
+    }
+
+    void plus5_cornerprep() {
+        plus5begin();
+        drWait(0.3, 0.3, -8.33);
+        toggleFrontLeftArm();
+        pros::delay(150);
+        drWait(0.5, 0.5, 2);
+        turn2hd(180, 1000, { .direction = lemlib::AngularDirection::CW_CLOCKWISE, .minSpeed = 127, .earlyExitRange = 50 });
+        turn2hd(180, 1000, { .direction = lemlib::AngularDirection::CW_CLOCKWISE, .maxSpeed = 40, .minSpeed = 20, .earlyExitRange = 5 });
+        toggleFrontLeftArm();
+    }
+
+    void plus5_rushprep() {
+        plus5begin();
+        // ending position
+        mv2pt(38.098, -3.43366, 1000, { .forwards = false, .minSpeed = 25, .earlyExitRange = 2 });
+        turn2hd(-90, 1000, { .minSpeed = 30, .earlyExitRange = 20 });
+        toggleGoalClamp();
+        turn2hd(-90, 250);
+        bigArm.reset();
+        drWait(0, 0.6, 2);
+        turn2hd(0, 1000);
     }
 
     void plusRush2_1_1() {

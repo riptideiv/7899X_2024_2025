@@ -31,11 +31,11 @@ namespace bot {
         chass[0] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[0], pid::angular_controller[0], *odomSensors[0], &(lemlib::defaultDriveCurve), &driveSteerCurve);
         chass[1] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[1], pid::angular_controller[1], *odomSensors[1], &(lemlib::defaultDriveCurve), &driveSteerCurve);
 
-        int bigArmHi = 32750,
-            bigArmMid = 32750, // useless rn
-            bigArmLow = 34950,
-            bigArmToScore = 27000, // useless rn
-            bigArmScore = 19500;
+        int bigArmHi = -2365,
+            bigArmMid = -2365, // useless rn
+            bigArmLow = 333,
+            bigArmToScore = -6800, // useless rn
+            bigArmScore = -16077;
 
         intake.initialize(-10, -6);
 

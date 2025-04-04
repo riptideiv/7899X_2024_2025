@@ -17,7 +17,7 @@ namespace auton {
     int selectedRoute = 1;
     int selectedKeybinds = 0;
 
-    std::vector<std::string> routeDisplay = { "Skills", "Coop", "Pos6", "Neg5+1", "Neg6", "Neg3+2+1" };
+    std::vector<std::string> routeDisplay = { "Skills", "Coop", "Pos5Stay", "Neg5+1", "Neg6", "Pos5Rush" };
     std::string keybindsDisplay[] = { "ryan", "altf4" };
 
     inline void displaySelectedAuton() {
@@ -47,7 +47,7 @@ namespace auton {
                 coopSlot();
                 break;
             case 2:
-                red::plus6();
+                red::plus5_cornerprep();
                 break;
             case 3:
                 red::minus5_1();
@@ -56,7 +56,7 @@ namespace auton {
                 red::minus6();
                 break;
             case 5:
-                red::minus3_2_1();
+                red::plus5_rushprep();
                 break;
             }
         } else {
@@ -73,7 +73,7 @@ namespace auton {
                 coopSlot();
                 break;
             case 2:
-                blue::plus6();
+                blue::plus5_cornerprep();
                 break;
             case 3:
                 blue::minus5_1();
@@ -82,7 +82,7 @@ namespace auton {
                 blue::minus6();
                 break;
             case 5:
-                blue::minus3_2_1();
+                blue::plus5_rushprep();
                 break;
             }
         }

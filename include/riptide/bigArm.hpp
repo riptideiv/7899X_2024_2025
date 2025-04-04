@@ -12,7 +12,7 @@ namespace bot {
         pros::Rotation *rotation;
         int posLow, posMid, posHigh, posToScore, posScore;
 
-        const double nkP = 2.5, nkI = 0, nkD = 0; // "normal" kP, kI, kD for resetting after some custom action
+        const double nkP = 1.65, nkI = 0, nkD = 0; // "normal" kP, kI, kD for resetting after some custom action
         double kP = nkP, kI = nkI, kD = nkD;
 
         int maxSpeed = 100;
@@ -44,6 +44,11 @@ namespace bot {
             }
         }
 
+        void set_load() {
+            set_target(posHigh);
+            kP = 2.75;
+        }
+
         void reset() {
             set_target(posLow);
         }
@@ -70,11 +75,11 @@ namespace bot {
                 set_target(posHigh);
             } else if (move_target == posHigh) {
                 set_target(posToScore);
-                kP = 1.5;
+                kP = 1;
             } else if (move_target == posToScore) {
                 set_target(posScore);
             } else if (move_target == posScore) {
-                set_target(11300);
+                set_target(-5791);
             }
         }
 
