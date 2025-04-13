@@ -6,10 +6,10 @@ namespace bot {
     pros::adi::DigitalOut frontLeftArm('F'), frontRightArm('C');
     bool frontLeftArmDown = false, frontRightArmDown = false;
 
-    pros::adi::DigitalOut goalClamp('B');
+    pros::adi::DigitalOut goalClamp('A');
     bool goalClampClosed = false;
 
-    pros::adi::DigitalOut intakeLift('A');
+    pros::adi::DigitalOut intakeLift('B');
     bool intakeLiftUp = false;
 
     void toggleFrontRightArm() {

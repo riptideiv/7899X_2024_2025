@@ -35,7 +35,7 @@ namespace bot {
             .intakeLiftToggle = pros::E_CONTROLLER_DIGITAL_DOWN,
             .frontRightArmToggle = pros::E_CONTROLLER_DIGITAL_RIGHT,
             .frontLeftArmToggle = pros::E_CONTROLLER_DIGITAL_LEFT,
-            .mogoToggle = pros::E_CONTROLLER_DIGITAL_B
+            .mogoToggle = pros::E_CONTROLLER_DIGITAL_L1
         }
     };
 
@@ -51,7 +51,7 @@ namespace bot {
         });
 
     void alliStakeMacro() {
-        bool immed = bigArm.move_target >= bigArm.posHigh;
+        bool immed = bigArm.move_target >= posHigh;
         double theta = getChass()->getPose().theta * M_PI / 180;
         double x = -9.5 * std::sin(theta);
         double y = -9.5 * std::cos(theta) + 0.5;
@@ -192,13 +192,13 @@ namespace bot {
                 bigArm.raise();
             }
             if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
-                bigArm.set_load();
+                bigArm.toggleUp();
             }
             if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) {
                 bigArm.reset();
             }
             if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-                bigArm.manual_move(-100);
+                bigArm.manual_move(100);
             } else if (bigArm.manual) {
                 bigArm.manual_move(0);
             }
@@ -207,10 +207,10 @@ namespace bot {
                 bigArm.cycle();
             }
             if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
-                if (bigArm.move_target < bigArm.posHigh) {
-                    bigArm.set_target(bigArm.posHigh);
+                if (bigArm.move_target > posHigh) {
+                    bigArm.set_target(posHigh);
                 } else {
-                    bigArm.set_target(bigArm.posLow);
+                    bigArm.set_target(posLow);
                 }
             }
         }

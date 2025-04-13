@@ -4,15 +4,20 @@
 
 #include<iostream>
 
+#define posHigh 10687
+#define posMid 10687
+#define posLow 7690
+#define posToScore 15720
+#define posScore 23774
+
 namespace bot {
     struct BigArm {
         bool intakeSawRing = true; // intake saw ring after bigarm going to posHigh
 
         pros::Motor *mtr;
         pros::Rotation *rotation;
-        int posLow, posMid, posHigh, posToScore, posScore;
 
-        const double nkP = 1.65, nkI = 0, nkD = 0; // "normal" kP, kI, kD for resetting after some custom action
+        const double nkP = 1.2, nkI = 0, nkD = 0; // "normal" kP, kI, kD for resetting after some custom action
         double kP = nkP, kI = nkI, kD = nkD;
 
         int maxSpeed = 100;
@@ -23,30 +28,32 @@ namespace bot {
         bool manual = false;
 
         void set_target(int target) {
-            if (target == posHigh) {
-                intakeSawRing = false;
-            }
             manual = false;
             move_target = target;
             kP = nkP, kI = nkI, kD = nkD;
+            switch (target) {
+            case posHigh:
+                intakeSawRing = false;
+                kP = 1.4;
+                break;
+            case posLow:
+                kP = 4;
+                break;
+            }
         }
 
         void toggleUp() {
-            if (move_target == posScore || move_target == posToScore || manual) {
+            if (rotation->get_position() > posHigh) {
                 set_target(posHigh);
-                kP = 2.75;
             } else if (move_target == posHigh) {
                 set_target(posLow);
-                kP = 3;
             } else {
                 set_target(posHigh);
-                kP = 2.75;
             }
         }
 
         void set_load() {
             set_target(posHigh);
-            kP = 2.75;
         }
 
         void reset() {
@@ -59,15 +66,12 @@ namespace bot {
         }
 
         void raise() {
-            if (move_target == posToScore) {
+            if (move_target == posToScore || move_target > posScore) {
                 set_target(posScore);
-                kP = 2.5;
             } else {
                 set_target(posToScore);
-                kP = 1.5;
             }
             // set_target(posScore);
-            // kP = 2;
         }
 
         void cycle() {
@@ -75,25 +79,18 @@ namespace bot {
                 set_target(posHigh);
             } else if (move_target == posHigh) {
                 set_target(posToScore);
-                kP = 1;
             } else if (move_target == posToScore) {
                 set_target(posScore);
             } else if (move_target == posScore) {
-                set_target(-5791);
+                set_target(posScore + 9000);
             }
         }
 
-        void initialize(int port, int rotationPort, int posLow, int posMid, int posHigh, int posToScore, int posScore) {
+        void initialize(int port, int rotationPort) {
             mtr = new pros::Motor(port);
 
             rotation = new pros::Rotation(rotationPort);
             rotation->reset();
-
-            this->posLow = posLow;
-            this->posMid = posMid;
-            this->posHigh = posHigh;
-            this->posToScore = posToScore;
-            this->posScore = posScore;
 
             move_target = posLow;
 

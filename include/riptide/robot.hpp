@@ -9,6 +9,7 @@
 
 namespace bot {
     lemlib::ExpoDriveCurve driveSteerCurve(10, 15, 1.01);
+    lemlib::ExpoDriveCurve driveThrottleCurve(10, 15, 1);
 
     pros::Controller master(pros::E_CONTROLLER_MASTER);
 
@@ -20,26 +21,20 @@ namespace bot {
         init_sensors();
 
         drivetrain = new lemlib::Drivetrain(
-            new pros::MotorGroup({ -11, 12, -15 }, pros::v5::MotorGears::rpm_600, pros::v5::MotorEncoderUnits::degrees),
-            new pros::MotorGroup({ 13, -20, 19 }, pros::v5::MotorGears::rpm_600, pros::v5::MotorEncoderUnits::degrees),
+            new pros::MotorGroup({ -1,8,9 }, pros::v5::MotorGears::rpm_600, pros::v5::MotorEncoderUnits::degrees),
+            new pros::MotorGroup({ 2,-3,-4 }, pros::v5::MotorGears::rpm_600, pros::v5::MotorEncoderUnits::degrees),
             12.344, // 12.344 inch track width
             lemlib::Omniwheel::NEW_275, // using new 2.75" omnis
             600, // drivetrain rpm is 360
             2 // horizontal drift is 2
         );
 
-        chass[0] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[0], pid::angular_controller[0], *odomSensors[0], &(lemlib::defaultDriveCurve), &driveSteerCurve);
-        chass[1] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[1], pid::angular_controller[1], *odomSensors[1], &(lemlib::defaultDriveCurve), &driveSteerCurve);
+        chass[0] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[0], pid::angular_controller[0], *odomSensors[0], &driveThrottleCurve, &driveSteerCurve);
+        chass[1] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[1], pid::angular_controller[1], *odomSensors[1], &driveThrottleCurve, &driveSteerCurve);
 
-        int bigArmHi = -2365,
-            bigArmMid = -2365, // useless rn
-            bigArmLow = 333,
-            bigArmToScore = -6800, // useless rn
-            bigArmScore = -16077;
+        intake.initialize(20, 19);
 
-        intake.initialize(-10, -6);
-
-        bigArm.initialize(-4, 5, bigArmLow, bigArmMid, bigArmHi, bigArmToScore, bigArmScore);
+        bigArm.initialize(7, 6);
 
         chass[0]->calibrate();
     }

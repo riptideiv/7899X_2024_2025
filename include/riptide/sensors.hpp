@@ -3,24 +3,24 @@
 #include "main.h"
 
 namespace bot {
-    pros::Distance mogoDist(1);
-    pros::Distance rWallDist(8);
-    pros::Distance lWallDist(21);
+    pros::Distance mogoDist(18);
+    pros::Distance rWallDist(17);
+    pros::Distance lWallDist(16);
 
     pros::IMU *imu;
 
     pros::Rotation *horizTrackRotSensor;
     lemlib::TrackingWheel *horizTrack[2]; // 0 = no mogo, 1 = mogo
 
-    pros::Optical colorSortSensor(9);
+    pros::Optical colorSortSensor(15);
 
     lemlib::OdomSensors *odomSensors[2]; // 0 = no mogo, 1 = mogo
 
     void init_sensors() {
-        imu = new pros::IMU(2);
+        imu = new pros::IMU(10);
 
-        horizTrackRotSensor = new pros::Rotation(3);
-        horizTrackRotSensor->set_reversed(true);
+        horizTrackRotSensor = new pros::Rotation(11);
+        horizTrackRotSensor->set_reversed(false);
         horizTrack[0] = new lemlib::TrackingWheel(horizTrackRotSensor, lemlib::Omniwheel::NEW_275, -0.8298); // done
         horizTrack[1] = new lemlib::TrackingWheel(horizTrackRotSensor, lemlib::Omniwheel::NEW_275, 4.28069);
 

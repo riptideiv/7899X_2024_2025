@@ -42,7 +42,7 @@ namespace bot {
                     // frReverseTime = 100;
                 }
             } else {
-                if (!throwAway && speed > 0 && colorSortSensor.get_proximity() > 200 && bigArm.move_target != bigArm.posHigh) {
+                if (!throwAway && speed > 0 && colorSortSensor.get_proximity() > 200 && bigArm.move_target != posHigh) {
                     if ((colorSortSensor.get_hue() < 30 || colorSortSensor.get_hue() > 340) && !colorSortRed ||
                         (colorSortSensor.get_hue() > 120 && colorSortSensor.get_hue() < 270) && colorSortRed ||
                         confirmThrow) {
@@ -62,7 +62,7 @@ namespace bot {
                 stuckFor = 0;
             }
 
-            if (bot::bigArm.move_target == bot::bigArm.posHigh) {
+            if (bot::bigArm.move_target == posHigh) {
                 if (!bot::bigArm.intakeSawRing && colorSortSensor.get_proximity() > 55) {
                     bot::bigArm.intakeSawRing = true;
                     stuckFor = 0;
@@ -142,7 +142,7 @@ namespace bot {
                     //     intake->frReverseTime -= intake->loopDelay;
                     //     intake->frontMtr->move_voltage(-12000);
                     // } else {
-                    //     if (bigArm.move_target != bigArm.posHigh)
+                    //     if (bigArm.move_target != posHigh)
                     //         intake->frontMtr->move_voltage(110 * intake->frontSpd);
                     //     else
                     //         intake->frontMtr->move_voltage(120 * intake->frontSpd);
