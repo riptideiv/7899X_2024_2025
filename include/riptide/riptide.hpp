@@ -32,10 +32,15 @@ namespace riptide {
     }
 
     void autonomous() {
+        // test::findTrackingRadius();
+        // test::testMotorAccels();
         auton::runSelectedAuton();
     }
 
     void opcontrol() {
+        // getChass()->setPose(0, 0, 0);
+        // getChass()->moveToPoint(0, 48, 5000);
+        // test::pidTune();
         while (1) {
             bot::handleControllerInput();
             pros::delay(8);

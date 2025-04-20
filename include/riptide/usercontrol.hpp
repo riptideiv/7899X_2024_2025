@@ -35,7 +35,7 @@ namespace bot {
             .intakeLiftToggle = pros::E_CONTROLLER_DIGITAL_DOWN,
             .frontRightArmToggle = pros::E_CONTROLLER_DIGITAL_RIGHT,
             .frontLeftArmToggle = pros::E_CONTROLLER_DIGITAL_LEFT,
-            .mogoToggle = pros::E_CONTROLLER_DIGITAL_L1
+            .mogoToggle = pros::E_CONTROLLER_DIGITAL_B
         }
     };
 
@@ -51,7 +51,7 @@ namespace bot {
         });
 
     void alliStakeMacro() {
-        bool immed = bigArm.move_target >= posHigh;
+        bool immed = bigArm.move_target < posHigh + 1000;
         double theta = getChass()->getPose().theta * M_PI / 180;
         double x = -9.5 * std::sin(theta);
         double y = -9.5 * std::cos(theta) + 0.5;
@@ -60,48 +60,23 @@ namespace bot {
         getChass()->setPose(x, y, getChass()->getPose().theta);
         if (immed) {
             bigArm.setMaxSpeed(70);
-            bigArm.set_target(14300);
-            bigArm.kP = 5;
+            bigArm.set_target(28800);
+            bigArm.kP = 2;
         }
-        mv2pt(targx, targy, 1000, { .forwards = false, .minSpeed = 40, .earlyExitRange = 7 });
+        mv2pt(targx, targy, 1000, { .forwards = false, .minSpeed = 40, .earlyExitRange = 4 });
         if (!immed) {
             bigArm.setMaxSpeed(60);
-            bigArm.set_target(14300);
-            bigArm.kP = 5;
+            bigArm.set_target(28800);
+            bigArm.kP = 2;
         }
         mv2pt(targx, targy, 800, {}, true);
-        while (getChass()->isInMotion() && bigArm.rotation->get_position() > 17191) pros::delay(3);
+        while (getChass()->isInMotion() && bigArm.rotation->get_position() < 26750) pros::delay(3);
         getChass()->cancelAllMotions();
         pros::delay(10);
         drWait(1, 1, -2.5);
         bigArm.reset();
         bigArm.setMaxSpeed(100);
         drive_chass(0, 0);
-    }
-
-    void hangMacro() {
-        bigArm.reset();
-        bigArm.raise();
-        if (auton::selectedRoute == 0) {
-            turn2hd(45, 1000, { .minSpeed = 20, .earlyExitRange = 2 });
-        }
-        const double kP = 2.5;
-        const double chass_rpm = 600;
-        const double targ_spdPct = -0.39 * chass_rpm;
-        while (1) {
-            double error = targ_spdPct - getChassVelo();
-            double chassPower = error * kP + targ_spdPct;
-            chassPower = chassPower / chass_rpm * 100;
-            drive_chass(chassPower, chassPower);
-            if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1) || master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
-                break;
-            }
-            pros::delay(5);
-        }
-        std::cout << "actual velocity at exit: " << getChassVelo() / chass_rpm << std::endl;
-        if (MOGO) {
-            toggleGoalClamp();
-        }
     }
 
     void debugPrint() {
@@ -193,12 +168,18 @@ namespace bot {
             }
             if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
                 bigArm.toggleUp();
+
+                double gravityTheta = (bigArm.rotation->get_position() - 18193) / 18000.0 * M_PI;
+                std::cout << "Gravity: " << gravityTheta << std::endl;
+                std::cout << "sin: " << std::sin(gravityTheta) << std::endl;
             }
-            if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) {
-                bigArm.reset();
-            }
+            // if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) {
+            //     bigArm.reset();
+            // }
             if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
                 bigArm.manual_move(100);
+            } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
+                bigArm.manual_move(-100);
             } else if (bigArm.manual) {
                 bigArm.manual_move(0);
             }

@@ -23,9 +23,9 @@ namespace bot {
         drivetrain = new lemlib::Drivetrain(
             new pros::MotorGroup({ -1,8,9 }, pros::v5::MotorGears::rpm_600, pros::v5::MotorEncoderUnits::degrees),
             new pros::MotorGroup({ 2,-3,-4 }, pros::v5::MotorGears::rpm_600, pros::v5::MotorEncoderUnits::degrees),
-            12.344, // 12.344 inch track width
-            lemlib::Omniwheel::NEW_275, // using new 2.75" omnis
-            600, // drivetrain rpm is 360
+            11.5, // 11.5 inch track width
+            lemlib::Omniwheel::NEW_325, // using new 3.25" omnis
+            450, // drivetrain rpm is 450
             2 // horizontal drift is 2
         );
 

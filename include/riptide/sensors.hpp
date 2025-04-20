@@ -4,15 +4,16 @@
 
 namespace bot {
     pros::Distance mogoDist(18);
-    pros::Distance rWallDist(17);
+    pros::Distance rWallDist(15);
     pros::Distance lWallDist(16);
+    pros::Distance intakeDist(5);
 
     pros::IMU *imu;
 
     pros::Rotation *horizTrackRotSensor;
     lemlib::TrackingWheel *horizTrack[2]; // 0 = no mogo, 1 = mogo
 
-    pros::Optical colorSortSensor(15);
+    pros::Optical colorSortSensor(17);
 
     lemlib::OdomSensors *odomSensors[2]; // 0 = no mogo, 1 = mogo
 
@@ -20,9 +21,9 @@ namespace bot {
         imu = new pros::IMU(10);
 
         horizTrackRotSensor = new pros::Rotation(11);
-        horizTrackRotSensor->set_reversed(false);
-        horizTrack[0] = new lemlib::TrackingWheel(horizTrackRotSensor, lemlib::Omniwheel::NEW_275, -0.8298); // done
-        horizTrack[1] = new lemlib::TrackingWheel(horizTrackRotSensor, lemlib::Omniwheel::NEW_275, 4.28069);
+        horizTrackRotSensor->set_reversed(true);
+        horizTrack[0] = new lemlib::TrackingWheel(horizTrackRotSensor, lemlib::Omniwheel::NEW_275, -3.5);
+        horizTrack[1] = new lemlib::TrackingWheel(horizTrackRotSensor, lemlib::Omniwheel::NEW_275, 1.07);
 
         odomSensors[0] = new lemlib::OdomSensors(nullptr, nullptr, horizTrack[0], nullptr, imu);
         odomSensors[1] = new lemlib::OdomSensors(nullptr, nullptr, horizTrack[1], nullptr, imu);

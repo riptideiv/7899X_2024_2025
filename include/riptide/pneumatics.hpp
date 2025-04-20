@@ -3,13 +3,13 @@
 #include "main.h"
 
 namespace bot {
-    pros::adi::DigitalOut frontLeftArm('F'), frontRightArm('C');
+    pros::adi::DigitalOut frontLeftArm('C'), frontRightArm('D');
     bool frontLeftArmDown = false, frontRightArmDown = false;
 
     pros::adi::DigitalOut goalClamp('A');
     bool goalClampClosed = false;
 
-    pros::adi::DigitalOut intakeLift('B');
+    pros::adi::DigitalOut intakeLift('E');
     bool intakeLiftUp = false;
 
     void toggleFrontRightArm() {
@@ -25,8 +25,8 @@ namespace bot {
     }
 
     void toggleFrontLeftArm() {
-        // frontLeftArmDown = !frontLeftArmDown;
-        // frontLeftArm.set_value(frontLeftArmDown);
-        toggleIntakeLift();
+        frontLeftArmDown = !frontLeftArmDown;
+        frontLeftArm.set_value(frontLeftArmDown);
+        // toggleIntakeLift();
     }
 }

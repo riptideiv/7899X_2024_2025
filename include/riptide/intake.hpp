@@ -16,6 +16,8 @@ namespace bot {
         bool doAntiStuck = false;
         bool confirmThrow = false;
 
+        bool stopNextRing = false;
+
         int speed = 0;
         // int frontSpd = 0;
 
@@ -36,13 +38,13 @@ namespace bot {
             if (throwAway && revTime <= 0) {
                 if (mtr->get_position() < -300) {
                     throwAway = 0;
-                } else if (colorSortRed && mtr->get_position() > 261 || !colorSortRed && mtr->get_position() > 261) {
+                } else if (colorSortRed && mtr->get_position() > 132 || !colorSortRed && mtr->get_position() > 132) {
                     throwAway = 0;
                     revTime = 100;
                     // frReverseTime = 100;
                 }
             } else {
-                if (!throwAway && speed > 0 && colorSortSensor.get_proximity() > 200 && bigArm.move_target != posHigh) {
+                if (!throwAway && speed > 0 && intakeDist.get() < 65 && bigArm.move_target != posHigh) {
                     if ((colorSortSensor.get_hue() < 30 || colorSortSensor.get_hue() > 340) && !colorSortRed ||
                         (colorSortSensor.get_hue() > 120 && colorSortSensor.get_hue() < 270) && colorSortRed ||
                         confirmThrow) {
@@ -56,14 +58,14 @@ namespace bot {
         }
 
         void antiStuck() {
-            if (revTime <= 0 && speed > 0 && mtr->get_actual_velocity() / speed < 0.075) {
+            if (revTime <= 0 && speed > 0 && mtr->get_actual_velocity() / speed < 0.1) {
                 stuckFor += loopDelay;
             } else {
                 stuckFor = 0;
             }
 
             if (bot::bigArm.move_target == posHigh) {
-                if (!bot::bigArm.intakeSawRing && colorSortSensor.get_proximity() > 55) {
+                if (!bot::bigArm.intakeSawRing && intakeDist.get() < 65) {
                     bot::bigArm.intakeSawRing = true;
                     stuckFor = 0;
                 }
@@ -119,34 +121,33 @@ namespace bot {
                     } else {
                         intake->startUpTime -= intake->loopDelay;
                     }
+
+                    // give startup time when intake starts
                     if (intake->prevSpd == 0 && intake->speed > 0) {
                         intake->startUpTime = 200;
                     }
+
+                    // record previous speed to check for changes
                     intake->prevSpd = intake->speed;
+
+                    // give startup time if the intake is auto-reversing
                     if (intake->revTime > 0) {
                         intake->startUpTime = 300;
                         intake->revTime -= intake->loopDelay;
                         intake->mtr->move_voltage(-12000);
                     } else {
-                        if (false && bigArm.rotation->get_position() < 29500) { //"false" - disabled
-                            if (intake->revTime <= 0 && intake->speed > 0 && colorSortSensor.get_proximity() > 55) {
-                                intake->mtr->move_voltage(0);
+                        // hold ring
+                        if (intake->stopNextRing || bigArm.rotation->get_position() > posToScore - 500) {
+                            if (intake->revTime <= 0 && intake->speed > 0 && intakeDist.get() < 120) {
+                                intake->set_speed(0);
+                                intake->stopNextRing = false;
                                 intake->stuckFor = 0;
                             } else {
-                                intake->mtr->move_voltage(80 * intake->speed);
+                                intake->mtr->move_voltage(70 * intake->speed);
                             }
-                        } else
+                        } else // normal operation
                             intake->mtr->move_voltage(120 * intake->speed);
                     }
-                    // if (intake->frReverseTime > 0) {
-                    //     intake->frReverseTime -= intake->loopDelay;
-                    //     intake->frontMtr->move_voltage(-12000);
-                    // } else {
-                    //     if (bigArm.move_target != posHigh)
-                    //         intake->frontMtr->move_voltage(110 * intake->frontSpd);
-                    //     else
-                    //         intake->frontMtr->move_voltage(120 * intake->frontSpd);
-                    // }
                 }
                 }, this);
         }

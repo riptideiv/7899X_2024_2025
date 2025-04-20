@@ -156,22 +156,60 @@ namespace test {
     void pidTune() {
         // runAngularPID_kPs(0, 2, 2.8, 0.1, 90, 3000);
         // runAngularPID_kDs(3.1, 24.4, 25.4, 0, 90, 2000);
-        // runLateralBSearchkP(0, 0, 30, 24, 2000);
-        // runLateralBSearchkD(7.5, 50, 100, 24, 2000);
+        // runLateralBSearchkP(0, 10, 50, 24, 2000);
+        // runLateralBSearchkD(25, 0, 300, 48, 2000);
         // runAngularBSearchkP(0, 0, 10, 135, 1500);
-        runAngularBSearchkD(1.5, 0, 20, 135, 1500);
+        runAngularBSearchkD(8, 50, 100, 135, 1500);
     }
 
-    void findTrackingRadius() {
-        int t = clock();
-        bot::drive_chass(30, -30);
-        pros::delay(500);
-        bot::horizTrackRotSensor->reset();
-        double initAngle = bot::imu->get_rotation();
-        pros::delay(5000);
-        double pos = bot::horizTrackRotSensor->get_position() / 36000.0 * 2.75 * M_PI;
-        std::cout << "dist: " << pos
-            << "\nangle: " << bot::imu->get_rotation() - initAngle
-            << "\nradius: " << (bot::horizTrack[0]->getDistanceTraveled() / ((bot::imu->get_rotation() - initAngle) / 360 * 2 * M_PI)) << '\n';
+    void findTrackingRadius(bool clamp = false) {
+        if (clamp) {
+            bot::toggleGoalClamp();
+            pros::delay(500);
+        }
+        double avg = 0;
+        for (int i = 0; i < 5; i++) {
+            int t = clock();
+            int speed = 30 + (i * 10);
+            std::cout << "Run " << (i + 1) << " with speed: " << speed << '\n';
+            bot::drive_chass(speed, -speed);
+            pros::delay(1000);
+            bot::horizTrackRotSensor->reset();
+            double initAngle = bot::imu->get_rotation();
+            pros::delay(3000);
+            double pos = bot::horizTrackRotSensor->get_position() / 36000.0 * 2.75 * M_PI;
+            std::cout << "dist: " << pos
+                << "\nangle: " << bot::imu->get_rotation() - initAngle
+                << "\nradius: " << (bot::horizTrack[0]->getDistanceTraveled() / ((bot::imu->get_rotation() - initAngle) / 360 * 2 * M_PI)) << '\n';
+            avg += (bot::horizTrack[0]->getDistanceTraveled() / ((bot::imu->get_rotation() - initAngle) / 360 * 2 * M_PI));
+        }
+        std::cout << "average radius: " << (avg / 5) << '\n';
+    }
+
+    void testMotorAccels() {
+        // run each drivetrain motor individually 5 times and calculate the average time to reach 50% speed
+        int ports[] = { -1, 2, 8, -3, 9, -4 };
+        double times[6] = { 0 };
+        for (int j = 0; j < 5; j++) {
+            std::cout << "Run " << (j + 1) << ":\n";
+            for (int i = 0; i < 6; i++) {
+                pros::Motor m(ports[i]);
+                m.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+                m.move_voltage(12000);
+                int t = pros::millis();
+                int rpm = 500;
+                while (m.get_actual_velocity() < rpm) {
+                    pros::delay(3);
+                }
+                double timeTaken = (pros::millis() - t) / 1000.0;
+                std::cout << "motor " << ports[i] << " time: " << timeTaken << " seconds to reach 500 rpm\n";
+                times[i] += timeTaken;
+                m.move_velocity(0);
+                pros::delay(500);
+            }
+        }
+        for (int i = 0; i < 6; i++) {
+            std::cout << "motor " << ports[i] << " average time: " << (times[i] / 5) << " seconds to reach 500 rpm\n";
+        }
     }
 }

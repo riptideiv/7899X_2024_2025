@@ -8,18 +8,18 @@ namespace pid {
         lemlib::ControllerSettings(
             15, // proportional gain (kP)
             0, // integral gain (kI)
-            156.25, // derivative gain (kD)
+            112.5, // derivative gain (kD)
             0, // anti windup
             0, // small error range, in inches
             0, // small error range timeout, in milliseconds
             0, // large error range, in inches
             0, // large error range timeout, in milliseconds
-            0 // maximum acceleration (slew)
+            23 // maximum acceleration (slew)
         ),
         lemlib::ControllerSettings(
-            15, // proportional gain (kP)
+            25, // proportional gain (kP)
             0, // integral gain (kI)
-            131.25, // derivative gain (kD)
+            187.5, // derivative gain (kD)
             0, // anti windup
             0, // small error range, in inches
             0, // small error range timeout, in milliseconds
@@ -32,9 +32,9 @@ namespace pid {
     // angular PID controllers (0 = no mogo, 1 = mogo)
     lemlib::ControllerSettings angular_controller[2] = {
         lemlib::ControllerSettings(
-            4, // proportional gain (kP)
+            5, // proportional gain (kP)
             0, // integral gain (kI)
-            34.375, // derivative gain (kD)
+            38.75, // derivative gain (kD)
             0, // anti windup
             0, // small error range, in degrees
             0, // small error range timeout, in milliseconds
@@ -43,9 +43,9 @@ namespace pid {
             0 // maximum acceleration (slew)
         ),
         lemlib::ControllerSettings(
-            5, // proportional gain (kP)
+            8, // proportional gain (kP)
             0, // integral gain (kI)
-            43.75, // derivative gain (kD)
+            73.4375, // derivative gain (kD)
             0, // anti windup
             0, // small error range, in degrees
             0, // small error range timeout, in milliseconds

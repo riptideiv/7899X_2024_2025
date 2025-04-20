@@ -14,15 +14,18 @@ namespace auton {
     enum class Color { Red, Blue };
 
     Color selectedColor = Color::Red;
-    int selectedRoute = 1;
-    int selectedKeybinds = 0;
+    int selectedRoute = 2;
+    int selectedKeybinds = 1;
 
-    std::vector<std::string> routeDisplay = { "Skills", "Coop", "Pos5Stay", "Neg5+1", "Neg6", "Pos5Rush" };
+    std::vector<std::string> routeDisplay = { "Skills", "Coop", "NegRRush", "Neg6+1", "PosTRush" };
+    std::vector<int> routeSetupAngle = { 0, 0, 15, 25, 0 };
     std::string keybindsDisplay[] = { "ryan", "altf4" };
 
     inline void displaySelectedAuton() {
         bot::master.print(0, 0, "%s;; %s    ", selectedColor == Color::Red ? "Red" : "Blue", keybindsDisplay[selectedKeybinds]);
-        pros::delay(100);
+        pros::delay(50);
+        bot::master.print(1, 0, "setup: %d deg    ", routeSetupAngle[(int)selectedRoute]);
+        pros::delay(50);
         bot::master.print(2, 0, "%s            ", routeDisplay[(int)selectedRoute]);
     }
 
@@ -47,17 +50,13 @@ namespace auton {
                 coopSlot();
                 break;
             case 2:
-                red::plus5_cornerprep();
+                red::neg_rrush();
                 break;
             case 3:
-                red::minus5_1();
+                red::neg6_1();
                 break;
             case 4:
-                red::minus6();
-                break;
-            case 5:
-                red::plus5_rushprep();
-                break;
+                red::pos_trush();
             }
         } else {
             bot::intake.doAntiStuck = true;
@@ -73,17 +72,13 @@ namespace auton {
                 coopSlot();
                 break;
             case 2:
-                blue::plus5_cornerprep();
+                blue::neg_rrush();
                 break;
             case 3:
-                blue::minus5_1();
+                blue::neg6_1();
                 break;
             case 4:
-                blue::minus6();
-                break;
-            case 5:
-                blue::plus5_rushprep();
-                break;
+                blue::pos_trush();
             }
         }
         drive_chass(0, 0);
@@ -152,15 +147,16 @@ namespace auton {
             // Display the selected attributes on the controller screen
             displaySelectedAuton();
 
-            // set the big arm settings
+            // setup settings
             bigArm.reset();
             switch (selectedRoute) {
             case 1: // Coop
-            case 2: // Pos4+1
-            case 3: // Neg5+1
-            case 5: // Neg3+2+1
+            case 3: // Neg6+1
                 bigArm.manual_move(0);
                 bigArm.setBrakeMode(pros::E_MOTOR_BRAKE_COAST);
+                break;
+            case 2: // NegRRush
+                turn2pt(-12.3251, 41.5651, 1000);
                 break;
             default:
                 bigArm.manual = false;

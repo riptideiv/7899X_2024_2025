@@ -4,11 +4,12 @@
 
 #include<iostream>
 
-#define posHigh 10687
-#define posMid 10687
+#define posHigh 10600
+#define posMid 10600
 #define posLow 7690
 #define posToScore 15720
 #define posScore 23774
+#define posUntip 30800
 
 namespace bot {
     struct BigArm {
@@ -17,7 +18,7 @@ namespace bot {
         pros::Motor *mtr;
         pros::Rotation *rotation;
 
-        const double nkP = 1.2, nkI = 0, nkD = 0; // "normal" kP, kI, kD for resetting after some custom action
+        const double nkP = 1.4, nkI = 0, nkD = 0; // "normal" kP, kI, kD for resetting after some custom action
         double kP = nkP, kI = nkI, kD = nkD;
 
         int maxSpeed = 100;
@@ -43,7 +44,7 @@ namespace bot {
         }
 
         void toggleUp() {
-            if (rotation->get_position() > posHigh) {
+            if (rotation->get_position() > posToScore - 500) {
                 set_target(posHigh);
             } else if (move_target == posHigh) {
                 set_target(posLow);
@@ -61,6 +62,9 @@ namespace bot {
         }
 
         void manual_move(int spdPercent) {
+            if (!manual && move_target == posUntip && spdPercent > 0) {
+                return;
+            }
             manual = true;
             mtr->move_voltage(spdPercent * 120);
         }
@@ -101,19 +105,19 @@ namespace bot {
                 BigArm *arm = (BigArm *)bigArm;
                 arm->rotation->get_position();
                 while (true) {
-                    if (arm->manual) {
+                    if (arm->rotation->get_position() > 30000 && arm->manual) {
+                        arm->set_target(posUntip);
+                    } else if (arm->manual) {
                         pros::delay(50);
                         continue;
                     }
 
                     int armPos = arm->rotation->get_position();
 
-                    error = arm->move_target - armPos;
+                    double gravityTheta = (armPos - 18193) / 18000.0 * M_PI;
+                    double kGravity = 700 * std::sin(gravityTheta);
 
-                    // if (abs(error) < 1000 && arm->mtr->get_actual_velocity() < 20) {
-                    //     arm->manual = true;
-                    //     arm->mtr->move_velocity(0);
-                    // }
+                    error = arm->move_target - armPos;
 
                     if ((error > 0 && prevError < 0) || (error < 0 && prevError > 0)) {
                         integral = 0;
@@ -122,10 +126,13 @@ namespace bot {
                     derivative = error - prevError;
                     prevError = error;
 
-                    double power = error * arm->kP + integral * arm->kI + derivative * arm->kD;
+                    double power = error * arm->kP + integral * arm->kI + derivative * arm->kD - kGravity;
 
                     if (power > arm->maxSpeed / 100.0 * 12000) power = arm->maxSpeed / 100.0 * 12000;
                     if (power < -arm->maxSpeed / 100.0 * 12000) power = -arm->maxSpeed / 100.0 * 12000;
+                    if (armPos >= posScore) {
+                        if (power < -arm->maxSpeed / 100.0 * 9000) power = -arm->maxSpeed / 100.0 * 9000;
+                    }
 
                     arm->mtr->move_voltage(power);
 
