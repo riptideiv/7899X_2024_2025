@@ -79,7 +79,9 @@ namespace bot {
             } else if (move_target == posToScore) {
                 set_target(posScore);
             } else if (move_target == posScore) {
-                set_target(-5791);
+                set_target(9333);
+            } else {
+                set_target(900);
             }
         }
 
