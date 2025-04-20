@@ -33,6 +33,7 @@ namespace riptide {
 
     void autonomous() {
         auton::runSelectedAuton();
+        auton::autonSelectTask->remove();
     }
 
     void opcontrol() {
