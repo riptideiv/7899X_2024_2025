@@ -62,9 +62,6 @@ namespace bot {
         }
 
         void manual_move(int spdPercent) {
-            if (!manual && move_target == posUntip && spdPercent > 0) {
-                return;
-            }
             manual = true;
             mtr->move_voltage(spdPercent * 120);
         }
@@ -105,9 +102,7 @@ namespace bot {
                 BigArm *arm = (BigArm *)bigArm;
                 arm->rotation->get_position();
                 while (true) {
-                    if (arm->rotation->get_position() > 30000 && arm->manual) {
-                        arm->set_target(posUntip);
-                    } else if (arm->manual) {
+                    if (arm->manual) {
                         pros::delay(50);
                         continue;
                     }
