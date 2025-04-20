@@ -14,7 +14,7 @@ namespace auton {
     enum class Color { Red, Blue };
 
     Color selectedColor = Color::Red;
-    int selectedRoute = 2;
+    int selectedRoute = 1;
     int selectedKeybinds = 1;
 
     std::vector<std::string> routeDisplay = { "Skills", "Coop", "NegRRush", "Neg6+1", "PosTRush" };

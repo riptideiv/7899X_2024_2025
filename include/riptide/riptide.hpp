@@ -35,6 +35,7 @@ namespace riptide {
         // test::findTrackingRadius();
         // test::testMotorAccels();
         auton::runSelectedAuton();
+        auton::autonSelectTask->remove();
     }
 
     void opcontrol() {
