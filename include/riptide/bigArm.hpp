@@ -127,7 +127,10 @@ namespace bot {
                     derivative = error - prevError;
                     prevError = error;
 
-                    double power = error * arm->kP + integral * arm->kI + derivative * arm->kD;
+                    double gravityTheta = (armPos - 15530) / 18000.0 * M_PI;
+                    double kGravity = 700 * std::sin(gravityTheta);
+
+                    double power = error * arm->kP + integral * arm->kI + derivative * arm->kD - kGravity;
 
                     if (power > arm->maxSpeed / 100.0 * 12000) power = arm->maxSpeed / 100.0 * 12000;
                     if (power < -arm->maxSpeed / 100.0 * 12000) power = -arm->maxSpeed / 100.0 * 12000;
