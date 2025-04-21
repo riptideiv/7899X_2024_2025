@@ -15,7 +15,7 @@ namespace auton {
 
     Color selectedColor = Color::Red;
     int selectedRoute = 1;
-    int selectedKeybinds = 1;
+    int selectedKeybinds = 0;
 
     std::vector<std::string> routeDisplay = { "Skills", "Coop", "NegRRush", "Neg6+1", "PosTRush" };
     std::vector<int> routeSetupAngle = { 0, 0, 15, 25, 0 };
