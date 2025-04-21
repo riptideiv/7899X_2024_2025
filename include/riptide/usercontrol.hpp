@@ -150,7 +150,7 @@ namespace bot {
 
         bot::intake.doAntiStuck = true;
 
-        // // debug & program
+        // debug & program
         if (master.get_digital_new_press(keybindsList[selectedKeybinds].debugPrint)) {
             debugPrint();
         }
@@ -192,13 +192,15 @@ namespace bot {
                 bigArm.raise();
             }
             if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
-                bigArm.set_load();
+                bigArm.toggleUp();
             }
-            if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) {
-                bigArm.reset();
-            }
+            // if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) {
+            //     bigArm.reset();
+            // }
             if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
                 bigArm.manual_move(-100);
+            } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
+                bigArm.manual_move(100);
             } else if (bigArm.manual) {
                 bigArm.manual_move(0);
             }

@@ -128,13 +128,8 @@ namespace bot {
                         intake->revTime -= intake->loopDelay;
                         intake->mtr->move_voltage(-12000);
                     } else {
-                        if (false && bigArm.rotation->get_position() < 29500) { //"false" - disabled
-                            if (intake->revTime <= 0 && intake->speed > 0 && colorSortSensor.get_proximity() > 55) {
-                                intake->mtr->move_voltage(0);
-                                intake->stuckFor = 0;
-                            } else {
-                                intake->mtr->move_voltage(80 * intake->speed);
-                            }
+                        if (bigArm.rotation->get_position() < 29500) {
+                            intake->mtr->move_voltage(90 * intake->speed);
                         } else
                             intake->mtr->move_voltage(120 * intake->speed);
                     }
