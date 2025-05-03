@@ -83,7 +83,7 @@ namespace red {
     void pos6_1() {
         bigArm.set_target(28800);
         bigArm.maxSpeed = 80;
-        chass[2]->moveToPoint(17, 22, 1000, { .maxSpeed = 60, .minSpeed = 1, .earlyExitRange = 20 }, false);
+        ms2pt(17, 22, 1000, { .maxSpeed = 60, .minSpeed = 1, .earlyExitRange = 20 });
         pros::delay(400);
         mv2pt(-7.0848, -25.4775, 1000, { .forwards = false, .minSpeed = 1, .earlyExitRange = 20 });
         bigArm.maxSpeed = 100;
@@ -97,7 +97,7 @@ namespace red {
         turn2hd(158, 350);
 
         toggleFrontLeftArm();
-        chass[2]->moveToPoint(5.85926, -38.5027, 1000, { .minSpeed = 1, .earlyExitRange = 1.5 }, false);
+        ms2pt(5.85926, -38.5027, 1000, { .minSpeed = 1, .earlyExitRange = 1.5 });
         swing2hd(144, lemlib::DriveSide::RIGHT, 500, { .maxSpeed = 70 });
         toggleFrontRightArm();
         pros::delay(250);

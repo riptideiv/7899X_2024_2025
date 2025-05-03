@@ -9,10 +9,18 @@ namespace auton {
     }
 
     /**
-     * use for moving to a point. recomend to use when moving straight.
+     * use for moving to a point.
      */
     void mv2pt(double x, double y, double timeout, lemlib::MoveToPointParams params = {}, bool async = false) {
         bot::moveToPoint(x, y, timeout, params, async);
+    }
+
+    /**
+     * move straight to point
+     * same as mv2pt but uses the lateral-only chassis. recommended to use .minSpeed and .earlyExitRange so the chassis doesn't tweak out when it reaches the target. also recommended to use near the beginning of auton routes, since this one can't autocorrect for errors caused by previous interference/inconsistency.
+     */
+    void ms2pt(double x, double y, double timeout, lemlib::MoveToPointParams params = {}, bool async = false) {
+        bot::chass[2]->moveToPoint(x, y, timeout, params, async);
     }
 
     /**
@@ -50,7 +58,4 @@ namespace auton {
     void swing2hd(double theta, lemlib::DriveSide side, double timeout, lemlib::SwingToHeadingParams params = {}, bool async = false) {
         bot::getChass()->swingToHeading(theta, side, timeout, params, async);
     }
-}
-
-namespace auton {
 }

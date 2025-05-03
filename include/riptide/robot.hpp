@@ -131,7 +131,7 @@ namespace bot {
         goalClampClosed = !goalClampClosed;
         goalClamp.set_value(goalClampClosed);
         MOGO = goalClampClosed;
-        chass[MOGO]->setPose(chass[!MOGO]->getPose());
+        getChass()->setPose(chass[!MOGO]->getPose());
     }
 
     //! wrapper for lemlib's moveToPoint function that is aware of the MOGO state.
@@ -144,31 +144,31 @@ namespace bot {
 
     //! wrapper for lemlib's moveToPoint function that is aware of the MOGO state.
     void moveToPoint(double x, double y, double timeout, lemlib::MoveToPointParams params = {}, bool async = false) {
-        chass[MOGO]->moveToPoint(x, y, timeout, params, async);
+        getChass()->moveToPoint(x, y, timeout, params, async);
     }
 
     //! wrapper for lemlib's moveToPose function that is aware of the MOGO state.
     void moveToPose(double x, double y, double theta, double timeout, lemlib::MoveToPoseParams params = {}, bool async = false) {
-        chass[MOGO]->moveToPose(x, y, theta, timeout, params, async);
+        getChass()->moveToPose(x, y, theta, timeout, params, async);
     }
 
     //! wrapper for lemlib's turnToHeading function that is aware of the MOGO state.
     void turnToHeading(double theta, double timeout, lemlib::TurnToHeadingParams params = {}, bool async = false) {
-        chass[MOGO]->turnToHeading(theta, timeout, params, async);
+        getChass()->turnToHeading(theta, timeout, params, async);
     }
 
     //! wrapper for lemlib's turnToPoint function that is aware of the MOGO state.
     void turnToPoint(double x, double y, double timeout, lemlib::TurnToPointParams params = {}, bool async = false) {
-        chass[MOGO]->turnToPoint(x, y, timeout, params, async);
+        getChass()->turnToPoint(x, y, timeout, params, async);
     }
 
     //! wrapper for lemlib's setPose function that is aware of the MOGO state.
     void setPose(double x, double y, double theta) {
-        chass[MOGO]->setPose(x, y, theta);
+        getChass()->setPose(x, y, theta);
     }
 
     lemlib::Pose getPose() {
-        return chass[MOGO]->getPose();
+        return getChass()->getPose();
     }
 
     /**
