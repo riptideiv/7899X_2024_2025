@@ -15,16 +15,34 @@ namespace auton {
 
     Color selectedColor = Color::Red;
     int selectedRoute = 1;
-    int selectedKeybinds = 0;
+    int selectedKeybinds = 1;
 
-    std::vector<std::string> routeDisplay = { "Skills", "Coop", "NegRRush", "Neg6+1", "PosTRush" };
-    std::vector<int> routeSetupAngle = { 0, 0, 15, 25, 0 };
+    std::vector<std::string> routeDisplay = { "Skills", "Coop", "NegRRush", "Neg6+1", "PosTRush", "PosGRush" };
+    std::vector<std::vector<double>> routeSetupAngle =
+    {
+        { // Red
+            0, // Skills
+            0, // Coop
+            -16, // NegRRush
+            -25, // Neg6+1
+            0, // PosTRush
+            32 // Pos6+1
+        },
+        { // Blue
+            0, // Skills
+            0, // Coop
+            17, // NegRRush
+            25, // Neg6+1
+            0, // PosTRush
+            -32 // Pos6+1
+        }
+    };
     std::string keybindsDisplay[] = { "ryan", "altf4" };
 
     inline void displaySelectedAuton() {
         bot::master.print(0, 0, "%s;; %s    ", selectedColor == Color::Red ? "Red" : "Blue", keybindsDisplay[selectedKeybinds]);
         pros::delay(50);
-        bot::master.print(1, 0, "setup: %d deg    ", routeSetupAngle[(int)selectedRoute]);
+        bot::master.print(1, 0, "setup: %.2f deg    ", routeSetupAngle[(int)selectedColor][(int)selectedRoute]);
         pros::delay(50);
         bot::master.print(2, 0, "%s            ", routeDisplay[(int)selectedRoute]);
     }
@@ -57,6 +75,9 @@ namespace auton {
                 break;
             case 4:
                 red::pos_trush();
+                break;
+            case 5:
+                red::pos6_1();
             }
         } else {
             bot::intake.doAntiStuck = true;
@@ -79,6 +100,9 @@ namespace auton {
                 break;
             case 4:
                 blue::pos_trush();
+                break;
+            case 5:
+                blue::pos6_1();
             }
         }
         drive_chass(0, 0);
@@ -152,17 +176,20 @@ namespace auton {
             switch (selectedRoute) {
             case 1: // Coop
             case 3: // Neg6+1
+            case 5: // PosGRush
                 bigArm.manual_move(0);
                 bigArm.setBrakeMode(pros::E_MOTOR_BRAKE_COAST);
-                break;
-            case 2: // NegRRush
-                turn2pt(-12.3251, 41.5651, 1000);
                 break;
             default:
                 bigArm.manual = false;
                 bigArm.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
                 break;
             }
+
+            if (selectedColor == Color::Red)
+                turn2hd(routeSetupAngle[0][selectedRoute], 700, { .maxSpeed = 70 });
+            else
+                turn2hd(routeSetupAngle[1][selectedRoute], 700, { .maxSpeed = 70 });
         }
         printf("Auton select loop ended.\n");
     }
