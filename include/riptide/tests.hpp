@@ -168,6 +168,8 @@ namespace test {
             pros::delay(500);
         }
         double avg = 0;
+        double avgL = 0;
+        double avrR = 0;
         for (int i = 0; i < 5; i++) {
             int t = clock();
             int speed = 30 + (i * 10);
@@ -175,15 +177,20 @@ namespace test {
             bot::drive_chass(speed, -speed);
             pros::delay(1000);
             bot::horizTrackRotSensor->reset();
+            double initL = getLeftPos();
+            double initR = getRightPos();
             double initAngle = bot::imu->get_rotation();
             pros::delay(3000);
             double pos = bot::horizTrackRotSensor->get_position() / 36000.0 * 2.75 * M_PI;
-            std::cout << "dist: " << pos
-                << "\nangle: " << bot::imu->get_rotation() - initAngle
-                << "\nradius: " << (bot::horizTrack[0]->getDistanceTraveled() / ((bot::imu->get_rotation() - initAngle) / 360 * 2 * M_PI)) << '\n';
-            avg += (bot::horizTrack[0]->getDistanceTraveled() / ((bot::imu->get_rotation() - initAngle) / 360 * 2 * M_PI));
+            double posL = getLeftPos() - initL;
+            double posR = getRightPos() - initR;
+            double angle = (bot::imu->get_rotation() - initAngle) / 180.0 * M_PI;
+            std::cout << "horizRadius: " << (pos / angle) << '\n' << "leftRadius: " << (posL / angle) << '\n' << "rightRadius: " << (posR / angle) << '\n';
+            avg += (pos / angle);
+            avgL += (posL / angle);
+            avrR += (posR / angle);
         }
-        std::cout << "average radius: " << (avg / 5) << '\n';
+        std::cout << "average radius: " << (avg / 5) << '\n' << "avgL: " << (avgL / 5) << '\n' << "avgR: " << (avrR / 5) << '\n';
     }
 
     void testMotorAccels() {

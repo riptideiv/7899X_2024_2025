@@ -50,35 +50,6 @@ namespace bot {
         }
         });
 
-    void alliStakeMacro() {
-        bool immed = bigArm.move_target < posHigh + 1000;
-        double theta = getChass()->getPose().theta * M_PI / 180;
-        double x = -9.5 * std::sin(theta);
-        double y = -9.5 * std::cos(theta) + 0.5;
-        double targx = -16.5 * std::sin(theta);
-        double targy = -16.5 * std::cos(theta) + 0.5;
-        getChass()->setPose(x, y, getChass()->getPose().theta);
-        if (immed) {
-            bigArm.setMaxSpeed(70);
-            bigArm.set_target(28800);
-            bigArm.kP = 2;
-        }
-        mv2pt(targx, targy, 1000, { .forwards = false, .minSpeed = 40, .earlyExitRange = 4 });
-        if (!immed) {
-            bigArm.setMaxSpeed(60);
-            bigArm.set_target(28800);
-            bigArm.kP = 2;
-        }
-        mv2pt(targx, targy, 800, {}, true);
-        while (getChass()->isInMotion() && bigArm.rotation->get_position() < 26750) pros::delay(3);
-        getChass()->cancelAllMotions();
-        pros::delay(10);
-        drWait(1, 1, -2.5);
-        bigArm.reset();
-        bigArm.setMaxSpeed(100);
-        drive_chass(0, 0);
-    }
-
     void debugPrint() {
         std::cout << "x,y,theta: " << (bot::chass[0]->getPose().x) << ", " << (bot::chass[0]->getPose().y) << ", " << (bot::chass[0]->getPose().theta) << ", lWall: " << (bot::lWallDist.get()) << ", rWall: " << (bot::rWallDist.get()) << ", mogoDist: " << (bot::mogoDist.get()) << std::endl;
     }

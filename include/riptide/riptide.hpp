@@ -32,7 +32,20 @@ namespace riptide {
     }
 
     void autonomous() {
-        // test::findTrackingRadius();
+        // turn2hd(180, 1000, { .direction = lemlib::AngularDirection::CW_CLOCKWISE, .maxSpeed = 80 });
+        intake.set_colorsort(0, 0);
+        spin_intk(100);
+        int minVal = 0x7fffffff;
+        int maxVal = 0;
+        for (int i = 333; i--;) {
+            pros::delay(3);
+            if (colorSortSensor.get_proximity() > 200) {
+                if (colorSortSensor.get_hue() < minVal) minVal = colorSortSensor.get_hue();
+                if (colorSortSensor.get_hue() > maxVal) maxVal = colorSortSensor.get_hue();
+            }
+        }
+        std::cout << "minVal: " << minVal << std::endl;
+        std::cout << "maxVal: " << maxVal << std::endl;
         // test::testMotorAccels();
         auton::runSelectedAuton();
         auton::autonSelectTask->remove();

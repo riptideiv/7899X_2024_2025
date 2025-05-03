@@ -21,7 +21,7 @@ namespace display {
         displayMotorCurrentAndTemperature();
         std::vector<double> lvals = bot::drivetrain->leftMotors->get_position_all();
         std::vector<double> rvals = bot::drivetrain->rightMotors->get_position_all();
-        lv_label_set_text_fmt(leftMotorsDisplay[0], "bigArm: %i ;; intakeMtr: %i", (bot::bigArm.rotation->get_position()), (int)(intake.mtr->get_position()));
+        lv_label_set_text_fmt(leftMotorsDisplay[0], "bigArm: %i ;; ColorProxim: %i", (bot::bigArm.rotation->get_position()), (int)(colorSortSensor.get_proximity()));
         lv_label_set_text_fmt(rightMotorsDisplay[0], "intakeDist: %i ;; chassVelo: %i", (int)(intakeDist.get()), (int)(bot::getChassVelo() / 600.0 * 100));
         lv_obj_set_style_text_font(angleDisplay, &lv_font_montserrat_40, 0);
         lv_label_set_text_fmt(angleDisplay, "%i.%i", (int)(bot::chass[0]->getPose().theta), abs((int)(bot::chass[0]->getPose().theta * 100) % 100));

@@ -15,7 +15,7 @@ namespace bot {
 
     lemlib::Drivetrain *drivetrain;
 
-    lemlib::Chassis *chass[2]; // 0 = no mogo, 1 = mogo
+    lemlib::Chassis *chass[3]; // 0 = no mogo, 1 = mogo, 2 = straight-only
 
     void initialize() {
         init_sensors();
@@ -23,14 +23,18 @@ namespace bot {
         drivetrain = new lemlib::Drivetrain(
             new pros::MotorGroup({ -1,8,9 }, pros::v5::MotorGears::rpm_600, pros::v5::MotorEncoderUnits::degrees),
             new pros::MotorGroup({ 2,-3,-4 }, pros::v5::MotorGears::rpm_600, pros::v5::MotorEncoderUnits::degrees),
-            11.5, // 11.5 inch track width
+            13, // this go up -> 180 turn x value go down
+            // 12.25: 0, 700
             lemlib::Omniwheel::NEW_325, // using new 3.25" omnis
             450, // drivetrain rpm is 450
-            2 // horizontal drift is 2
+            1.5 // horizontal drift is 2
         );
 
         chass[0] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[0], pid::angular_controller[0], *odomSensors[0], &driveThrottleCurve, &driveSteerCurve);
         chass[1] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[1], pid::angular_controller[1], *odomSensors[1], &driveThrottleCurve, &driveSteerCurve);
+
+        // straight-only chassis
+        chass[2] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[1], pid::angular_controller[2], *odomSensors[1], &driveThrottleCurve, &driveSteerCurve);
 
         intake.initialize(20, 19);
 
@@ -51,7 +55,7 @@ namespace bot {
         std::vector<double> v = drivetrain->leftMotors->get_position_all();
         double avg = 0;
         for (double i : v) {
-            avg += i * 2.75 * M_PI;
+            avg += i * 3.25 * M_PI;
             // avg += i;
         }
         return avg / 3;
@@ -61,7 +65,7 @@ namespace bot {
         std::vector<double> v = drivetrain->rightMotors->get_position_all();
         double avg = 0;
         for (double i : v) {
-            avg += i * 2.75 * M_PI;
+            avg += i * 3.25 * M_PI;
             // avg += i;
         }
         return avg / 3;
@@ -191,5 +195,34 @@ namespace bot {
                 getChass()->tank(-127 * lMult, -127 * rMult);
             }
         }
+    }
+
+    void alliStakeMacro() {
+        bool immed = bigArm.move_target < posHigh + 1000;
+        double theta = getChass()->getPose().theta * M_PI / 180;
+        double x = -9 * std::sin(theta);
+        double y = -9 * std::cos(theta) + 0.5;
+        double targx = -15.5 * std::sin(theta);
+        double targy = -15.5 * std::cos(theta) + 0.5;
+        getChass()->setPose(x, y, getChass()->getPose().theta);
+        if (immed) {
+            bigArm.setMaxSpeed(70);
+            bigArm.set_target(28800);
+            bigArm.kP = 2;
+        }
+        moveToPoint(targx, targy, 1000, { .forwards = false, .minSpeed = 40, .earlyExitRange = 4 });
+        if (!immed) {
+            bigArm.setMaxSpeed(60);
+            bigArm.set_target(28800);
+            bigArm.kP = 2;
+        }
+        moveToPoint(targx, targy, 800, {}, true);
+        while (getChass()->isInMotion() && bigArm.rotation->get_position() < 26750) pros::delay(3);
+        getChass()->cancelAllMotions();
+        pros::delay(100);
+        driveWait(1, 1, -4);
+        bigArm.reset();
+        bigArm.setMaxSpeed(100);
+        drive_chass(0, 0);
     }
 }

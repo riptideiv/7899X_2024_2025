@@ -18,8 +18,8 @@ namespace bot {
         pros::Motor *mtr;
         pros::Rotation *rotation;
 
-        const double nkP = 1.4, nkI = 0, nkD = 0; // "normal" kP, kI, kD for resetting after some custom action
-        double kP = nkP, kI = nkI, kD = nkD;
+        const double nkP = 1.0, nkI = 0, nkD = 0; // "normal" kP, kI, kD for resetting after some custom action
+        double kP = 4, kI = nkI, kD = nkD;
 
         int maxSpeed = 100;
 
@@ -35,7 +35,10 @@ namespace bot {
             switch (target) {
             case posHigh:
                 intakeSawRing = false;
-                kP = 1.4;
+                kP = 1.1;
+                if (rotation->get_position() < posHigh) {
+                    kP = 1.4;
+                }
                 break;
             case posLow:
                 kP = 4;
@@ -44,9 +47,7 @@ namespace bot {
         }
 
         void toggleUp() {
-            if (rotation->get_position() > posToScore - 500) {
-                set_target(posHigh);
-            } else if (move_target == posHigh) {
+            if (move_target == posHigh) {
                 set_target(posLow);
             } else {
                 set_target(posHigh);
@@ -63,6 +64,7 @@ namespace bot {
 
         void manual_move(int spdPercent) {
             manual = true;
+            move_target = posScore;
             mtr->move_voltage(spdPercent * 120);
         }
 
@@ -109,8 +111,10 @@ namespace bot {
 
                     int armPos = arm->rotation->get_position();
 
-                    double gravityTheta = (armPos - 18193) / 18000.0 * M_PI;
-                    double kGravity = 700 * std::sin(gravityTheta);
+                    double theta = (armPos - 18193) / 18000.0 * M_PI; // angle from vertical
+                    double kGravity = 700;
+                    if (arm->rotation->get_position() < 12200) kGravity = -200;
+                    kGravity *= std::sin(theta);
 
                     error = arm->move_target - armPos;
 
@@ -125,9 +129,6 @@ namespace bot {
 
                     if (power > arm->maxSpeed / 100.0 * 12000) power = arm->maxSpeed / 100.0 * 12000;
                     if (power < -arm->maxSpeed / 100.0 * 12000) power = -arm->maxSpeed / 100.0 * 12000;
-                    if (armPos >= posScore) {
-                        if (power < -arm->maxSpeed / 100.0 * 9000) power = -arm->maxSpeed / 100.0 * 9000;
-                    }
 
                     arm->mtr->move_voltage(power);
 

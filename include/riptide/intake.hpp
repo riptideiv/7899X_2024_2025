@@ -36,18 +36,32 @@ namespace bot {
 
         void colorSort() {
             if (throwAway && revTime <= 0) {
-                if (mtr->get_position() < -300) {
-                    throwAway = 0;
-                } else if (colorSortRed && mtr->get_position() > 132 || !colorSortRed && mtr->get_position() > 132) {
-                    throwAway = 0;
+                if (colorSortRed && mtr->get_position() > 305 || !colorSortRed && mtr->get_position() > 305) {
+                    throwAway = false;
+                    confirmThrow = false;
                     revTime = 100;
                     // frReverseTime = 100;
+                } else if (mtr->get_position() < -300) {
+                    throwAway = false;
+                    confirmThrow = false;
                 }
             } else {
+                if (speed >= 0) {
+                    if (revTime <= 0 && colorSortSensor.get_proximity() > 200) {
+                        if ((colorSortSensor.get_hue() < 30 || colorSortSensor.get_hue() > 340) && !colorSortRed ||
+                            (colorSortSensor.get_hue() > 120 && colorSortSensor.get_hue() < 270) && colorSortRed) {
+                            confirmThrow = true;
+                            mtr->set_zero_position(0);
+                        }
+                    }
+                }
+
+                if (mtr->get_position() < -300) {
+                    confirmThrow = false;
+                }
+
                 if (!throwAway && speed > 0 && intakeDist.get() < 65 && bigArm.move_target != posHigh) {
-                    if ((colorSortSensor.get_hue() < 30 || colorSortSensor.get_hue() > 340) && !colorSortRed ||
-                        (colorSortSensor.get_hue() > 120 && colorSortSensor.get_hue() < 270) && colorSortRed ||
-                        confirmThrow) {
+                    if (confirmThrow) {
                         confirmThrow = false;
                         throwAway = true;
                         mtr->set_zero_position(0);
@@ -137,7 +151,7 @@ namespace bot {
                         intake->mtr->move_voltage(-12000);
                     } else {
                         // hold ring
-                        if (intake->stopNextRing || bigArm.rotation->get_position() > posToScore - 500) {
+                        if (intake->stopNextRing) {
                             if (intake->revTime <= 0 && intake->speed > 0 && intakeDist.get() < 120) {
                                 intake->set_speed(0);
                                 intake->stopNextRing = false;
