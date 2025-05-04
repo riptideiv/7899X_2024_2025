@@ -29,12 +29,12 @@ namespace pid {
         )
     };
 
-    // angular PID controllers (0 = no mogo, 1 = mogo, 2 = straight-only)
-    lemlib::ControllerSettings angular_controller[3] = {
+    // angular PID controllers (0 = no mogo, 1 = mogo)
+    lemlib::ControllerSettings standard_angular_controller[2] = {
         lemlib::ControllerSettings(
-            5, // proportional gain (kP)
+            4, // proportional gain (kP)
             0, // integral gain (kI)
-            38.75, // derivative gain (kD)
+            22.5, // derivative gain (kD)
             0, // anti windup
             0, // small error range, in degrees
             0, // small error range timeout, in milliseconds
@@ -52,8 +52,37 @@ namespace pid {
             0, // large error range, in degrees
             0, // large error range timeout, in milliseconds
             0 // maximum acceleration (slew)
-        ),
+        )
+    };
+
+    // angular PID controllers for connecting to straight motions
+    lemlib::ControllerSettings connecting_angular_controller[2] = {
         lemlib::ControllerSettings(
+            1.5625, // proportional gain (kP)
+            0, // integral gain (kI)
+            0, // derivative gain (kD)
+            0, // anti windup
+            0, // small error range, in degrees
+            0, // small error range timeout, in milliseconds
+            0, // large error range, in degrees
+            0, // large error range timeout, in milliseconds
+            0 // maximum acceleration (slew)
+        ),
+        lemlib::ControllerSettings( // UNTUNED
+            1.5625, // proportional gain (kP)
+            0, // integral gain (kI)
+            0, // derivative gain (kD)
+            0, // anti windup
+            0, // small error range, in degrees
+            0, // small error range timeout, in milliseconds
+            0, // large error range, in degrees
+            0, // large error range timeout, in milliseconds
+            0 // maximum acceleration (slew)
+        )
+    }
+
+        // straight-only angular PID controller
+        lemlib::ControllerSettings straight_angular_controller = lemlib::ControllerSettings(
             0, // proportional gain (kP)
             0, // integral gain (kI)
             0, // derivative gain (kD)
@@ -64,5 +93,4 @@ namespace pid {
             0, // large error range timeout, in milliseconds
             0 // maximum acceleration (slew)
         )
-    };
 }

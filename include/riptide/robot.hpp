@@ -30,11 +30,11 @@ namespace bot {
             1.5 // horizontal drift is 2
         );
 
-        chass[0] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[0], pid::angular_controller[0], *odomSensors[0], &driveThrottleCurve, &driveSteerCurve);
-        chass[1] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[1], pid::angular_controller[1], *odomSensors[1], &driveThrottleCurve, &driveSteerCurve);
+        chass[0] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[0], pid::standard_angular_controller[0], *odomSensors[0], &driveThrottleCurve, &driveSteerCurve);
+        chass[1] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[1], pid::standard_angular_controller[1], *odomSensors[1], &driveThrottleCurve, &driveSteerCurve);
 
         // straight-only chassis
-        chass[2] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[1], pid::angular_controller[2], *odomSensors[1], &driveThrottleCurve, &driveSteerCurve);
+        chass[2] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[1], pid::standard_angular_controller[2], *odomSensors[1], &driveThrottleCurve, &driveSteerCurve);
 
         intake.initialize(20, 19);
 

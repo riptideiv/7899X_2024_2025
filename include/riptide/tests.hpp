@@ -5,7 +5,7 @@
 namespace test {
     void runFwdBwdTest(int target, int timeout) {
         delete bot::chass[0];
-        bot::chass[0] = new lemlib::Chassis(*bot::drivetrain, pid::lateral_controller[0], pid::angular_controller[0], *bot::odomSensors[0]);
+        bot::chass[0] = new lemlib::Chassis(*bot::drivetrain, pid::lateral_controller[0], pid::standard_angular_controller[0], *bot::odomSensors[0]);
         bot::setPose(0, 0, 0);
         bot::moveToPoint(0, target, timeout, { .forwards = true }, false);
         double y = bot::getPose().y;
@@ -18,7 +18,7 @@ namespace test {
 
     void runTurnTest(double target, int timeout) {
         delete bot::chass[0];
-        bot::chass[0] = new lemlib::Chassis(*bot::drivetrain, pid::lateral_controller[0], pid::angular_controller[0], *bot::odomSensors[0]);
+        bot::chass[0] = new lemlib::Chassis(*bot::drivetrain, pid::lateral_controller[0], pid::standard_angular_controller[0], *bot::odomSensors[0]);
         bot::setPose(0, 0, 0);
         double angle = bot::getRotation();
         bot::turnToHeading(target, timeout, {}, false);
@@ -30,12 +30,12 @@ namespace test {
     }
 
     void runAngularPID_kPs(double kD, double begin, double end, double step, double target, int timeout) {
-        pid::angular_controller[0].kD = kD;
+        pid::standard_angular_controller[0].kD = kD;
         for (double kP = begin; kP <= end; kP += step) {
             int origangle = bot::getRotation();
             std::cout << "kP: " << kP << std::endl;
-            pid::angular_controller[0].kP = kP;
-            lemlib::Chassis *chassTest = new lemlib::Chassis(*bot::drivetrain, pid::lateral_controller[0], pid::angular_controller[0], *bot::odomSensors[0]);
+            pid::standard_angular_controller[0].kP = kP;
+            lemlib::Chassis *chassTest = new lemlib::Chassis(*bot::drivetrain, pid::lateral_controller[0], pid::standard_angular_controller[0], *bot::odomSensors[0]);
             chassTest->setPose(0, 0, 0);
             chassTest->turnToHeading(target, timeout, {}, false);
             delete chassTest;
@@ -44,12 +44,12 @@ namespace test {
     }
 
     void runAngularPID_kDs(double kP, double begin, double end, double step, double target, int timeout) {
-        pid::angular_controller[0].kP = kP;
+        pid::standard_angular_controller[0].kP = kP;
         for (double kD = begin; kD <= end; kD += step) {
             int origangle = bot::getRotation();
             std::cout << "kD: " << kD << std::endl;
-            pid::angular_controller[0].kD = kD;
-            lemlib::Chassis *chassTest = new lemlib::Chassis(*bot::drivetrain, pid::lateral_controller[0], pid::angular_controller[0], *bot::odomSensors[0]);
+            pid::standard_angular_controller[0].kD = kD;
+            lemlib::Chassis *chassTest = new lemlib::Chassis(*bot::drivetrain, pid::lateral_controller[0], pid::standard_angular_controller[0], *bot::odomSensors[0]);
             chassTest->setPose(0, 0, 0);
             chassTest->turnToHeading(target, timeout, {}, false);
             delete chassTest;
@@ -106,10 +106,10 @@ namespace test {
     }
 
     void runAngularBSearchkP(double kD, double l, double r, double target, int timeout) {
-        pid::angular_controller[0].kD = kD;
+        pid::standard_angular_controller[0].kD = kD;
         while (1) {
             double m = (l + r) / 2;
-            pid::angular_controller[0].kP = m;
+            pid::standard_angular_controller[0].kP = m;
             std::cout << l << ", " << r << ", mid: " << m << std::endl;
             runTurnTest(target, timeout);
             while (1) {
@@ -130,10 +130,10 @@ namespace test {
     }
 
     void runAngularBSearchkD(double kP, double l, double r, double target, int timeout) {
-        pid::angular_controller[0].kP = kP;
+        pid::standard_angular_controller[0].kP = kP;
         while (1) {
             double m = (l + r) / 2;
-            pid::angular_controller[0].kD = m;
+            pid::standard_angular_controller[0].kD = m;
             std::cout << l << ", " << r << ", mid: " << m << std::endl;
             runTurnTest(target, timeout);
             while (1) {
@@ -158,8 +158,9 @@ namespace test {
         // runAngularPID_kDs(3.1, 24.4, 25.4, 0, 90, 2000);
         // runLateralBSearchkP(0, 10, 50, 24, 2000);
         // runLateralBSearchkD(25, 0, 300, 48, 2000);
-        // runAngularBSearchkP(0, 0, 10, 135, 1500);
-        runAngularBSearchkD(8, 50, 100, 135, 1500);
+        // runAngularBSearchkP(0, 1.5625, 1.5625, 135, 1500);
+        // runAngularBSearchkD(4, 0, 60, 45, 1500);
+        // kP: 4-6
     }
 
     void findTrackingRadius(bool clamp = false) {
