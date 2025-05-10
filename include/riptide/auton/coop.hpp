@@ -8,5 +8,10 @@ using namespace auton;
 using namespace bot;
 
 namespace auton {
-    void coopSlot() {}
+    void coopSlot() {
+        toggleIntakeLift();
+        toggleGoalClamp();
+        pros::delay(500);
+        cornerMacro();
+    }
 }

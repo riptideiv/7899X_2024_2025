@@ -15,7 +15,7 @@ namespace bot {
 
     lemlib::Drivetrain *drivetrain;
 
-    lemlib::Chassis *chass[3]; // 0 = no mogo, 1 = mogo, 2 = straight-only
+    lemlib::Chassis *chass[2], *straight_chass[2], *connecting_chass[2]; // 0 = no mogo, 1 = mogo
 
     void initialize() {
         init_sensors();
@@ -34,7 +34,12 @@ namespace bot {
         chass[1] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[1], pid::standard_angular_controller[1], *odomSensors[1], &driveThrottleCurve, &driveSteerCurve);
 
         // straight-only chassis
-        chass[2] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[1], pid::standard_angular_controller[2], *odomSensors[1], &driveThrottleCurve, &driveSteerCurve);
+        straight_chass[0] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[0], pid::straight_angular_controller, *odomSensors[0], &driveThrottleCurve, &driveSteerCurve);
+        straight_chass[1] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[1], pid::straight_angular_controller, *odomSensors[1], &driveThrottleCurve, &driveSteerCurve);
+
+        // connecting chassis
+        connecting_chass[0] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[0], pid::connecting_angular_controller[0], *odomSensors[0], &driveThrottleCurve, &driveSteerCurve);
+        connecting_chass[1] = new lemlib::Chassis(*drivetrain, pid::lateral_controller[1], pid::connecting_angular_controller[1], *odomSensors[1], &driveThrottleCurve, &driveSteerCurve);
 
         intake.initialize(20, 19);
 
@@ -49,6 +54,30 @@ namespace bot {
 
     double getRotation() {
         return imu->get_rotation();
+    }
+
+    double getLeftCurrent() {
+        std::vector<long> v = drivetrain->leftMotors->get_current_draw_all();
+        double avg = 0;
+        for (double i : v) {
+            avg += i * 3.25 * M_PI;
+            // avg += i;
+        }
+        return avg / 3;
+    }
+
+    double getRightCurrent() {
+        std::vector<long> v = drivetrain->rightMotors->get_current_draw_all();
+        double avg = 0;
+        for (double i : v) {
+            avg += i * 3.25 * M_PI;
+            // avg += i;
+        }
+        return avg / 3;
+    }
+
+    double getChassCurrent() {
+        return (getLeftCurrent() + getRightCurrent()) / 2;
     }
 
     double getLeftPos() {
@@ -223,6 +252,6 @@ namespace bot {
         driveWait(1, 1, -4);
         bigArm.reset();
         bigArm.setMaxSpeed(100);
-        drive_chass(0, 0);
+        getChass()->arcade(0, 0);
     }
 }

@@ -51,13 +51,14 @@ namespace bot {
         });
 
     void debugPrint() {
-        std::cout << "x,y,theta: " << (bot::chass[0]->getPose().x) << ", " << (bot::chass[0]->getPose().y) << ", " << (bot::chass[0]->getPose().theta) << ", lWall: " << (bot::lWallDist.get()) << ", rWall: " << (bot::rWallDist.get()) << ", mogoDist: " << (bot::mogoDist.get()) << std::endl;
+        std::cout << "x,y,theta: " << (bot::chass[0]->getPose().x) << ", " << (bot::chass[0]->getPose().y) << ", " << (bot::chass[0]->getPose().theta) << ", bigArm: " << (bot::bigArm.rotation->get_position()) << std::endl;
     }
 
     bool skillsMacroRan = 0;
 
     void handleControllerInput() {
-        if (auton::autonSelectTask->get_state() != pros::E_TASK_STATE_DELETED) {
+        if (!auton_ran || auton_running) {
+            pros::delay(50);
             return;
         }
 
@@ -97,14 +98,13 @@ namespace bot {
         bot::intake.doAntiStuck = true;
 
         // // debug & program
-        if (master.get_digital_new_press(keybindsList[selectedKeybinds].debugPrint)) {
+        // if (master.get_digital_new_press(keybindsList[selectedKeybinds].debugPrint)) {
+        //     debugPrint();
+        // }
+        if (master.get_digital_new_press(keybindsList[selectedKeybinds].colorSortToggle)) {
+            intake.colorSortRed = !intake.colorSortRed;
             debugPrint();
         }
-
-        // // fix colorsort
-        // if (master.get_digital_new_press(keybindsList[selectedKeybinds].colorSortToggle)) {
-        //     intake.colorSortRed = !intake.colorSortRed;
-        // }
 
         // alliance stake macro
         if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y)) {

@@ -4,8 +4,8 @@
 
 #include<iostream>
 
-#define posHigh 10600
-#define posMid 10600
+#define posHigh 11100
+#define posMid 11100
 #define posLow 7690
 #define posToScore 15720
 #define posScore 23774
@@ -35,13 +35,16 @@ namespace bot {
             switch (target) {
             case posHigh:
                 intakeSawRing = false;
-                kP = 1.1;
+                kP = 0.9;
                 if (rotation->get_position() < posHigh) {
                     kP = 1.4;
                 }
                 break;
             case posLow:
                 kP = 4;
+                break;
+            case posToScore:
+                kP = 1.3;
                 break;
             }
         }

@@ -154,12 +154,15 @@ namespace test {
     }
 
     void pidTune() {
+        goalClamp.set_value(true);
+        pros::delay(500);
+
         // runAngularPID_kPs(0, 2, 2.8, 0.1, 90, 3000);
         // runAngularPID_kDs(3.1, 24.4, 25.4, 0, 90, 2000);
         // runLateralBSearchkP(0, 10, 50, 24, 2000);
         // runLateralBSearchkD(25, 0, 300, 48, 2000);
-        // runAngularBSearchkP(0, 1.5625, 1.5625, 135, 1500);
-        // runAngularBSearchkD(4, 0, 60, 45, 1500);
+        // runAngularBSearchkP(0, 1.1875, 1.1875, 135, 1500);
+        runAngularBSearchkD(7, 0, 150, 90, 1500);
         // kP: 4-6
     }
 

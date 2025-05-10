@@ -6,40 +6,40 @@
 
 namespace bot {
     struct Intake {
-        pros::Motor *mtr;
-        // pros::Motor *frontMtr;
+        pros::Motor *mtr = nullptr;
+        // pros::Motor *frontMtr = nullptr;
 
         pros::Task *move_task = nullptr;
 
-        bool doColorSort = true;
-        bool colorSortRed = true;
-        bool doAntiStuck = false;
-        bool confirmThrow = false;
+        bool doColorSort;
+        bool colorSortRed;
+        bool doAntiStuck;
+        bool confirmThrow;
 
-        bool stopNextRing = false;
+        bool stopNextRing;
 
-        int speed = 0;
-        // int frontSpd = 0;
+        int speed;
+        // int frontSpd;
 
-        bool throwAway = false;
+        bool throwAway;
 
-        int stuckFor = 0;
+        int stuckFor;
 
-        int revTime = 0;
+        int revTime;
 
-        // int frReverseTime = 0;
+        // int frReverseTime;
 
-        int prevSpd = 0;
-        int startUpTime = 0;
+        int prevSpd;
+        int startUpTime;
 
-        const int loopDelay = 5;
+        const int loopDelay = 3;
 
         void colorSort() {
-            if (throwAway && revTime <= 0) {
-                if (colorSortRed && mtr->get_position() > 305 || !colorSortRed && mtr->get_position() > 305) {
+            if (throwAway && revTime <= 0) { // 69
+                if (colorSortRed && mtr->get_position() > 72 || !colorSortRed && mtr->get_position() > 72) {
                     throwAway = false;
                     confirmThrow = false;
-                    revTime = 100;
+                    revTime = 200;
                     // frReverseTime = 100;
                 } else if (mtr->get_position() < -300) {
                     throwAway = false;
@@ -47,7 +47,7 @@ namespace bot {
                 }
             } else {
                 if (speed >= 0) {
-                    if (revTime <= 0 && colorSortSensor.get_proximity() > 200) {
+                    if (!confirmThrow && revTime <= 0 && colorSortSensor.get_proximity() > 200) {
                         if ((colorSortSensor.get_hue() < 30 || colorSortSensor.get_hue() > 340) && !colorSortRed ||
                             (colorSortSensor.get_hue() > 120 && colorSortSensor.get_hue() < 270) && colorSortRed) {
                             confirmThrow = true;
@@ -60,7 +60,7 @@ namespace bot {
                     confirmThrow = false;
                 }
 
-                if (!throwAway && speed > 0 && intakeDist.get() < 65 && bigArm.move_target != posHigh) {
+                if (mtr->get_position() > 5 && !throwAway && speed > 0 && intakeDist.get() < 65 && bigArm.move_target != posHigh) {
                     if (confirmThrow) {
                         confirmThrow = false;
                         throwAway = true;
@@ -98,7 +98,10 @@ namespace bot {
             doAntiStuck = false;
             confirmThrow = false;
 
+            stopNextRing = false;
+
             speed = 0;
+            // frontSpd = 0;
 
             throwAway = false;
 
@@ -152,7 +155,7 @@ namespace bot {
                     } else {
                         // hold ring
                         if (intake->stopNextRing) {
-                            if (intake->revTime <= 0 && intake->speed > 0 && intakeDist.get() < 120) {
+                            if (intake->revTime <= 0 && intake->speed > 0 && colorSortSensor.get_proximity() > 200) {
                                 intake->set_speed(0);
                                 intake->stopNextRing = false;
                                 intake->stuckFor = 0;

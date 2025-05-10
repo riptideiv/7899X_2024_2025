@@ -10,6 +10,7 @@
 namespace auton {
     pros::Task *autonSelectTask;
     bool auton_running = false;
+    bool auton_ran = false;
 
     enum class Color { Red, Blue };
 
@@ -17,24 +18,28 @@ namespace auton {
     int selectedRoute = 1;
     int selectedKeybinds = 1;
 
-    std::vector<std::string> routeDisplay = { "Skills", "Coop", "NegRRush", "Neg6+1", "PosTRush", "PosGRush" };
+    std::vector<std::string> routeDisplay = { "Skills", "Coop", "NegRRush", "Neg6+1", "Neg5+1", "PosGRush", "Pos5+1", "Pos6+0" };
     std::vector<std::vector<double>> routeSetupAngle =
     {
         { // Red
             0, // Skills
             0, // Coop
             -16, // NegRRush
-            -25, // Neg6+1
-            0, // PosTRush
-            32 // Pos6+1
+            -27, // Neg6+1
+            -27, // Neg5+1
+            15.5, // PosGRush
+            29.5, // Pos5+1
+            0 // Pos6+0
         },
         { // Blue
             0, // Skills
             0, // Coop
             17, // NegRRush
-            25, // Neg6+1
-            0, // PosTRush
-            -32 // Pos6+1
+            29.5, // Neg6+1
+            29.5, // Neg5+1
+            0, // PosGRush
+            -27, // Pos5+1
+            0 // Pos6+0
         }
     };
     std::string keybindsDisplay[] = { "ryan", "altf4" };
@@ -42,17 +47,48 @@ namespace auton {
     inline void displaySelectedAuton() {
         bot::master.print(0, 0, "%s;; %s    ", selectedColor == Color::Red ? "Red" : "Blue", keybindsDisplay[selectedKeybinds]);
         pros::delay(50);
-        bot::master.print(1, 0, "setup: %.2f deg    ", routeSetupAngle[(int)selectedColor][(int)selectedRoute]);
+        bot::master.print(1, 0, "setup: %.1f deg    ", routeSetupAngle[(int)selectedColor][(int)selectedRoute]);
         pros::delay(50);
         bot::master.print(2, 0, "%s            ", routeDisplay[(int)selectedRoute]);
     }
 
+    void updateSelectedAuton() {
+        // Display the selected attributes on the controller screen
+        displaySelectedAuton();
+
+        // setup settings
+        bigArm.reset();
+        switch (selectedRoute) {
+        case 1: // Coop
+        case 3: // Neg6+1
+        case 4: // Neg5+1
+        case 5: // PosGRush
+        case 6: // Pos5+1
+            bigArm.manual_move(0);
+            bigArm.setBrakeMode(pros::E_MOTOR_BRAKE_COAST);
+            break;
+        default:
+            bigArm.manual = false;
+            bigArm.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
+            break;
+        }
+
+        getChass()->cancelAllMotions();
+        pros::delay(50);
+        if (selectedColor == Color::Red)
+            turn2hd(routeSetupAngle[0][selectedRoute], 700, {}, 1);
+        else
+            turn2hd(routeSetupAngle[1][selectedRoute], 700, {}, 1);
+    }
+
     void runSelectedAuton() {
         auton_running = true;
+        auton_ran = true;
         bot::set_brake_mode(pros::MotorBrake::brake);
 
         bigArm.manual = false;
         bigArm.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
+        bigArm.reset();
 
         if (selectedColor == Color::Red) {
             bot::intake.doAntiStuck = true;
@@ -74,10 +110,16 @@ namespace auton {
                 red::neg6_1();
                 break;
             case 4:
-                red::pos_trush();
+                blue::pos5_1();
                 break;
             case 5:
-                red::pos6_1();
+                red::pos_grush();
+                break;
+            case 6:
+                red::pos5_1();
+                break;
+            case 7:
+                red::pos6();
             }
         } else {
             bot::intake.doAntiStuck = true;
@@ -99,13 +141,20 @@ namespace auton {
                 blue::neg6_1();
                 break;
             case 4:
-                blue::pos_trush();
+                red::pos5_1();
                 break;
             case 5:
-                blue::pos6_1();
+                blue::pos_grush();
+                break;
+            case 6:
+                blue::pos5_1();
+                break;
+            case 7:
+                blue::pos6();
             }
         }
-        drive_chass(0, 0);
+        auton_running = false;
+        getChass()->arcade(0, 0);
     }
 
     void autonSelectLoop() {
@@ -114,6 +163,7 @@ namespace auton {
         bot::master.clear();
         pros::delay(100);
         displaySelectedAuton();
+        updateSelectedAuton();
         while (!pros::competition::is_disabled()) {
             if (auton_running) {
                 pros::delay(20);
@@ -150,7 +200,7 @@ namespace auton {
                 bot::master.get_digital_new_press(DIGITAL_UP) ||
                 bot::master.get_digital_new_press(DIGITAL_DOWN)) {
                 runSelectedAuton();
-                auton_running = false;
+                auton_ran = false;
             }
 
             if (bot::master.get_digital_new_press(DIGITAL_L1) ||
@@ -158,7 +208,7 @@ namespace auton {
                 bot::master.get_digital_new_press(DIGITAL_R1) ||
                 bot::master.get_digital_new_press(DIGITAL_R2)) {
                 bot::bigArm.reset();
-                // bot::getChass()->setPose(0, 0, 90);
+                auton_ran = true;
                 break;
             }
 
@@ -168,28 +218,7 @@ namespace auton {
 
             // update stuff when selected auton is changed
 
-            // Display the selected attributes on the controller screen
-            displaySelectedAuton();
-
-            // setup settings
-            bigArm.reset();
-            switch (selectedRoute) {
-            case 1: // Coop
-            case 3: // Neg6+1
-            case 5: // PosGRush
-                bigArm.manual_move(0);
-                bigArm.setBrakeMode(pros::E_MOTOR_BRAKE_COAST);
-                break;
-            default:
-                bigArm.manual = false;
-                bigArm.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
-                break;
-            }
-
-            if (selectedColor == Color::Red)
-                turn2hd(routeSetupAngle[0][selectedRoute], 700, { .maxSpeed = 70 });
-            else
-                turn2hd(routeSetupAngle[1][selectedRoute], 700, { .maxSpeed = 70 });
+            updateSelectedAuton();
         }
         printf("Auton select loop ended.\n");
     }
